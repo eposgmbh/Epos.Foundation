@@ -1,11 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <Import Project="../NuGetPackageVersion.properties" />
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Epos.Utilities</AssemblyName>
     <RootNamespace>Epos.Utilities</RootNamespace>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
+    <PackageVersion>$(NuGetPackageVersion)</PackageVersion>
+    <Description>.NET Standard utilities</Description>
     <Authors>Jan Bohlen</Authors>
     <Company>Epos</Company>
     <PackageLicenseUrl>https://github.com/eposgmbh/Epos.Foundation/blob/master/LICENSE</PackageLicenseUrl>
@@ -13,6 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Properties\launchSettings.json" />
     <None Remove="Epos.Utilities.csproj.DotSettings" />
   </ItemGroup>
 
