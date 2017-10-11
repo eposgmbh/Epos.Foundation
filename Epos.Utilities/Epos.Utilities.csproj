@@ -5,6 +5,11 @@
     <AssemblyName>Epos.Utilities</AssemblyName>
     <RootNamespace>Epos.Utilities</RootNamespace>
     <OutputType>Library</OutputType>
+    <IsPackable>true</IsPackable>
+    <Authors>Jan Bohlen</Authors>
+    <Company>Epos</Company>
+    <PackageLicenseUrl>https://github.com/eposgmbh/Epos.Foundation/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/eposgmbh/Epos.Foundation</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
