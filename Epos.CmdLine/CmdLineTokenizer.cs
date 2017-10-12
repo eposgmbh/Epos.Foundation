@@ -39,67 +39,65 @@ namespace Epos.CmdLine
                     // Option
                     if (subcommand == null) {
                         myUsageWriter.WriteAndExit();
-                    }
+                    } else {
+                        bool isLongNameOption = theArg.StartsWith("--");
 
-                    bool isLongNameOption = theArg.StartsWith("--");
+                        string theOptionTextWithoutDashes = isLongNameOption ? theArg.Substring(2) : theArg.Substring(1);
 
-                    string theOptionTextWithoutDashes = isLongNameOption ? theArg.Substring(2) : theArg.Substring(1);
+                        CmdLineOption theOption =
+                            theArg.StartsWith("--") ?
+                                subcommand.Options.SingleOrDefault(o => o.LongName == theOptionTextWithoutDashes) :
+                                subcommand.Options.SingleOrDefault(o => o.Letter.ToString() == theOptionTextWithoutDashes);
 
-                    CmdLineOption theOption =
-                        theArg.StartsWith("--") ?
-                        subcommand.Options.SingleOrDefault(o => o.LongName == theOptionTextWithoutDashes) :
-                        subcommand.Options.SingleOrDefault(o => o.Letter.ToString() == theOptionTextWithoutDashes);
+                        if (theOption != null) {
+                            object theValue = true;
+                            if (!theOption.IsSwitch) {
+                                if (theIndex < args.Length - 1) {
+                                    theIndex++;
+                                    string theRawValue = args[theIndex];
 
-                    if (theOption != null) {
-                        object theValue = true;
-                        if (!theOption.IsSwitch) {
-                            if (theIndex < args.Length - 1) {
-                                theIndex++;
-                                string theRawValue = args[theIndex];
+                                    theValue = ParseUtils.ParseOption(theOption, theRawValue, out string theErrorMessage);
 
-                                theValue = ParseUtils.ParseOption(theOption, theRawValue, out string theErrorMessage);
+                                    if (theErrorMessage != null) {
+                                        myUsageWriter.WriteAndExit(subcommand, theErrorMessage);
+                                    }
+                                } else {
+                                    // Value kommt nicht
+                                    myUsageWriter.WriteAndExit(
+                                        subcommand,
+                                        $"Missing value for option {theOption.ToCmdLineString()}."
+                                    );
+                                }
+                            }
 
-                                if (theErrorMessage != null) {
-                                    myUsageWriter.WriteAndExit(subcommand, theErrorMessage);
+                            theResult.Add(
+                                new CmdLineToken(CmdLineTokenKind.Option, theOption.Letter.ToString()) {
+                                    Value = theValue
+                                }
+                            );
+                        } else {
+                            // Sind es vielleicht mehrere verkettete Switches (-abc)?
+                            if (!isLongNameOption && theOptionTextWithoutDashes.Length > 1) {
+                                foreach (char theOptionLetter in theOptionTextWithoutDashes) {
+                                    theOption = subcommand.Options.SingleOrDefault(o => o.Letter == theOptionLetter);
+
+                                    if (theOption != null && theOption.IsSwitch) {
+                                        theResult.Add(
+                                            new CmdLineToken(CmdLineTokenKind.Option, theOptionLetter.ToString()) {
+                                                Value = true
+                                            }
+                                        );
+                                    } else {
+                                        myUsageWriter.WriteAndExit(subcommand, $"Unknown switch: -{theOptionLetter}");
+                                    }
                                 }
                             } else {
-                                // Value kommt nicht
-                                myUsageWriter.WriteAndExit(
-                                    subcommand,
-                                    $"Missing value for option {theOption.ToCmdLineString()}."
-                                );
+                                // Unbekannte Option
+                                myUsageWriter.WriteAndExit(subcommand, $"Unknown option: {theArg}");
                             }
                         }
-
-                        theResult.Add(
-                            new CmdLineToken(CmdLineTokenKind.Option, theOption.Letter.ToString()) {
-                                Value = theValue
-                            }
-                        );
                     }
-                    else {
-                        // Sind es vielleicht mehrere verkettete Switches (-abc)?
-                        if (!isLongNameOption && theOptionTextWithoutDashes.Length > 1) {
-                            foreach (char theOptionLetter in theOptionTextWithoutDashes) {
-                                theOption = subcommand.Options.SingleOrDefault(o => o.Letter == theOptionLetter);
-
-                                if (theOption != null && theOption.IsSwitch) {
-                                    theResult.Add(
-                                        new CmdLineToken(CmdLineTokenKind.Option, theOptionLetter.ToString()) {
-                                            Value = true
-                                        }
-                                    );
-                                } else {
-                                    myUsageWriter.WriteAndExit(subcommand, $"Unknown switch: -{theOptionLetter}");
-                                }
-                            }
-                        } else {
-                            // Unbekannte Option
-                            myUsageWriter.WriteAndExit(subcommand, $"Unknown option: {theArg}");
-                        }
-                    }
-                }
-                else {
+                } else {
                     // Parameter
                     if (subcommand == null) {
                         myUsageWriter.WriteAndExit();

@@ -87,6 +87,8 @@ namespace Epos.CmdLine
             var theConsoleOutput = new StringWriter();
 
             // decimal als Parametertyp ist beispielsweise nicht erlaubt:
+
+            // ReSharper disable once ObjectCreationAsStatement
             Assert.Throws<TypeInitializationException>(() => new CmdLineParameter<decimal>(null, null));
 
             BuildOptions theBuildOptions = null;
@@ -188,6 +190,7 @@ namespace Epos.CmdLine
             var theConsoleOutput = new StringWriter();
 
             // decimal als Parametertyp ist beispielsweise nicht erlaubt:
+            // ReSharper disable once ObjectCreationAsStatement
             Assert.Throws<TypeInitializationException>(() => new CmdLineOption<decimal>('a', null));
 
             BuildOptions theBuildOptions = null;
@@ -304,7 +307,7 @@ namespace Epos.CmdLine
 
         private class CmdLineError : Exception { }
 
-        private class BuildOptions
+        internal class BuildOptions
         {
             [CmdLineOption('p')]
             public int ProjectNumber { get; set; }

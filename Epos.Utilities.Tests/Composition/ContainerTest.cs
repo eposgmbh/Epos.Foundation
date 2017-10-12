@@ -9,6 +9,7 @@ namespace Epos.Utilities.Composition
     {
         [Test]
         public void ConstructorWithNullArgumentForInstaller() {
+            // ReSharper disable once ObjectCreationAsStatement
             Assert.Throws<ArgumentNullException>(() => new Container(null));
         }
 

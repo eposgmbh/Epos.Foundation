@@ -9,6 +9,7 @@ namespace Epos.Utilities
     {
         [Test]
         public void ConstructorExceptions() {
+            // ReSharper disable once ObjectCreationAsStatement
             Assert.Throws<ArgumentOutOfRangeException>(() => { new Cache<object, object>(1); });
         }
 
