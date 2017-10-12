@@ -2,9 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>Epos.Utilities.Tests</AssemblyName>
-    <RootNamespace>Epos.Utilities</RootNamespace>
-    <DefineConstants>LOGGING</DefineConstants>
+    <AssemblyName>Epos.CmdLine.Tests</AssemblyName>
+    <RootNamespace>Epos.CmdLine</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,7 +11,7 @@
     <PackageReference Include="NUnit" Version="3.8.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.8.0" />
 
-    <ProjectReference Include="..\Epos.Utilities\Epos.Utilities.csproj" />
+    <ProjectReference Include="..\Epos.CmdLine\Epos.CmdLine.csproj" />
   </ItemGroup>
 
 </Project>

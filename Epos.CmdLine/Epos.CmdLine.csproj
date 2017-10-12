@@ -4,20 +4,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Epos.Utilities</AssemblyName>
-    <RootNamespace>Epos.Utilities</RootNamespace>
+    <AssemblyName>Epos.CmdLine</AssemblyName>
+    <RootNamespace>Epos.CmdLine</RootNamespace>
     <AssemblyVersion>$(NuGetPackageVersion)</AssemblyVersion>
     <FileVersion>$(NuGetPackageVersion)</FileVersion>
     <PackageVersion>$(NuGetPackageVersion)</PackageVersion>
-    <Description>.NET Standard utilities</Description>
+    <Description>.NET Standard Command line parser and PowerShell adapter</Description>
     <Authors>Jan Bohlen</Authors>
     <Company>Epos</Company>
     <PackageLicenseUrl>https://github.com/eposgmbh/Epos.Foundation/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/eposgmbh/Epos.Foundation</PackageProjectUrl>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Epos.Utilities.csproj.DotSettings" />
-  </ItemGroup>
 
 </Project>
