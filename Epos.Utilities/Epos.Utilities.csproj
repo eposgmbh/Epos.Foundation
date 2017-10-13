@@ -6,7 +6,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Epos.Utilities</AssemblyName>
     <RootNamespace>Epos.Utilities</RootNamespace>
-    <AssemblyVersion>1.1.0</AssemblyVersion>
+    <AssemblyVersion>9.9.9</AssemblyVersion>
+    <PackageVersion>9.9.9</PackageVersion>
     <Description>.NET Standard utilities</Description>
     <Authors>Jan Bohlen</Authors>
     <Company>Epos</Company>
