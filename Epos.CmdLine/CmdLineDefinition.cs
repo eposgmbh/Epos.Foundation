@@ -7,6 +7,8 @@ namespace Epos.CmdLine
 {
     public sealed class CmdLineDefinition
     {
+        private CmdLineConfiguration myConfiguration;
+
         public CmdLineDefinition() {
             Subcommands = new List<CmdLineSubcommand>();
         }
@@ -15,11 +17,34 @@ namespace Epos.CmdLine
 
         public bool HasDifferentiatedCommands { get; set; } = true;
 
-        public CmdLineConfiguration Configuration { get; set; }
+        public CmdLineConfiguration Configuration {
+            get => myConfiguration ?? (myConfiguration = new CmdLineConfiguration());
+            set => myConfiguration = value;
+        }
 
         public IList<CmdLineSubcommand> Subcommands {get; }
 
-        public int Try(string[] args, bool verbose = true) {
+        public void ShowHelp() {
+            var theUsageWriter = new CmdLineUsageWriter(this);
+            theUsageWriter.WriteAndExit();
+        }
+
+        public void ShowHelp(string subcommandName) {
+            if (subcommandName == null) {
+                throw new ArgumentNullException(nameof(subcommandName));
+            }
+
+            CmdLineSubcommand theSubcommand = Subcommands.SingleOrDefault(sc => sc.Name == subcommandName);
+
+            if (theSubcommand == null) {
+                throw new ArgumentException($"Subcommand \"{subcommandName}\" is not defined.");
+            }
+
+            var theUsageWriter = new CmdLineUsageWriter(this);
+            theUsageWriter.WriteAndExit(theSubcommand);
+        }
+
+        public int Try(string[] args) {
             if (args == null) {
                 throw new ArgumentNullException(nameof(args));
             }
@@ -35,7 +60,7 @@ namespace Epos.CmdLine
                 Name = Path.GetFileNameWithoutExtension(thePathToExe).ToLower();
             }
             
-            var theCmdLineDefinitionExecutor = new CmdLineDefinitionExecutor(this, args, verbose);
+            var theCmdLineDefinitionExecutor = new CmdLineDefinitionExecutor(this, args);
             return theCmdLineDefinitionExecutor.Try();
         }
     }

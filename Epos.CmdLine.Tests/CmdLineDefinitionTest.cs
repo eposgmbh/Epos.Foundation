@@ -2,14 +2,13 @@
 using System.IO;
 using NUnit.Framework;
 
+using static Epos.Utilities.Characters;
+
 namespace Epos.CmdLine
 {
     [TestFixture]
     public class CmdLineDefinitionTest
     {
-        private static readonly string Lf = Environment.NewLine;
-        private static readonly string DbLf = Lf + Lf;
-
         [Test]
         public void BasicsWithoutSubcommand() {
             var theConsoleOutput = new StringWriter();
@@ -31,7 +30,7 @@ namespace Epos.CmdLine
             bool isRun = false;
             theCmdLineDefinition.Subcommands.Add(
                 new CmdLineSubcommand<object>(CmdLineSubcommand.DefaultName, "Default command") {
-                    CmdLineFunc = o => { isRun = true; return 0; }
+                    CmdLineFunc = (o, _) => { isRun = true; return 0; }
                 }
             );
 
@@ -107,7 +106,7 @@ namespace Epos.CmdLine
                                 DefaultValue = "1 GB"
                             }
                         },
-                        CmdLineFunc = o => {
+                        CmdLineFunc = (o, _) => {
                             theBuildOptions = o;
                             return 0;
                         }
@@ -186,7 +185,7 @@ namespace Epos.CmdLine
         }
 
         [Test]
-        public void Options() {
+        public void OptionsAndShowHelp() {
             var theConsoleOutput = new StringWriter();
 
             // decimal als Parametertyp ist beispielsweise nicht erlaubt:
@@ -199,7 +198,7 @@ namespace Epos.CmdLine
                 Name = "sample",
                 Configuration = new CmdLineConfiguration {
                     UsageTextWriter = theConsoleOutput,
-                    ErrorAction = () => throw new CmdLineError()
+                    ErrorAction = () => { }
                 },
                 Subcommands = {
                     new CmdLineSubcommand<BuildOptions>("build", "Builds something.") {
@@ -215,13 +214,51 @@ namespace Epos.CmdLine
                         Parameters = {
                             new CmdLineParameter<string>("dummy", "Sets a dummy value.")
                         },
-                        CmdLineFunc = o => {
+                        CmdLineFunc = (o, _) => {
                             theBuildOptions = o;
                             return 0;
                         }
-                    }
+                    },
+                    new CmdLineSubcommand<object>("test", "Tests something.")
                 }
             };
+
+            theCmdLineDefinition.ShowHelp();
+
+            Assert.That(
+                theConsoleOutput.ToString(),
+                Is.EqualTo(
+                    "Usage: sample <build | test>" + DbLf +
+                    "Subcommands" + Lf +
+                    "  build   Builds something." + Lf +
+                    "  test    Tests something." + DbLf
+                )
+            );
+
+            theConsoleOutput.GetStringBuilder().Clear();
+
+            Assert.Throws<ArgumentNullException>(() => theCmdLineDefinition.ShowHelp(null));
+            Assert.Throws<ArgumentException>(() => theCmdLineDefinition.ShowHelp("not-found"));
+
+            theCmdLineDefinition.ShowHelp("build");
+
+            Assert.That(
+                theConsoleOutput.ToString(),
+                Is.EqualTo(
+                    "Usage: sample build [-p, --project-number <int>] [-m, --memory <string=\"1 GB\">]" + Lf +
+                    "                    [-d] [-z] <dummy:string>" + DbLf +
+                    "Options" + Lf +
+                    "  -p, --project-number   Sets the project number." + Lf +
+                    "  -m, --memory           Sets the used memory. >>> defaults to \"1 GB\"" + Lf +
+                    "  -d                     Disables the command." + Lf +
+                    "  -z                     Zzzz..." + DbLf +
+                    "Parameters" + Lf +
+                    "  dummy                  Sets a dummy value." + DbLf
+                )
+            );
+
+            theCmdLineDefinition.Configuration.ErrorAction = () => throw new CmdLineError();
+            theConsoleOutput.GetStringBuilder().Clear();
 
             Assert.Throws<CmdLineError>(() => theCmdLineDefinition.Try(new[] { "build" }));
 

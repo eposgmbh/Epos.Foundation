@@ -11,13 +11,11 @@ namespace Epos.CmdLine
         private const int SeparatorCharCount = 3;
 
         private readonly CmdLineDefinition myDefinition;
-        private readonly bool myIsVerbose;
         private readonly TextWriter myTextWriter;
         private readonly Action myErrorAction;
 
-        public CmdLineUsageWriter(CmdLineDefinition definition, bool isVerbose) {
+        public CmdLineUsageWriter(CmdLineDefinition definition) {
             myDefinition = definition;
-            myIsVerbose = isVerbose;
 
             myTextWriter = definition.Configuration.UsageTextWriter;
             myErrorAction = definition.Configuration.ErrorAction;
@@ -41,11 +39,6 @@ namespace Epos.CmdLine
                     .Append(Environment.NewLine);
             }
             
-            if (!myIsVerbose) {
-                myTextWriter.Write(theResult.ToString());
-                myErrorAction();
-            }
-
             theResult
                 .Append(Environment.NewLine)
                 .Append("Subcommands")
@@ -115,12 +108,6 @@ namespace Epos.CmdLine
                     .Append("Error: ")
                     .Append(errorMessage)
                     .Append(Environment.NewLine);
-            }
-
-            if (!myIsVerbose) {
-                theResult.Append(Environment.NewLine);
-                myTextWriter.Write(theResult.ToString());
-                myErrorAction();
             }
 
             int theMaxOptionLength =

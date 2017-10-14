@@ -16,4 +16,8 @@
     <PackageProjectUrl>https://github.com/eposgmbh/Epos.Foundation</PackageProjectUrl>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Epos.Utilities\Epos.Utilities.csproj" />
+  </ItemGroup>
+
 </Project>

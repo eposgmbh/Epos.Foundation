@@ -8,16 +8,14 @@ namespace Epos.CmdLine
     {
         private readonly CmdLineDefinition myDefinition;
         private readonly string[] myArgs;
-        private readonly bool myIsVerbose;
 
-        public CmdLineDefinitionExecutor(CmdLineDefinition definition, string[] args, bool isVerbose) {
+        public CmdLineDefinitionExecutor(CmdLineDefinition definition, string[] args) {
             myDefinition = definition;
             myArgs = args;
-            myIsVerbose = isVerbose;
         }
 
         public int Try() {
-            var theUsageWriter = new CmdLineUsageWriter(myDefinition, myIsVerbose);
+            var theUsageWriter = new CmdLineUsageWriter(myDefinition);
 
             if (myDefinition.HasDifferentiatedCommands && !myDefinition.Subcommands.Any()) {
                 throw new InvalidOperationException("At least one subcommand must be added to the definition.");
@@ -45,7 +43,7 @@ namespace Epos.CmdLine
             List<CmdLineToken> theTokens = theTokenizer.Tokenize(myArgs, ref theSubcommand);
 
             // Subcommand ausführen
-            return theSubcommand.Execute(theTokens);
+            return theSubcommand.Execute(theTokens, myDefinition);
         }
     }
 }
