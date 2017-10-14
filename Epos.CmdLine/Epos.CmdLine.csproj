@@ -7,6 +7,7 @@
     <AssemblyName>Epos.CmdLine</AssemblyName>
     <RootNamespace>Epos.CmdLine</RootNamespace>
     <AssemblyVersion>9.9.9</AssemblyVersion>
+    <AssemblyInformationalVersion>9.9.9</AssemblyInformationalVersion>
     <PackageVersion>9.9.9</PackageVersion>
     <Description>.NET Standard Command line parser and PowerShell adapter</Description>
     <Authors>Jan Bohlen</Authors>
