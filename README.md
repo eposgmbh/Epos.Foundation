@@ -2,10 +2,16 @@
 
 ![Build Status](https://eposgmbh.visualstudio.com/_apis/public/build/definitions/30ebff28-f13c-44d2-b6db-7739d6cf4ab1/5/badge)
 
+(Build and Release deployment to [NuGet](https://www.nuget.org/) is automated with
+[Visual Studio Team Services](https://www.visualstudio.com/team-services).
+
 ## Description
 
 Epos.Foundation is the Github Repo for foundational utilities like String or Dictionary extension methods
 (NuGet package **Epos.Utilities**) and a powerful and simple command line parser (NuGet package **Epos.CmdLine**).
+
+The packages are implemented using .NET Standard (2.0+). Therefore you can use them cross-platform on any supported platform and
+also with the full .NET Framework (4.6.1+).
 
 ## Installation
 
@@ -27,40 +33,58 @@ this:
 
 ```csharp
 public static int Main(string[] args) {
-	var theCmdLineDefinition = new CmdLineDefinition
-	{
-		Name = "sample", // <- if null, .exe-Filename is taken
-		Subcommands = {
-			new CmdLineSubcommand<BuildOptions>("build", "Builds something.") {
-				Options = {
-					new CmdLineOption<int>('p', "Sets the project number.") { LongName = "project-number" },
-					new CmdLineOption<string>('m', "Sets the used memory.") {
-						LongName = "memory",
-						DefaultValue = "1 GB"
-					},
-					new CmdLineSwitch('d', "Disables the command."),
-					new CmdLineSwitch('z', "Zzzz...")
-				},
-				Parameters = {
-					new CmdLineParameter<string>("filename", "Sets the filename.")
-				},
-				CmdLineFunc = (options, definition) => {
-					// Do something for the build subcommand
-					// ...
+    var theCmdLineDefinition = new CmdLineDefinition {
+        Name = "sample", // <- if null, .exe-Filename is taken
+        Subcommands = {
+            new CmdLineSubcommand<BuildOptions>("build", "Builds something.") {
+                Options = {
+                    new CmdLineOption<int>('p', "Sets the project number.") { LongName = "project-number" },
+                    new CmdLineOption<string>('m', "Sets the used memory.") {
+                        LongName = "memory",
+                        DefaultValue = "1 GB"
+                    },
+                    new CmdLineSwitch('d', "Disables the command."),
+                    new CmdLineSwitch('z', "Zzzz...")
+                },
+                Parameters = {
+                    new CmdLineParameter<string>("filename", "Sets the filename.")
+                },
+                CmdLineFunc = (options, definition) => {
+                    // Do something for the build subcommand
+                    // ...
 
-					Console.WriteLine("sample command line application" + Lf);
-					Console.WriteLine(options.Dump() + Lf);
+                    Console.WriteLine("sample command line application" + Lf);
+                    Console.WriteLine(options.Dump() + Lf);
 
-					return 0; // <- your error code or 0, if successful
-				}
-			}
-			// ... further subcommands
-		},
-	};
+                    return 0; // <- your error code or 0, if successful
+                }
+            }
+        },
+        // further subcommands...
+    };
 
-	return theCmdLineDefinition.Try(args);
+    return theCmdLineDefinition.Try(args);
 }
 ```
+
+This definition automatically produces help and usage console output like this:
+
+```
+Usage: sample build [-p, --project-number <int>] [-m, --memory <string="1 GB">] [-d] [-z] <filename:string>
+
+Error: Missing parameter: filename
+
+Options
+  -p, --project-number   Sets the project number.
+  -m, --memory           Sets the used memory. >>> defaults to "1 GB"
+  -d                     Disables the command.
+  -z                     Zzzz...
+
+Parameters
+  filename               Sets the filename.
+```
+
+Long option chains and description texts are properly line breaked.
 
 ## Contributing
 
