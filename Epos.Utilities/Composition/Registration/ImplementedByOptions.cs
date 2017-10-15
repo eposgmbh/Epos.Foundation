@@ -2,7 +2,7 @@ using System;
 
 namespace Epos.Utilities.Composition
 {
-    public sealed class ImplementedByOptions<TAbstract, TConcrete> : HasLifetime where TConcrete : TAbstract
+    public sealed class ImplementedByOptions<TAbstract, TConcrete> : LifetimeOptions where TConcrete : TAbstract
     {
         internal ImplementedByOptions(ComponentRegistration componentRegistration) : base(componentRegistration) {
             ComponentRegistration.ConcreteType = typeof (TConcrete);

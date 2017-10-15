@@ -22,6 +22,8 @@ PM> Install-Package Epos.Utilities
 PM> Install-Package Epos.CmdLine
 ```
 
+You can install them separately, the packages are independent from each other.
+
 ## Usage
 
 **Epos.Utilities** are more or less self-documenting simple utility classes. You can take a look at the corresponding
@@ -89,7 +91,7 @@ Long option chains and description texts are properly line breaked.
 ## Contributing
 
 You can enter an issue on Github [here](https://github.com/eposgmbh/Epos.Foundation/issues). I will work on
-your issue when I have time. Pull Requests are possible, too.
+your issue when I have time. Pull Requests are possible too.
 
 ## License
 

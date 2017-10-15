@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace Epos.Utilities
 {
@@ -7,6 +8,9 @@ namespace Epos.Utilities
     {
         [Test]
         public void Basics() {
+            Assert.Throws<ArgumentNullException>(() => Password.Encrypt(null));
+            Assert.Throws<ArgumentNullException>(() => Password.Decrypt(null));
+
             string theBase64 = Password.Encrypt("Hallo, Welt!");
 
             Assert.AreEqual("BFzXiq9YSIvSl+fKtxrPhw==", theBase64);

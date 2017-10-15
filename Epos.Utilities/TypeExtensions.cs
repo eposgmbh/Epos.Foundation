@@ -32,5 +32,17 @@ namespace Epos.Utilities
                 select theGenericMethodInfo
             ).SingleOrDefault();
         }
+
+        public static bool HasAttribute<TAttribute>(this Type type) where TAttribute : Attribute {
+            return type.GetAttribute<TAttribute>() != null;
+        }
+
+        public static TAttribute GetAttribute<TAttribute>(this Type type) where TAttribute : Attribute {
+            if (type == null) {
+                throw new ArgumentNullException(nameof(type));
+            }
+
+            return (TAttribute) Attribute.GetCustomAttribute(type, typeof(TAttribute));
+        }
     }
 }

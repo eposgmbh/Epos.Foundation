@@ -22,13 +22,13 @@ namespace Epos.Utilities
             }
         }
 
-        public static IEnumerable<T> Traverse<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> recurseFunc) {
+        public static IEnumerable<T> FlattenRecursiveHierarchy<T>(this IEnumerable<T> source, Func<T, IEnumerable<T>> recurseFunc) {
             foreach (T theItem in source) {
                 yield return theItem;
 
                 IEnumerable<T> theRecursiveEnumerable = recurseFunc(theItem);
                 if (theRecursiveEnumerable != null) {
-                    foreach (T theRecursiveItem in Traverse(theRecursiveEnumerable, recurseFunc)) {
+                    foreach (T theRecursiveItem in FlattenRecursiveHierarchy(theRecursiveEnumerable, recurseFunc)) {
                         yield return theRecursiveItem;
                     }
                 }

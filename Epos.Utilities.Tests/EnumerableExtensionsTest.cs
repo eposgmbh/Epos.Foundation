@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 using NUnit.Framework;
@@ -38,6 +39,25 @@ namespace Epos.Utilities
         }
 
         [Test]
+        public void FlattenRecursiveHierarchy() {
+            var theChild = new Child("Hermann") {
+                Children = {
+                    new Child("Jan") {
+                        Children = {
+                            new Child("Jakob"),
+                            new Child("Frederick")
+                        }
+                    }
+                }
+            };
+
+            var theList = theChild.ToEnumerable().FlattenRecursiveHierarchy(c => c.Children).ToList();
+            Assert.That(theList.Count, Is.EqualTo(4));
+            Assert.That(theList.First().Name, Is.EqualTo("Hermann"));
+            Assert.That(theList.Last().Name, Is.EqualTo("Frederick"));
+        }
+
+        [Test]
         public void DisposeAll() {
             var theDisposables = new[] {
                 new DisposableTestClass("This"),
@@ -72,6 +92,18 @@ namespace Epos.Utilities
             }
 
             public string Result => myIsDisposed ? myResult : null;
+        }
+
+        private sealed class Child
+        {
+            public Child(string name) {
+                Name = name;
+                Children = new List<Child>();
+            }
+
+            public string Name { get; }
+
+            public IList<Child> Children { get; }
         }
     }
 }

@@ -2,7 +2,7 @@ using System;
 
 namespace Epos.Utilities.Composition
 {
-    public sealed class WithParameterOptions : HasLifetime
+    public sealed class WithParameterOptions : LifetimeOptions
     {
         internal WithParameterOptions(string parameterName, object value, ComponentRegistration componentRegistration)
             : base(componentRegistration) {

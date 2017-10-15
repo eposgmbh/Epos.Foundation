@@ -2,7 +2,7 @@ using System;
 
 namespace Epos.Utilities.Composition
 {
-    public sealed class RegisterOptions<TAbstract> : HasLifetime
+    public sealed class RegisterOptions<TAbstract> : LifetimeOptions
     {
         internal RegisterOptions(ComponentRegistration componentRegistration) : base(componentRegistration) {
         }

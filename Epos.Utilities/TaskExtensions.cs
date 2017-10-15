@@ -4,6 +4,7 @@ namespace Epos.Utilities
 {
     public static class TaskExtensions
     {
-        public static void Forget(this Task task) {}
+        // ReSharper disable once UnusedParameter.Global
+        public static void FireAndForget(this Task task) { }
     }
 }

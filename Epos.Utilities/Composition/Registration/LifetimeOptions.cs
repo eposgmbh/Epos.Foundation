@@ -2,9 +2,9 @@
 
 namespace Epos.Utilities.Composition
 {
-    public abstract class HasLifetime : RegistrationStep
+    public abstract class LifetimeOptions : RegistrationStep
     {
-        internal HasLifetime(ComponentRegistration componentRegistration) : base(componentRegistration) {
+        internal LifetimeOptions(ComponentRegistration componentRegistration) : base(componentRegistration) {
         }
 
         public void WithLifetime(Lifetime lifetime) {
@@ -19,7 +19,7 @@ namespace Epos.Utilities.Composition
             }
         }
 
-        public void WithLifetime(ComponentCreationStrategy strategy) {
+        private void WithLifetime(ComponentCreationStrategy strategy) {
             if (strategy == null) {
                 throw new ArgumentNullException(nameof(strategy));
             }
