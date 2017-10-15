@@ -1,15 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using NUnit.Framework;
 
 namespace Epos.Utilities
 {
+#if DEBUG
     [TestFixture]
     public class DebugThrowTest
     {
         [Test]
-        [Conditional("DEBUG")]
         public void IfNull() {
             Assert.Throws<ArgumentNullException>(() => DebugThrow.IfNull((object) null, "param"));
 
@@ -17,7 +16,6 @@ namespace Epos.Utilities
         }
 
         [Test]
-        [Conditional("DEBUG")]
         public void IfInvalidEnum() {
             DateTimeKind theDateTimeKind = (DateTimeKind) 999;
 
@@ -27,11 +25,11 @@ namespace Epos.Utilities
         }
 
         [Test]
-        [Conditional("DEBUG")]
         public void If() {
             Assert.Throws<ArgumentException>(() => DebugThrow.If(true, "Wrong param value.", "param"));
 
             DebugThrow.If(false, "Wrong param value.", "param");
         }
     }
+#endif
 }
