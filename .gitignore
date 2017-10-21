@@ -260,4 +260,6 @@ paket-files/
 __pycache__/
 *.pyc
 
-# Custom Epos.Blog
+# Custom
+Epos.Foundation.Docs/index.md
+Epos.Foundation.Docs/log.txt

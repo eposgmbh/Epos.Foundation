@@ -13,7 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Solution Items", "0. Sol
 		.gitignore = .gitignore
 		LICENSE = LICENSE
 		NuGet.Config = NuGet.Config
-		NuGetPackageVersion.properties = NuGetPackageVersion.properties
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -25,7 +24,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Utilities", "1. Utilitie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epos.CmdLine.Tests", "Epos.CmdLine.Tests\Epos.CmdLine.Tests.csproj", "{E8DB5440-EDDA-4115-92DC-9E44795C6F9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Epos.CmdLine.Sample", "Epos.CmdLine.Sample\Epos.CmdLine.Sample.csproj", "{A82D7560-CA22-49D0-9670-558E2F30BB0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epos.CmdLine.Sample", "Epos.CmdLine.Sample\Epos.CmdLine.Sample.csproj", "{A82D7560-CA22-49D0-9670-558E2F30BB0D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Docs", "3. Docs", "{F6FDFD3A-775A-40CB-B659-4B1FE7122348}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Epos.Foundation.Docs", "Epos.Foundation.Docs\Epos.Foundation.Docs.csproj", "{303FB2C7-1219-4859-B9F2-2A4F30391D01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +56,10 @@ Global
 		{A82D7560-CA22-49D0-9670-558E2F30BB0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A82D7560-CA22-49D0-9670-558E2F30BB0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A82D7560-CA22-49D0-9670-558E2F30BB0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{303FB2C7-1219-4859-B9F2-2A4F30391D01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{303FB2C7-1219-4859-B9F2-2A4F30391D01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{303FB2C7-1219-4859-B9F2-2A4F30391D01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{303FB2C7-1219-4859-B9F2-2A4F30391D01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +70,7 @@ Global
 		{CD4721AD-6017-42E5-8E9C-C8D12E57FBFB} = {174A667F-ED3D-40CC-ADF9-99821E06FC45}
 		{E8DB5440-EDDA-4115-92DC-9E44795C6F9A} = {174A667F-ED3D-40CC-ADF9-99821E06FC45}
 		{A82D7560-CA22-49D0-9670-558E2F30BB0D} = {174A667F-ED3D-40CC-ADF9-99821E06FC45}
+		{303FB2C7-1219-4859-B9F2-2A4F30391D01} = {F6FDFD3A-775A-40CB-B659-4B1FE7122348}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6E9830A-11C2-440E-9619-4A10D50BCB59}

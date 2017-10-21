@@ -1,0 +1,40 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../",
+          "files": [ "Epos.Utilities/**/*.cs", "Epos.CmdLine/**/*.cs" ],
+          "exclude": [ "**/obj/**", "**/bin/**" ]
+        }
+      ],
+      "dest": "bin/Metadata"
+    }
+  ],
+  "build": {
+    "content": [
+      { "files": [ "bin/Metadata/**.yml" ] },
+      { "files": [ "toc.yml", "index.md", "Articles/**.md", "Articles/**/toc.yml" ] }
+    ],
+    "resource": [
+      { "files": [ "Images/**" ] }
+    ],
+    "overwrite": [
+      { "files": [ "Overwrite/**.md" ] }
+    ],
+    "globalMetadata": {
+      "_appTitle": "Epos.Foundation Docs",
+      "_gitContribute": {
+        "repo": "https://github.com/eposgmbh/Epos.Foundation.Docs",
+        "branch": "master",
+        "apiSpecFolder": "Overwrite"
+      },
+      "_enableSearch": false
+    },
+    "dest": "bin/Website",
+    "fileMetadataFiles": [],
+    "template": [ "Templates/Epos" ],
+    "postProcessors": [],
+    "noLangKeyword": false
+  }
+}
