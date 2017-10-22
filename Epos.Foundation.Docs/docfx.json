@@ -8,13 +8,13 @@
           "exclude": [ "**/obj/**", "**/bin/**" ]
         }
       ],
-      "dest": "bin/Metadata"
+      "dest": "Api"
     }
   ],
   "build": {
     "content": [
-      { "files": [ "bin/Metadata/**.yml" ] },
-      { "files": [ "toc.yml", "index.md", "Articles/**.md", "Articles/**/toc.yml" ] }
+      { "files": [ "Api/**.yml" ] },
+      { "files": [ "toc.yml", "getting-started.md", "Articles/**.md", "Articles/**/toc.yml" ] }
     ],
     "resource": [
       { "files": [ "Images/**" ] }
@@ -24,11 +24,6 @@
     ],
     "globalMetadata": {
       "_appTitle": "Epos.Foundation Docs",
-      "_gitContribute": {
-        "repo": "https://github.com/eposgmbh/Epos.Foundation.Docs",
-        "branch": "master",
-        "apiSpecFolder": "Overwrite"
-      },
       "_enableSearch": false
     },
     "dest": "bin/Website",

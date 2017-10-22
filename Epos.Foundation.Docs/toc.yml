@@ -1,4 +1,4 @@
 - name: Getting started
-  href: index.md
+  href: getting-started.md
 - name: API Reference
-  href: bin/metadata/
+  href: api/

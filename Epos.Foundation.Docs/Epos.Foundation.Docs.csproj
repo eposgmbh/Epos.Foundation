@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="docfx.console" Version="2.25.1" />
+    <Compile Remove="Api\**" />
+    <EmbeddedResource Remove="Api\**" />
+    <None Remove="Api\**" />
   </ItemGroup>
 
-  <Target Name="CopyFiles" BeforeTargets="Build">
-    <Copy SourceFiles="../README.md" DestinationFiles="index.md" />
-  </Target>
+  <ItemGroup>
+    <PackageReference Include="docfx.console" Version="2.25.1" />
+  </ItemGroup>
 
 </Project>
