@@ -21,35 +21,33 @@ namespace Epos.Utilities
         // --- Methoden ---
 
         public static string Dump(this object value) {
-            if (value == null) {
-                return Null;
+            // Simple cases:
+            switch (value) {
+                case null:
+                    return Null;
+
+                case string theString:
+                    return theString;
+
+                case double theDoubleValue:
+                    if (Math.Abs(theDoubleValue) < 1.0E-14) {
+                        return "0";
+                    } else {
+                        return theDoubleValue.ToString("0.##########", CultureInfo.InvariantCulture);
+                    }
+
+                case DictionaryEntry theEntry:
+                    return
+                        new StringBuilder("[")
+                            .Append(theEntry.Key.Dump()).Append(", ")
+                            .Append(theEntry.Value.Dump()).Append("]")
+                            .ToString();
+
+                case Type theTypeToDump:
+                    return theTypeToDump.Dump();
             }
 
-            if (value is string theString) {
-                return theString;
-            }
-
-            if (value is double theDoubleValue) {
-                if (Math.Abs(theDoubleValue) < 1.0E-14) {
-                    return "0";
-                }
-
-                return theDoubleValue.ToString("0.##########", CultureInfo.InvariantCulture);
-            }
-
-            if (value is DictionaryEntry theEntry) {
-                var theBuilder = new StringBuilder("[");
-                theBuilder.Append(theEntry.Key.Dump()).Append(", ");
-                theBuilder.Append(theEntry.Value.Dump()).Append("]");
-				
-                return theBuilder.ToString();
-            }
-
-            if (value is Type theType) {
-                return theType.Dump();
-            }
-
-            theType = value.GetType();
+            Type theType = value.GetType();
             if (theType.IsGenericType && theType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>)) {
                 var theBuilder = new StringBuilder("[");
                 theBuilder.Append(theType.GetProperty("Key").GetValue(value, null).Dump()).Append(", ");

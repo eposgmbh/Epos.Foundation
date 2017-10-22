@@ -1,9 +1,6 @@
-# Epos.Foundation
+# Getting started
 
-![Build Status](https://eposgmbh.visualstudio.com/_apis/public/build/definitions/30ebff28-f13c-44d2-b6db-7739d6cf4ab1/5/badge)
-
-(Build and Release deployment to [NuGet](https://www.nuget.org/) is automated with
-[Visual Studio Team Services](https://www.visualstudio.com/team-services).)
+This is the Epos.Foundation Docs Website.
 
 ## Description
 
@@ -87,32 +84,3 @@ Parameters
 ```
 
 Long option chains and description texts are properly line breaked.
-
-## Contributing
-
-You can enter an issue on Github [here](https://github.com/eposgmbh/Epos.Foundation/issues). I will work on
-your issue when I have time. Pull Requests are possible too.
-
-## License
-
-MIT License
-
-Copyright (c) 2017 eposgmbh
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
