@@ -57,43 +57,6 @@ namespace Epos.Utilities
             Assert.That(theList.Last().Name, Is.EqualTo("Frederick"));
         }
 
-        [Test]
-        public void DisposeAll() {
-            var theDisposables = new[] {
-                new DisposableTestClass("This"),
-                new DisposableTestClass("is"),
-                new DisposableTestClass("a"),
-                new DisposableTestClass("test")
-            };
-
-            foreach (DisposableTestClass theDisposable in theDisposables) {
-                Assert.That(theDisposable.Result, Is.Null);
-            }
-
-            theDisposables.DisposeAll();
-
-            Assert.That(theDisposables[0].Result, Is.EqualTo("This"));
-            Assert.That(theDisposables[1].Result, Is.EqualTo("is"));
-            Assert.That(theDisposables[2].Result, Is.EqualTo("a"));
-            Assert.That(theDisposables[3].Result, Is.EqualTo("test"));
-        }
-
-        private sealed class DisposableTestClass : IDisposable
-        {
-            private readonly string myResult;
-            private bool myIsDisposed;
-
-            public DisposableTestClass(string result) {
-                myResult = result;
-            }
-
-            public void Dispose() {
-                myIsDisposed = true;
-            }
-
-            public string Result => myIsDisposed ? myResult : null;
-        }
-
         private sealed class Child
         {
             public Child(string name) {

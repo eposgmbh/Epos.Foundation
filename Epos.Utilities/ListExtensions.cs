@@ -3,21 +3,16 @@ using System.Collections.Generic;
 
 namespace Epos.Utilities
 {
-    /// <summary> Hilfsmethoden zum Umgang
-    /// mit dem Datentyp <see cref="IList{T}"/>.
-    /// </summary>
+    /// <summary>Collection of extension methods for the
+    /// <see cref="System.Collections.Generic.IList{T}" /> type.</summary>
     public static class ListExtensions
     {
-        /// <summary> Vergleicht zwei übergebene <see cref="IList{T}"/>. </summary>
-        /// <remarks> Die Anzahl der Elemente sowie die einzelnen Elemente und ihre Reihenfolge müssen übereinstimmen.
-        /// </remarks>
-        /// <param name="list">Liste</param>
-        /// <param name="anotherList">Liste</param>
-        /// <returns><b>true</b>, falls die beiden Listen wertgleich sind; ansonsten <b>false</b></returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="list"/> ist <b>null</b> (Nothing in VB) -oder- <paramref name="anotherList"/> ist
-        ///     <b>null</b> (Nothing in VB).
-        /// </exception>
+        /// <summary>Compares two <see cref="System.Collections.Generic.IList{T}"/> instances.
+        /// </summary>
+        /// <remarks>The element count, the elements and their order must match.</remarks>
+        /// <param name="list">List</param>
+        /// <param name="anotherList">List</param>
+        /// <returns><b>true</b>, if both lists are equal; otherwise <b>false</b></returns>
         public static bool EqualsList<T>(this IList<T> list, IList<T> anotherList) {
             if (list == null) {
                 throw new ArgumentNullException(nameof(list));
@@ -46,20 +41,20 @@ namespace Epos.Utilities
             return true;
         }
 
-        /// <summary> Berechnet einen Hash-Code aus den Einträgen einer <see cref="IList{T}"/>. </summary>
-        /// <param name="list">Liste</param>
-        /// <returns>Hash-Code der Liste</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="list"/> ist <b>null</b> (Nothing in VB).
-        /// </exception>
+        /// <summary>Calculates a combined hashcode of all entries in the specified
+        /// <see cref="System.Collections.Generic.IList{T}"/>. </summary>
+        /// <param name="list">List</param>
+        /// <returns>List hashcode</returns>
         public static int GetListHashCode<T>(this IList<T> list) {
             if (list == null) {
                 throw new ArgumentNullException(nameof(list));
             }
 
-            int theResult = 0;
+            int theResult = 12345;
             foreach (T theObject in list) {
-                theResult ^= !ReferenceEquals(theObject, null) ? theObject.GetHashCode() : 0;
+                theResult =
+                    37 * theResult +
+                    (!ReferenceEquals(theObject, null) ? theObject.GetHashCode() : 0);
             }
 
             return theResult;

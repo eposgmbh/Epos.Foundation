@@ -7,17 +7,11 @@ namespace Epos.Utilities
     public class PasswordTest
     {
         [Test]
-        public void Basics() {
-            Assert.Throws<ArgumentNullException>(() => Password.Encrypt(null));
-            Assert.Throws<ArgumentNullException>(() => Password.Decrypt(null));
+        public void Hash() {
+            Assert.Throws<ArgumentNullException>(() => Password.Hash(null));
 
-            string theBase64 = Password.Encrypt("Hallo, Welt!");
-
-            Assert.AreEqual("BFzXiq9YSIvSl+fKtxrPhw==", theBase64);
-
-            string theHalloWelt = Password.Decrypt(theBase64);
-
-            Assert.AreEqual("Hallo, Welt!", theHalloWelt);
+            string theHash = Password.Hash("abcd1234");
+            Assert.AreEqual("e9cee71ab932fde863338d08be4de9dfe39ea049bdafb342ce659ec5450b69ae", theHash);
         }
     }
 }

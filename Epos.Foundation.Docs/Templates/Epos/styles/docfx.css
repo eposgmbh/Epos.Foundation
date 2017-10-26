@@ -176,10 +176,17 @@ header {
   right: 0;
   z-index: 1000;
 }
+
 header .navbar {
-  border-width: 0;
-  border-radius: 0;
-  background: white;
+    border-width: 0;
+    border-radius: 0;
+    background: #0078d7;
+    color: white;
+}
+
+.navbar a, .navbar a:hover, .navbar a:focus {
+    color: white;
+    text-decoration: none;
 }
 
 ul.navbar-nav {
@@ -919,4 +926,8 @@ div.embeddedvideo iframe {
   .footer {
     display: none;
   }
+}
+
+article h4 {
+    margin-top: 20px;
 }

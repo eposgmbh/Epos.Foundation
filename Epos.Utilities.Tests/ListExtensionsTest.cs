@@ -36,7 +36,7 @@ namespace Epos.Utilities
         [Test]
         public void GetListHashCode() {
             var theDoubles = new List<double> { 1.0, 2.0, 99.0, 101.5 };
-            Assert.That(theDoubles.GetListHashCode(), Is.EqualTo(2146541568));
+            Assert.That(theDoubles.GetListHashCode(), Is.EqualTo(308829609));
 
             var theStrings = new List<string> { "This", "is", "a", "test" };
             Assert.That(theStrings.GetListHashCode(), Is.Not.EqualTo(0));

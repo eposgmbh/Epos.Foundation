@@ -87,7 +87,7 @@ namespace Epos.CmdLine
             foreach (CmdLineOption theOption in subcommand.Options) {
                 theResult
                     .Append(Space)
-                    .Append(theOption.ToCmdLineString());
+                    .Append(theOption.ToLongCmdLineString());
 
                 MakeLineBreakIfNeccessary(theResult, theLineInsertionCount);
             }
@@ -112,7 +112,7 @@ namespace Epos.CmdLine
 
             int theMaxOptionLength =
                 subcommand.Options.Any() ?
-                    subcommand.Options.Max(o => o.ToString().Length) :
+                    subcommand.Options.Max(o => o.ToShortCmdLineString().Length) :
                     0;
             int theMaxParameterLength =
                 subcommand.Parameters.Any() ?
@@ -141,7 +141,7 @@ namespace Epos.CmdLine
 
                     theResult.AppendFormat(
                         theFormatString,
-                        theOption,
+                        theOption.ToShortCmdLineString(),
                         GetLineBreakedText(
                             theDescription,
                             theMaxOptionParameterLength + SeparatorCharCount + 2 /* Spaces am Anfang */

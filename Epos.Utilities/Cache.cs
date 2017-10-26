@@ -6,22 +6,17 @@ using System.Linq;
 
 namespace Epos.Utilities
 {
-    // Implementation mit Weak-References lässt sich noch unter Changeset 94 finden.
-
-    /// <summary> Allgemeine Cache-Klasse </summary>
-    /// <typeparam name="TKey">Typ des Cache-Schlüssels</typeparam>
-    /// <typeparam name="TValue">Typ des Cache-Werts</typeparam>
+    /// <summary>Provides a general in-memory Cache.</summary>
+    /// <typeparam name="TKey">Cache key type</typeparam>
+    /// <typeparam name="TValue">Cache value type (must be a <b>class</b>)</typeparam>
     public sealed class Cache<TKey, TValue> where TValue : class
     {
         private const int ConcurrencyLevel = 4;
         private readonly ConcurrentDictionary<TKey, TValue> myInternalCache;
         private readonly List<TKey> myQueue;
 
-        /// <summary> Erzeugt eine Instanz der Klasse <b>Cache</b>. </summary>
-        /// <param name="capacity">Kapazität des Caches</param>
-        /// <exception cref="ArgumentOutOfRangeException">
-        ///     <paramref name="capacity"/> ist kleiner als 2.
-        /// </exception>
+        /// <summary>Initializes an instance of the <see cref="Cache{TKey,TValue}"/> class.</summary>
+        /// <param name="capacity">Cache capacity</param>
         public Cache(int capacity) {
             if (capacity < 2) {
                 throw new ArgumentOutOfRangeException(
@@ -36,12 +31,9 @@ namespace Epos.Utilities
             myQueue = new List<TKey>(capacity + 1);
         }
 		
-        /// <summary> Setzt oder liefert einen Wert aus dem Cache zurück. </summary>
-        /// <param name="key">Schlüssel</param>
-        /// <returns>Wert oder <b>null</b> (Nothing in VB), falls zu dem Schlüssel kein Wert existiert</returns>
-        /// <exception cref="ArgumentNullException">
-        ///     <paramref name="key"/> ist <b>null</b> (Nothing in VB).
-        /// </exception>
+        /// <summary>Sets or returns a cache value.</summary>
+        /// <param name="key">Cache key</param>
+        /// <returns>Value or <b>null</b>, if no value is found</returns>
         public TValue this[TKey key] {
             get {
                 myInternalCache.TryGetValue(key, out TValue theResult);
@@ -62,14 +54,16 @@ namespace Epos.Utilities
             }
         }
 
-        /// <summary> Liefert die Kapazität des Caches zurück. </summary>
+        /// <summary>Gets the cache capacity. </summary>
+        /// <returns>Cache capacity</returns>
         public int Capacity { get; }
 
-        /// <summary> Liefert die Anzahl der Elemente im Cache zurück. </summary>
+        /// <summary>Gets the value count of the cache.</summary>
+        /// <returns>Cache value count</returns>
         public int Count => myQueue.Count;
 
-        /// <summary> Liefert eine String-Repräsentation des Caches zurück. </summary>
-        /// <returns>String-Repräsentation des Caches</returns>
+        /// <summary>Returns a string that represents the cache.</summary>
+        /// <returns>String representation of the cache</returns>
         public override string ToString() {
             IEnumerable theDumpFriendlyEnumerable =
                 from theKey in myQueue
@@ -79,4 +73,6 @@ namespace Epos.Utilities
             return theDumpFriendlyEnumerable.Dump();
         }
     }
+
+    // DEV Hint: Implementation mit Weak-References lässt sich noch unter Changeset 94 finden.
 }

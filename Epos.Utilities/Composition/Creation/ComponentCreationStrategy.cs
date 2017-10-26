@@ -3,6 +3,14 @@ using System.Reflection;
 
 namespace Epos.Utilities.Composition
 {
+    /// <summary>Provides the base class for a component creation strategy.
+    /// </summary>
+    /// <remarks>Components can be created either by a factory method (see
+    /// <see cref="RegisterOptions{TAbstract}.WithFactoryMethod{TConcrete}"/>) or
+    /// by invoking a constructor with parameters (see
+    /// <see cref="ImplementedByOptions{TAbstract,TConcrete}.WithParameter"/>).
+    /// Therefore the methods <see cref="GetInstance(System.Delegate)"/> and
+    /// <see cref="GetInstance(ConstructorInfo, object[])"/> must be implemented.</remarks>
     public abstract class ComponentCreationStrategy
     {
         internal ComponentRegistration ComponentRegistration { get; set; }

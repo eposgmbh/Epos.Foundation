@@ -22,24 +22,5 @@ namespace Epos.CmdLine
                 );
             }
         }
-
-        public static string GetShortTypeString(this Type dataType) {
-            if (dataType == typeof(bool)) {
-                return "bool";
-            }
-            else if (dataType == typeof(int)) {
-                return "int";
-            }
-            else if (dataType == typeof(string)) {
-                return "string";
-            }
-            else if (dataType == typeof(double)) {
-                return "double";
-            }
-            else {
-                // DateTime
-                return "datetime";
-            }
-        }
     }
 }

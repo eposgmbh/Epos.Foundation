@@ -19,7 +19,7 @@ namespace Epos.CmdLine
             int theParameterIndex = 0;
             for (int theIndex = 0; theIndex < args.Length; theIndex++) {
                 string theArg = args[theIndex];
-                if (theIndex == 0 && myDefinition.HasDifferentiatedCommands) {
+                if (theIndex == 0 && myDefinition.HasDifferentiatedSubcommands) {
                     // Muss Subcommand sein
                     subcommand = myDefinition.Subcommands.SingleOrDefault(sc => sc.Name == theArg);
                     if (subcommand != null) {
@@ -65,7 +65,7 @@ namespace Epos.CmdLine
                                     // Value kommt nicht
                                     myUsageWriter.WriteAndExit(
                                         subcommand,
-                                        $"Missing value for option {theOption.ToCmdLineString()}."
+                                        $"Missing value for option {theOption.ToLongCmdLineString()}."
                                     );
                                 }
                             }

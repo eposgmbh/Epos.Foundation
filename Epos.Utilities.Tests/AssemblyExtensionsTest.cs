@@ -14,6 +14,7 @@ namespace Epos.Utilities
         public void HasAttribute() {
             Assert.Throws<ArgumentNullException>(() =>AssemblyExtensions.HasAttribute<AssemblyFileVersionAttribute>(null));
             Assert.That(typeof(AssemblyExtensionsTest).Assembly.HasAttribute<AssemblyFileVersionAttribute>());
+            Assert.That(typeof(AssemblyExtensionsTest).Assembly.HasAttribute<AttributeUsageAttribute>(), Is.False);
         }
 
         [Test]
@@ -22,6 +23,9 @@ namespace Epos.Utilities
 
             var theAssemblyTitleAttribute = Assembly.GetExecutingAssembly().GetAttribute<AssemblyTitleAttribute>();
             Assert.That(theAssemblyTitleAttribute.Title, Is.EqualTo("Epos.Utilities.Tests"));
+
+            var theUnknownAttribute = Assembly.GetExecutingAssembly().GetAttribute<AttributeUsageAttribute>();
+            Assert.That(theUnknownAttribute, Is.Null);
         }
 
         [Test]
@@ -30,6 +34,9 @@ namespace Epos.Utilities
 
             var theAssemblyTitleAttributes = Assembly.GetExecutingAssembly().GetAttributes<AssemblyTitleAttribute>();
             Assert.That(theAssemblyTitleAttributes.Single().Title, Is.EqualTo("Epos.Utilities.Tests"));
+
+            var theUnknownAttributes = Assembly.GetExecutingAssembly().GetAttributes<AttributeUsageAttribute>();
+            Assert.That(theUnknownAttributes, Is.Empty);
         }
     }
 }

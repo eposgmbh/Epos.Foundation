@@ -2,9 +2,13 @@
 
 namespace Epos.Utilities.Composition
 {
-    public sealed class WithFactoryMethodOptions<TAbstract, TConcrete> : LifetimeOptions where TConcrete : TAbstract
+    /// <summary> Options following the <see cref="RegisterOptions{TAbstraction}.WithFactoryMethod{TImplementation}"/>
+    /// fluent interface step.</summary>
+    /// <typeparam name="TAbstraction"></typeparam>
+    /// <typeparam name="TImplementation"></typeparam>
+    public sealed class WithFactoryMethodOptions<TAbstraction, TImplementation> : LifetimeOptions where TImplementation : TAbstraction
     {
-        internal WithFactoryMethodOptions(ComponentRegistration componentRegistration, Func<TConcrete> factoryMethod)
+        internal WithFactoryMethodOptions(ComponentRegistration componentRegistration, Func<TImplementation> factoryMethod)
             : base(componentRegistration) {
             ComponentRegistration.FactoryMethod = factoryMethod;
         }

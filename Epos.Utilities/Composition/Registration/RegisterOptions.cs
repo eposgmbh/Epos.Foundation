@@ -2,20 +2,37 @@ using System;
 
 namespace Epos.Utilities.Composition
 {
-    public sealed class RegisterOptions<TAbstract> : LifetimeOptions
+    /// <summary>Options following the <see cref="Container.Register{T}"/> fluent
+    /// interface step.
+    /// <list type="bullet">
+    /// <item><description><see cref="ImplementedBy{TConcrete}"/></description></item>
+    /// <item><description><see cref="WithFactoryMethod{TConcrete}"/></description></item>
+    /// </list>
+    /// </summary>
+    /// <typeparam name="TAbstraction">Abstraction</typeparam>
+    public sealed class RegisterOptions<TAbstraction> : LifetimeOptions
     {
         internal RegisterOptions(ComponentRegistration componentRegistration) : base(componentRegistration) {
         }
 
-        public ImplementedByOptions<TAbstract, TConcrete> ImplementedBy<TConcrete>() where TConcrete : TAbstract {
+        /// <summary>Specifies the implementation type of the registered container component.
+        /// </summary>
+        /// <typeparam name="TImplementation">Implementation</typeparam>
+        /// <returns>Options following this fluent interface step</returns>
+        public ImplementedByOptions<TAbstraction, TImplementation> ImplementedBy<TImplementation>() where TImplementation : TAbstraction {
             ComponentRegistration.Container.TestAlreadyResolved();
-            return new ImplementedByOptions<TAbstract, TConcrete>(ComponentRegistration);
+            return new ImplementedByOptions<TAbstraction, TImplementation>(ComponentRegistration);
         }
 
-        public WithFactoryMethodOptions<TAbstract, TConcrete> WithFactoryMethod<TConcrete>(Func<TConcrete> factoryMethod)
-            where TConcrete : TAbstract {
+        /// <summary>Specifies the factory method that creates instances of the registered
+        /// container component.</summary>
+        /// <typeparam name="TImplementation">Implementation</typeparam>
+        /// <param name="factoryMethod">Factory method</param>
+        /// <returns></returns>
+        public WithFactoryMethodOptions<TAbstraction, TImplementation> WithFactoryMethod<TImplementation>(Func<TImplementation> factoryMethod)
+            where TImplementation : TAbstraction {
             ComponentRegistration.Container.TestAlreadyResolved();
-            return new WithFactoryMethodOptions<TAbstract, TConcrete>(ComponentRegistration, factoryMethod);
+            return new WithFactoryMethodOptions<TAbstraction, TImplementation>(ComponentRegistration, factoryMethod);
         }
     }
 }

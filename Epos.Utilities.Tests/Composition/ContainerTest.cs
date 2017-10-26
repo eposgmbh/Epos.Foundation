@@ -83,7 +83,8 @@ namespace Epos.Utilities.Composition
                 .Register<ITestService>()
                 .ImplementedBy<TestService>()
                 .WithParameter("connectionString", "Hello World!")
-                .AndParameter("maxCount", 10);
+                .AndParameter("maxCount", 10)
+                .WithLifetime(Lifetime.Singleton);
 
             theContainer
                 .Register<IDependency>()

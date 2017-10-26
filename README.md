@@ -2,7 +2,7 @@
 
 ![Build Status](https://eposgmbh.visualstudio.com/_apis/public/build/definitions/30ebff28-f13c-44d2-b6db-7739d6cf4ab1/5/badge)
 [![NuGet](https://img.shields.io/nuget/v/Epos.Utilities.svg)](https://www.nuget.org/packages/Epos.Utilities/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Downloads](https://img.shields.io/nuget/dt/Epos.Utilities.svg)
 
 Build and Release deployment (Docs Website and [NuGet](https://www.nuget.org/)) is automated with
@@ -16,9 +16,188 @@ Epos.Foundation is the Github Repo for foundational utilities like String or Dic
 The packages are implemented using .NET Standard (2.0+). Therefore you can use them cross-platform on any supported platform and
 also with the full .NET Framework (4.6.1+).
 
-[Getting started](https://eposgmbh.github.io/getting-started.html)
+[See the Docs Website.](https://eposgmbh.github.io/getting-started.html)
 
-[API Reference](https://eposgmbh.github.io/Api/Epos.CmdLine.html)
+## Installation
+
+Via NuGet you can install the NuGet packages **Epos.Utilities** and **Epos.CmdLine**.
+
+```
+PM> Install-Package Epos.Utilities
+PM> Install-Package Epos.CmdLine
+```
+
+You can install them separately, the packages are independent from each other.
+
+## Usage
+
+**Epos.Utilities** are more or less self-documenting simple utility classes. You can take a look at the corresponding
+unit tests in [this Github Repo](https://github.com/eposgmbh/Epos.Foundation/tree/master/Epos.Utilities.Tests).
+
+**Epos.CmdLine** is a full fledged yet simple command line parser. Source code for a demo console app can be found in
+[this Github Repo](https://github.com/eposgmbh/Epos.Foundation/tree/master/Epos.CmdLine.Sample).
+
+### Epos.Utilities
+
+Highlights of the **Epos.Utilities** package are:
+
+#### Arithmetics
+
+Use the `Arithmetics` class to do generic calculations for different data types like
+`int` or `double`:
+
+```csharp
+double double = Arithmetics.GetZeroValue<double>(); // 0.0
+int integer = Arithmetics.GetOneValue<int>(); // 1
+
+var addIntegers = Arithmetics.CreateAddOperation<int>();
+int sum = addIntegers(integer, 33); // 34
+
+var multiplyDoubles = Arithmetics.CreateMultiplyOperation<double>();
+double theProduct = multiplyDoubles(11.0, 6.5); // 71.5
+```
+
+#### StringExtensions
+
+Use the `StringExtensions` class to do (among other things) generic type conversions
+from a string. You can convert to any type with an attached `TypeConverterAttribute`.
+
+```csharp
+bool isSuccess = "33".TryConvert(CultureInfo.InvariantCulture, out int theInteger);
+Assert.That(theInteger, Is.EqualTo(33));
+Assert.That(isSuccess, Is.True);
+
+// or equivalent:
+
+isSuccess = "33".TryConvert(typeof(int), CultureInfo.InvariantCulture, out object theObject);
+Assert.That(theObject, Is.EqualTo(33));
+Assert.That(isSuccess, Is.True);
+
+// Failure case:
+
+isSuccess = "ABC".TryConvert(CultureInfo.InvariantCulture, out double theDouble);
+Assert.That(theDouble, Is.EqualTo(0.0));
+Assert.That(isSuccess, Is.False);
+```
+
+#### DumpExtensions
+
+Use the `DumpExtensions` class to pretty-print any kind of object.
+
+```csharp
+// null values
+object obj = null;
+Console.WriteLine(obj.Dump()); // Null
+
+// Types
+Console.WriteLine(typeof(int).Dump()); // int
+Console.WriteLine(typeof(double).Dump()); // double
+Console.WriteLine(typeof(double?).Dump()); // double?
+Console.WriteLine(typeof(Cache<,>).Dump()); // Epos.Utilities.Cache<TKey, TValue>
+
+double dbl = 33.99;
+Console.WriteLine(dbl.Dump()); // 33.99 (Dump always uses the invariant culture)
+
+// Complex type instances:
+Console.WriteLine(new[] { 1, 2, 3 }.Dump()); // {1, 2, 3}
+Console.WriteLine(new { Integer = 1, String = "Hello" }.Dump()); // [Integer = 1, String = Hello]
+```
+
+#### Container
+
+Use the `Container` class as a simple lightweight DI Container.
+
+```csharp
+var theContainer = new Container();
+theContainer
+    .Register<ITestService>()
+    .ImplementedBy<TestService>()
+    .WithParameter("connectionString", "Hello World!") // Constructor params
+    .AndParameter("maxCount", 10)
+    .WithLifetime(Lifetime.Singleton);
+
+// ...
+
+var theTestService = theContainer.Resolve<ITestService>();
+```
+
+### Epos.CmdLine
+
+`BuildOptions` class for strongly typed access of the command line parameters:
+
+```csharp
+public class BuildOptions
+{
+    [CmdLineOption('p')]
+    public int ProjectNumber { get; set; }
+
+    [CmdLineOption('m')]
+    public string Memory { get; set; }
+
+    // ...
+}
+```
+
+Sample Main method that uses the `BuildOptions` class for the subcommand `build`:
+
+```csharp
+public static int Main(string[] args) {
+    var theCmdLineDefinition = new CmdLineDefinition {
+        Name = "sample", // <- if not specified, .exe-Filename is used
+        Subcommands = {
+            new CmdLineSubcommand<BuildOptions>("build", "Builds something.") {
+                Options = {
+                    new CmdLineOption<int>('p', "Sets the project number.") { LongName = "project-number" },
+                    new CmdLineOption<string>('m', "Sets the used memory.") {
+                        LongName = "memory",
+                        DefaultValue = "1 GB"
+                    },
+                    new CmdLineSwitch('d', "Disables the command."),
+                    new CmdLineSwitch('z', "Zzzz...")
+                },
+                Parameters = {
+                    new CmdLineParameter<string>("filename", "Sets the filename.")
+                },
+                CmdLineFunc = (options, definition) => {
+                    // Do something for the build subcommand
+                    // ...
+
+                    Console.WriteLine("sample command line application" + Lf);
+                    Console.WriteLine(options.Dump() + Lf);
+
+                    return 0; // <- your error code or 0, if successful
+                }
+            }
+        },
+        // further subcommands...
+        //
+        // If you don't want to specify subcommands, register one subcommand with the name "default"
+        // (or use the constant CmdLineSubcommand.DefaultName) and set the HasDifferentiatedSubcommands
+        // property of the CmdLineDefinition to false.
+    };
+
+    return theCmdLineDefinition.Try(args);
+}
+```
+
+This simple definition automatically produces help and usage console output like this:
+
+```
+Usage: sample build [-p, --project-number <int>] [-m, --memory <string="1 GB">] [-d] [-z] <filename:string>
+
+Error: Missing parameter: filename
+
+Options
+  -p, --project-number   Sets the project number.
+  -m, --memory           Sets the used memory. >>> defaults to "1 GB"
+  -d                     Disables the command.
+  -z                     Zzzz...
+
+Parameters
+  filename               Sets the filename.
+```
+
+Long option chains and description texts are properly line breaked regarding the console window width.
 
 ## Contributing
 

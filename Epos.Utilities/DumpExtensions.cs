@@ -7,19 +7,19 @@ using System.Text;
 
 namespace Epos.Utilities
 {
-    /// <summary> Bietet Methoden zur Ausgabe einer String-Repräsentation aller Datentypen </summary>
+    /// <summary>Provides utility methods for pretty-printing arbitrary object instances.</summary>
     public static class DumpExtensions 
     {
-        // --- Konstanten ---
-
         private const string Null = "Null";
         private const string My = "my";
         private const string Underscore = "_";
         private const string ToStringMethodName = "ToString";
         private static readonly Type[] ToStringParameters = { typeof(IFormatProvider) };
 
-        // --- Methoden ---
-
+        /// <summary>Returns a pretty-print string representation of the specified
+        /// <paramref name="value"/>.</summary>
+        /// <param name="value">Value</param>
+        /// <returns>Pretty-print string representation</returns>
         public static string Dump(this object value) {
             // Simple cases:
             switch (value) {
@@ -30,11 +30,10 @@ namespace Epos.Utilities
                     return theString;
 
                 case double theDoubleValue:
-                    if (Math.Abs(theDoubleValue) < 1.0E-14) {
-                        return "0";
-                    } else {
-                        return theDoubleValue.ToString("0.##########", CultureInfo.InvariantCulture);
-                    }
+                    return
+                        Math.Abs(theDoubleValue) < 1.0E-14 ?
+                        "0" :
+                        theDoubleValue.ToString("0.##########", CultureInfo.InvariantCulture);
 
                 case DictionaryEntry theEntry:
                     return
@@ -49,14 +48,17 @@ namespace Epos.Utilities
 
             Type theType = value.GetType();
             if (theType.IsGenericType && theType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>)) {
-                var theBuilder = new StringBuilder("[");
-                theBuilder.Append(theType.GetProperty("Key").GetValue(value, null).Dump()).Append(", ");
-                theBuilder.Append(theType.GetProperty("Value").GetValue(value, null).Dump()).Append("]");
+                var theBuilder =
+                    new StringBuilder("[")
+                        .Append(theType.GetProperty("Key").GetValue(value, null).Dump())
+                        .Append(", ")
+                        .Append(theType.GetProperty("Value").GetValue(value, null).Dump())
+                        .Append("]");
 				
                 return theBuilder.ToString();
             }
 			
-            // ToString()-Methode suchen und aufrufen, falls vorhanden (nicht bei Anonymous types!):
+            // Find ToString() method and call, if available (not with anonymous types!):
             MethodInfo theToStringMethodInfo = GetToStringMethodInfo(theType);
             if (theToStringMethodInfo != null && !theType.Name.StartsWith("<>f__Anonymous")) {
                 if (theToStringMethodInfo.GetParameters().Length == 1) {
@@ -76,14 +78,15 @@ namespace Epos.Utilities
                 return Dump(theEnumerator);
             }
 
-            // Nur object.ToString() bzw. ValueType.ToString() ist möglich.
-            // Dies reicht nicht aus.
-            FieldInfo[] theFieldInfos = theType.GetFields(
+            // Only object.ToString() respectively ValueType.ToString() is possible.
+            // That's not enough.
+            var theFieldInfos = theType.GetFields(
                 BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static
             );
-            var theStringBuilder = new StringBuilder("[");
 
+            var theStringBuilder = new StringBuilder("[");
             int theFieldInfosLength = theFieldInfos.Length;
+
             for (int theIndex = 0; theIndex < theFieldInfosLength; theIndex++) {
                 FieldInfo theFieldInfo = theFieldInfos[theIndex];
                 string theFieldName = theFieldInfo.Name;
@@ -111,7 +114,7 @@ namespace Epos.Utilities
             return theStringBuilder.Append(']').ToString();
         }
 
-        #region Hilfsmethoden
+        #region Helper methods
 
         private static string Dump(this Type type) {
             if (type.IsGenericParameter) {

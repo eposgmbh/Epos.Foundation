@@ -17,11 +17,11 @@ namespace Epos.CmdLine
         public int Try() {
             var theUsageWriter = new CmdLineUsageWriter(myDefinition);
 
-            if (myDefinition.HasDifferentiatedCommands && !myDefinition.Subcommands.Any()) {
+            if (myDefinition.HasDifferentiatedSubcommands && !myDefinition.Subcommands.Any()) {
                 throw new InvalidOperationException("At least one subcommand must be added to the definition.");
             }
 
-            if (myDefinition.HasDifferentiatedCommands && myArgs.Length < 1) {
+            if (myDefinition.HasDifferentiatedSubcommands && myArgs.Length < 1) {
                 theUsageWriter.WriteAndExit();
                 return -1;
             }
@@ -31,7 +31,7 @@ namespace Epos.CmdLine
                 sc => sc.Name == CmdLineSubcommand.DefaultName
             );
 
-            if (!myDefinition.HasDifferentiatedCommands && theSubcommand == null) {
+            if (!myDefinition.HasDifferentiatedSubcommands && theSubcommand == null) {
                 throw new InvalidOperationException(
                     "Without differentiated commands a subcommand with the name \"default\" must be added to the definition."
                 );

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Text;
+using Epos.Utilities;
 
 namespace Epos.CmdLine
 {
+    /// <summary> Command line option, see <a href="/getting-started.html">Getting started</a>
+    /// for an example.</summary>
+    /// <typeparam name="T">Option data type</typeparam>
     public class CmdLineOption<T> : CmdLineOption
     {
         private T myDefaultValue;
@@ -12,8 +16,14 @@ namespace Epos.CmdLine
             typeof(T).TestAvailable();
         }
 
+        /// <summary> Initializes an instance of the <see cref="CmdLineOption{T}"/> class.
+        /// </summary>
+        /// <param name="letter">Option letter</param>
+        /// <param name="description">Description</param>
         public CmdLineOption(char letter, string description) : base(typeof(T), letter, description) { }
 
+        /// <summary> Gets or sets the default value that is used, if the option is not
+        /// specified on the command line.</summary>
         public T DefaultValue {
             get => myDefaultValue;
             set {
@@ -25,25 +35,36 @@ namespace Epos.CmdLine
         internal override object GetDefaultValue() => myIsDefaultValueSet ? (object) DefaultValue : null;
     }
 
+    /// <summary> Command line option base class.</summary>
     public abstract class CmdLineOption
     {
+        /// <summary> Initializes an instance of the <see cref="CmdLineOption"/> class.
+        /// </summary>
+        /// <param name="dataType">Option data type</param>
+        /// <param name="letter">Option letter</param>
+        /// <param name="description">Description</param>
         protected CmdLineOption(Type dataType, char letter, string description) {
             DataType    = dataType    ?? throw new ArgumentNullException(nameof(dataType));
             Letter      = letter;
             Description = description ?? throw new ArgumentNullException(nameof(description));
         }
 
+        /// <summary> Gets the option letter.</summary>
         public char Letter { get; }
 
+        /// <summary> Gets the description. </summary>
         public string Description { get; }
 
+        /// <summary> Gets the data type. </summary>
         public Type DataType { get; }
 
+        /// <summary> Gets or sets the long name ("--example").
+        /// </summary>
         public string LongName { get; set; }
 
-        public bool IsSwitch => DataType == typeof(bool);
+        internal bool IsSwitch => DataType == typeof(bool);
 
-        public override string ToString() {
+        internal string ToShortCmdLineString() {
             string theOptionName = $"-{Letter}";
 
             if (LongName != null) {
@@ -53,15 +74,15 @@ namespace Epos.CmdLine
             return theOptionName;
         }
 
-        public string ToCmdLineString() {
+        internal string ToLongCmdLineString() {
             var theResult = new StringBuilder()
                 .Append('[')
-                .Append(this);
+                .Append(ToShortCmdLineString());
 
             if (!IsSwitch) {
                 theResult
                     .Append(" <")
-                    .Append(DataType.GetShortTypeString());
+                    .Append(DataType.Dump());
 
                 object theDefaultValue = GetDefaultValue();
                 if (theDefaultValue != null) {
@@ -72,7 +93,7 @@ namespace Epos.CmdLine
                         theResult.Append('"');
                     }
 
-                    theResult.Append(theDefaultValue);
+                    theResult.Append(theDefaultValue.Dump());
 
                     if (theDefaultValue is string) {
                         theResult.Append('"');

@@ -14,4 +14,12 @@
     <PackageReference Include="docfx.console" Version="2.25.1" />
   </ItemGroup>
 
+  <Target Name="CopyFiles" BeforeTargets="Build"> 
+    <Copy SourceFiles="../README.md" DestinationFiles="getting-started.md" /> 
+  </Target> 
+
+  <Target Name="DeleteFiles" AfterTargets="DocBuild">
+    <Delete Files="getting-started.md" />
+  </Target>
+
 </Project>

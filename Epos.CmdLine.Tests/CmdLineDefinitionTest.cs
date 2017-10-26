@@ -14,7 +14,7 @@ namespace Epos.CmdLine
             var theConsoleOutput = new StringWriter();
 
             var theCmdLineDefinition = new CmdLineDefinition {
-                HasDifferentiatedCommands = false,
+                HasDifferentiatedSubcommands = false,
                 Configuration = new CmdLineConfiguration {
                     UsageTextWriter = theConsoleOutput,
                     ErrorAction = () => { }
