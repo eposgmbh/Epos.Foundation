@@ -33,9 +33,11 @@ namespace Epos.Utilities
 
             Assert.That(theBuilder.ToString(), Is.EqualTo("This is a test."));
 
+#if DEBUG
             Assert.Throws<ArgumentNullException>(() => theStringEnumerable.ForEach(null));
 
             Assert.Throws<ArgumentNullException>(() => EnumerableExtensions.ForEach(null, (Action<object>) (obj => { })));
+#endif
         }
 
         [Test]
