@@ -47,14 +47,14 @@ Use the `Arithmetics` class to do generic calculations for different data types 
 `int` or `double`:
 
 ```csharp
-double double = Arithmetics.GetZeroValue<double>(); // 0.0
-int integer = Arithmetics.GetOneValue<int>(); // 1
+double theDouble = Arithmetics.GetZeroValue<double>(); // 0.0
+int theInteger = Arithmetics.GetOneValue<int>(); // 1
 
-var addIntegers = Arithmetics.CreateAddOperation<int>();
-int sum = addIntegers(integer, 33); // 34
+var theAddIntegers = Arithmetics.CreateAddOperation<int>();
+int theSum = theAddIntegers(theInteger, 33); // 34
 
-var multiplyDoubles = Arithmetics.CreateMultiplyOperation<double>();
-double theProduct = multiplyDoubles(11.0, 6.5); // 71.5
+var theMultiplyDoubles = Arithmetics.CreateMultiplyOperation<double>();
+double theProduct = theMultiplyDoubles(11.0, 6.5); // 71.5
 ```
 
 #### StringExtensions
@@ -138,7 +138,7 @@ public class BuildOptions
 }
 ```
 
-Sample Main method that uses the `BuildOptions` class for the subcommand `build`:
+Sample `Main` method that uses the `BuildOptions` class for the subcommand `build`:
 
 ```csharp
 public static int Main(string[] args) {

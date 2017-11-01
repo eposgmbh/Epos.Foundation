@@ -1,10 +1,11 @@
-﻿using System;
+﻿#if DEBUG
+
+using System;
 using System.ComponentModel;
 using NUnit.Framework;
 
 namespace Epos.Utilities
 {
-#if DEBUG
     [TestFixture]
     public class DebugThrowTest
     {
@@ -31,5 +32,6 @@ namespace Epos.Utilities
             DebugThrow.If(false, "Wrong param value.", "param");
         }
     }
-#endif
 }
+
+#endif

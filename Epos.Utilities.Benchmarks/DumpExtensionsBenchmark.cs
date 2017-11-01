@@ -6,6 +6,7 @@ using NUnit.Framework;
 namespace Epos.Utilities
 {
     [TestFixture]
+    [Ignore("Lasts too long. Execute locally on demand.")]
     public class DumpExtensionsBenchmark
     {
         [Benchmark]
