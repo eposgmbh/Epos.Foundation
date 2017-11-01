@@ -12,7 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Solution Items", "0. Sol
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		LICENSE = LICENSE
-		NuGet.Config = NuGet.Config
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -28,9 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epos.CmdLine.Sample", "Epos
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Docs", "3. Docs", "{F6FDFD3A-775A-40CB-B659-4B1FE7122348}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Epos.Foundation.Docs", "Epos.Foundation.Docs\Epos.Foundation.Docs.csproj", "{303FB2C7-1219-4859-B9F2-2A4F30391D01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epos.Foundation.Docs", "Epos.Foundation.Docs\Epos.Foundation.Docs.csproj", "{303FB2C7-1219-4859-B9F2-2A4F30391D01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Epos.Utilities.Benchmarks", "Epos.Utilities.Benchmarks\Epos.Utilities.Benchmarks.csproj", "{5F7665B9-8DA8-408A-B8D3-0598D89E8223}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epos.Utilities.Benchmarks", "Epos.Utilities.Benchmarks\Epos.Utilities.Benchmarks.csproj", "{5F7665B9-8DA8-408A-B8D3-0598D89E8223}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
