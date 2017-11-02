@@ -68,7 +68,7 @@ namespace Epos.Utilities
             IEnumerable theDumpFriendlyEnumerable =
                 from theKey in myQueue
                 let theValue = this[theKey]
-                select new { Key = theKey, Value = theValue };
+                select new DictionaryEntry(theKey, theValue);
 
             return theDumpFriendlyEnumerable.Dump();
         }

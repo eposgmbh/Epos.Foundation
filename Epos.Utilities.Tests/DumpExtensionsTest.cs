@@ -11,7 +11,7 @@ namespace Epos.Utilities
     {
         [Test]
         public void Null() {
-            Assert.That((null as object).Dump(), Is.EqualTo("Null"));
+            Assert.That((null as object).Dump(), Is.EqualTo("null"));
         }
 
         [Test]
@@ -21,10 +21,10 @@ namespace Epos.Utilities
 
         [Test]
         public void DictionaryEntry() {
-            Assert.That(new DictionaryEntry(1, "One").Dump(), Is.EqualTo("[1, One]"));
+            Assert.That(new DictionaryEntry(1, "One").Dump(), Is.EqualTo("{ 1: One }"));
             Assert.That(
                 new DictionaryEntry(2.2, new KeyValuePair<int, string>(3, "Three")).Dump(), 
-                Is.EqualTo("[2.2, [3, Three]]")
+                Is.EqualTo("{ 2.2: { 3: Three } }")
             );
         }
 
@@ -42,10 +42,10 @@ namespace Epos.Utilities
 
         [Test]
         public void KeyValuePair() {
-            Assert.That(new KeyValuePair<int, string>(1, "One").Dump(), Is.EqualTo("[1, One]"));
+            Assert.That(new KeyValuePair<int, string>(1, "One").Dump(), Is.EqualTo("{ 1: One }"));
             Assert.That(
                 new KeyValuePair<double, DictionaryEntry>(3.3, new DictionaryEntry(4, "Four")).Dump(),
-                Is.EqualTo("[3.3, [4, Four]]")
+                Is.EqualTo("{ 3.3: { 4: Four } }")
             );
         }
 
@@ -57,24 +57,24 @@ namespace Epos.Utilities
 
         [Test]
         public void Enumerable() {
-            Assert.That(GetEnumerable1().Dump(), Is.EqualTo("{1, 2, 3}"));
-            Assert.That(GetEnumerable2().Dump(), Is.EqualTo("{[2, Two], [3, Three]}"));
+            Assert.That(GetEnumerable1().Dump(), Is.EqualTo("[1, 2, 3]"));
+            Assert.That(GetEnumerable2().Dump(), Is.EqualTo("[{ 2: Two }, { 3: Three }]"));
         }
 
         [Test]
         public void Enumerator() {
-            Assert.That(GetEnumerable1().GetEnumerator().Dump(), Is.EqualTo("{1, 2, 3}"));
-            Assert.That(GetEnumerable2().GetEnumerator().Dump(), Is.EqualTo("{[2, Two], [3, Three]}"));
+            Assert.That(GetEnumerable1().GetEnumerator().Dump(), Is.EqualTo("[1, 2, 3]"));
+            Assert.That(GetEnumerable2().GetEnumerator().Dump(), Is.EqualTo("[{ 2: Two }, { 3: Three }]"));
         }
 
         [Test]
         public void AnonymousType() {
-            Assert.That(new { Integer = 1, String = "Hello" }.Dump(), Is.EqualTo("[Integer = 1, String = Hello]"));
+            Assert.That(new { Integer = 1, String = "Hello" }.Dump(), Is.EqualTo("{ Integer = 1, String = Hello }"));
         }
 
         [Test]
         public void OtherClass() {
-            Assert.That(new ExampleClass().Dump(), Is.EqualTo("[One = 1, Two = Two, Date = 09/09/2099 00:00:00]"));
+            Assert.That(new ExampleClass().Dump(), Is.EqualTo("{ One = 1, Two = Two, Date = 09/09/2099 00:00:00 }"));
         }
 
         #region Hilfsmember
@@ -89,9 +89,7 @@ namespace Epos.Utilities
 
         private sealed class ExampleClass
         {
-            #pragma warning disable 414
             #pragma warning disable 169
-            
             private int myOne = 1;
             
             // ReSharper disable InconsistentNaming
@@ -101,7 +99,6 @@ namespace Epos.Utilities
             // ReSharper restore InconsistentNaming
             
             #pragma warning restore 169
-            #pragma warning restore 414
         }
 
         #endregion

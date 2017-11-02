@@ -10,7 +10,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Epos.Utilities
 {
-    /// <summary> Simple JSON Web API Client. </summary>
+    /// <summary> Provides a simple JSON Web API Client. </summary>
     public sealed class JsonServiceClient
     {
         private static readonly JsonSerializerSettings DefaultJsonSerializerSettings = new JsonSerializerSettings {

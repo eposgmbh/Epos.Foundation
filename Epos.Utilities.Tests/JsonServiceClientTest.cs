@@ -36,7 +36,7 @@ namespace Epos.Utilities
             var theClient = new JsonServiceClient("https://jsonplaceholder.typicode.com/");
 
             var theGetManyResult = await theClient.GetManyAsync<GetManyResult>(
-                "posts", ("userId", 1)
+                apiUrl: "posts", queryParams: ("userId", 1)
             );
 
             Assert.That(theGetManyResult, Has.Count.EqualTo(10));

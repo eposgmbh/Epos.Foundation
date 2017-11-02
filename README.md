@@ -57,6 +57,29 @@ var theMultiplyDoubles = Arithmetics.CreateMultiplyOperation<double>();
 double theProduct = theMultiplyDoubles(11.0, 6.5); // 71.5
 ```
 
+#### JsonServiceClient
+
+Use the `JsonServiceClient` to initiate JSON Web API calls (see
+[JSONPlaceholder Fake REST API](https://jsonplaceholder.typicode.com/)):
+
+```csharp
+public class Post
+{
+    public int    UserId { get; set; }
+    public int    Id     { get; set; }
+    public string Title  { get; set; }
+    public string Body   { get; set; }
+}
+
+// ...
+
+var theClient = new JsonServiceClient("https://jsonplaceholder.typicode.com/");
+
+var theGetManyResult = await theClient.GetManyAsync<Post>(
+    apiUrl: "posts", queryParams: ("userId", 1)
+);
+```
+
 #### StringExtensions
 
 Use the `StringExtensions` class to do (among other things) generic type conversions
@@ -99,8 +122,8 @@ double dbl = 33.99;
 Console.WriteLine(dbl.Dump()); // 33.99 (Dump always uses the invariant culture)
 
 // Complex type instances:
-Console.WriteLine(new[] { 1, 2, 3 }.Dump()); // {1, 2, 3}
-Console.WriteLine(new { Integer = 1, String = "Hello" }.Dump()); // [Integer = 1, String = Hello]
+Console.WriteLine(new[] { 1, 2, 3 }.Dump()); // [1, 2, 3]
+Console.WriteLine(new { Integer = 1, String = "Hello" }.Dump()); // { Integer = 1, String = Hello }
 ```
 
 #### Container

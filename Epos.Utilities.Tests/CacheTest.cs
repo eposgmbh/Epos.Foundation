@@ -47,7 +47,7 @@ namespace Epos.Utilities
             Assert.That(theCache[2], Is.EqualTo("Zwei"));
             Assert.That(theCache[3], Is.EqualTo("Drei"));
 
-            Assert.That(theCache.ToString(), Is.EqualTo("{[Key = 2, Value = Zwei], [Key = 3, Value = Drei]}"));
+            Assert.That(theCache.ToString(), Is.EqualTo("[{ 2: Zwei }, { 3: Drei }]"));
         }
     }
 }

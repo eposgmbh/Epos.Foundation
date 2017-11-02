@@ -3,8 +3,10 @@ using System.Diagnostics;
 
 namespace Epos.Utilities
 {
-    /// <summary> Provides a high performannce thread-safe logger implementation.
+    /// <summary> Provides a high performance thread-safe logger implementation.
     /// </summary>
+    /// <remarks> Calls to methods of this class are only compiled, if the compilation
+    /// symbol <b>LOGGING</b> is defined. </remarks>
     public static class HighPerfLogger
     {
         private static readonly object SyncLock = new object();

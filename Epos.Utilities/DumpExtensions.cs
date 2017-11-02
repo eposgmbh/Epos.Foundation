@@ -10,7 +10,7 @@ namespace Epos.Utilities
     /// <summary>Provides utility methods for pretty-printing arbitrary object instances.</summary>
     public static class DumpExtensions 
     {
-        private const string Null = "Null";
+        private const string Null = "null";
         private const string My = "my";
         private const string Underscore = "_";
         private const string ToStringMethodName = "ToString";
@@ -37,9 +37,9 @@ namespace Epos.Utilities
 
                 case DictionaryEntry theEntry:
                     return
-                        new StringBuilder("[")
-                            .Append(theEntry.Key.Dump()).Append(", ")
-                            .Append(theEntry.Value.Dump()).Append("]")
+                        new StringBuilder("{ ")
+                            .Append(theEntry.Key.Dump()).Append(": ")
+                            .Append(theEntry.Value.Dump()).Append(" }")
                             .ToString();
 
                 case Type theTypeToDump:
@@ -49,11 +49,11 @@ namespace Epos.Utilities
             Type theType = value.GetType();
             if (theType.IsGenericType && theType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>)) {
                 var theBuilder =
-                    new StringBuilder("[")
+                    new StringBuilder("{ ")
                         .Append(theType.GetProperty("Key").GetValue(value, null).Dump())
-                        .Append(", ")
+                        .Append(": ")
                         .Append(theType.GetProperty("Value").GetValue(value, null).Dump())
-                        .Append("]");
+                        .Append(" }");
 				
                 return theBuilder.ToString();
             }
@@ -70,12 +70,12 @@ namespace Epos.Utilities
                 }
             }
 
-            if (value is IEnumerable theSequence) {
-                return Dump(theSequence.GetEnumerator());
-            }
+            switch (value) {
+                case IEnumerable theSequence:
+                    return Dump(theSequence.GetEnumerator());
 
-            if (value is IEnumerator theEnumerator) {
-                return Dump(theEnumerator);
+                case IEnumerator theEnumerator:
+                    return Dump(theEnumerator);
             }
 
             // Only object.ToString() respectively ValueType.ToString() is possible.
@@ -84,7 +84,7 @@ namespace Epos.Utilities
                 BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static
             );
 
-            var theStringBuilder = new StringBuilder("[");
+            var theStringBuilder = new StringBuilder("{ ");
             int theFieldInfosLength = theFieldInfos.Length;
 
             for (int theIndex = 0; theIndex < theFieldInfosLength; theIndex++) {
@@ -111,7 +111,7 @@ namespace Epos.Utilities
                 }
             }
 
-            return theStringBuilder.Append(']').ToString();
+            return theStringBuilder.Append(" }").ToString();
         }
 
         #region Helper methods
@@ -204,7 +204,7 @@ namespace Epos.Utilities
         }
 
         private static string Dump(IEnumerator enumerator) {
-            StringBuilder theStringBuilder = new StringBuilder().Append('{');
+            StringBuilder theStringBuilder = new StringBuilder().Append('[');
 			
             while (enumerator.MoveNext()) {
                 object theEntry = enumerator.Current;
@@ -217,7 +217,7 @@ namespace Epos.Utilities
                 theStringBuilder.Length = theStringBuilder.Length - 2;
             }
 			
-            theStringBuilder.Append("}");
+            theStringBuilder.Append("]");
 			
             return theStringBuilder.ToString();
         }
