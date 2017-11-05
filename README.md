@@ -75,8 +75,9 @@ public class Post
 
 var theClient = new JsonServiceClient("https://jsonplaceholder.typicode.com/");
 
-var theGetManyResult = await theClient.GetManyAsync<Post>(
-    apiUrl: "posts", queryParams: ("userId", 1)
+IEnumerable<Post> thePosts = await theClient.GetManyAsync<Post>(
+    apiUrl: "posts",
+    queryParams: ("userId", 1) // Use one or more tuples for query params
 );
 ```
 

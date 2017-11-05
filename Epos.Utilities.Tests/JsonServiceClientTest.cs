@@ -58,9 +58,9 @@ namespace Epos.Utilities
         public async Task Post() {
             var theClient = new JsonServiceClient("https://jsonplaceholder.typicode.com/");
 
-            var thePostResult = await theClient.PostAsync<PostResult>(
+            var thePostResult = await theClient.PostAsync<PostAndPutResult>(
                 "posts",
-                new PostMessage {
+                new PostAndPutMessage {
                     UserId = 1,
                     Title = "foo",
                     Body = "bar"
@@ -71,6 +71,33 @@ namespace Epos.Utilities
             Assert.That(thePostResult.Id, Is.EqualTo(101));
             Assert.That(thePostResult.Title, Is.EqualTo("foo"));
             Assert.That(thePostResult.Body, Is.EqualTo("bar"));
+        }
+
+        [Test]
+        public async Task Put() {
+            var theClient = new JsonServiceClient("https://jsonplaceholder.typicode.com/");
+
+            var thePostResult = await theClient.PutAsync<PostAndPutResult>(
+                "posts/1",
+                new PostAndPutMessage {
+                    Id = 1,
+                    UserId = 1,
+                    Title = "foo",
+                    Body = "bar"
+                }
+            );
+
+            Assert.That(thePostResult.UserId, Is.EqualTo(1));
+            Assert.That(thePostResult.Id, Is.EqualTo(1));
+            Assert.That(thePostResult.Title, Is.EqualTo("foo"));
+            Assert.That(thePostResult.Body, Is.EqualTo("bar"));
+        }
+
+        [Test]
+        public async Task Delete() {
+            var theClient = new JsonServiceClient("https://jsonplaceholder.typicode.com/");
+
+            await theClient.DeleteAsync("posts/1");
         }
 
         #region Helper classes
@@ -98,10 +125,10 @@ namespace Epos.Utilities
             public string Body { get; set; }
         }
 
-        private class PostMessage : GetManyResult { }
+        private class PostAndPutMessage : GetManyResult { }
 
         // ReSharper disable once ClassNeverInstantiated.Local
-        private class PostResult : GetManyResult { }
+        private class PostAndPutResult : GetManyResult { }
 
         #endregion
     }

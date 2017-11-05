@@ -80,7 +80,7 @@ namespace Epos.Utilities
             return await GetDeserializedJsonObject<IEnumerable<TResponse>>(theResponseMessage);
         }
 
-        /// <summary> Executes a GET request and expects back a JSON
+        /// <summary> Executes a POST request and expects back a JSON
         /// response that can be deserialized to a <typeparamref name="TResponse"/>
         /// instance. </summary>
         /// <typeparam name="TResponse">Response type</typeparam>
@@ -108,6 +108,46 @@ namespace Epos.Utilities
             );
 
             return await GetDeserializedJsonObject<TResponse>(theResponseMessage);
+        }
+
+        /// <summary> Executes a PUT request and expects back a JSON
+        /// response that can be deserialized to a <typeparamref name="TResponse"/>
+        /// instance. </summary>
+        /// <typeparam name="TResponse">Response type</typeparam>
+        /// <param name="apiUrl">API URL</param>
+        /// <param name="body">Message body (is converted to JSON)</param>
+        /// <param name="queryParams">Query parameters</param>
+        /// <returns><typeparamref name="TResponse"/> instance</returns>
+        public async Task<TResponse> PutAsync<TResponse>(
+            string apiUrl, object body,
+            params (string paramName, object paramValue)[] queryParams
+        ) where TResponse : class {
+            if (body == null) {
+                throw new ArgumentNullException(nameof(body));
+            }
+
+            HttpResponseMessage theResponseMessage = await GetResponseMessage(
+                apiUrl, queryParams,
+                (client, url) => client.PutAsync(
+                    url,
+                    new StringContent(
+                        JsonConvert.SerializeObject(body, Formatting.Indented, DefaultJsonSerializerSettings),
+                        Encoding.UTF8, "application/json"
+                    )
+                )
+            );
+
+            return await GetDeserializedJsonObject<TResponse>(theResponseMessage);
+        }
+
+        /// <summary> Executes a DELETE request. </summary>
+        /// <param name="apiUrl">API URL</param>
+        /// <param name="queryParams">Query parameters</param>
+        public async Task DeleteAsync(string apiUrl, params (string paramName, object paramValue)[] queryParams) {
+            await GetResponseMessage(
+                apiUrl, queryParams,
+                (client, url) => client.DeleteAsync(url)
+            );
         }
 
         #region --- Hilfsmethoden ---
