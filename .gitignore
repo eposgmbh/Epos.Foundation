@@ -261,5 +261,5 @@ __pycache__/
 *.pyc
 
 # Custom
-Epos.Foundation.Docs/Api/
-Epos.Foundation.Docs/log.txt
+docs/Api/
+docs/log.txt
