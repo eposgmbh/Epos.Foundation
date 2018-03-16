@@ -27,15 +27,22 @@ namespace Epos.Utilities.Composition
             }
         }
 
+        /// <summary> Creates an instance. </summary>
+        /// <param name="constructorInfo">Constructor info</param>
+        /// <param name="parameterValues">Parmeter values</param>
+        /// <returns>Instance</returns>
         protected abstract object GetInstance(ConstructorInfo constructorInfo, object[] parameterValues);
 
+        /// <summary> Creates an instance. </summary>
+        /// <param name="factoryMethod">Factory method</param>
+        /// <returns>Instance</returns>
         protected abstract object GetInstance(Delegate factoryMethod);
 
         #region Hilfsmethoden
 
         private object[] GetParameterValues(ConstructorInfo constructurInfo, Container container) {
             ParameterInfo[] theParameterInfos = constructurInfo.GetParameters();
-            
+
             object[] theParameterValues = new object[theParameterInfos.Length];
             for (int theIndex = 0; theIndex < theParameterValues.Length; theIndex++) {
                 theParameterValues[theIndex] = GetParameterValue(container, theParameterInfos[theIndex]);

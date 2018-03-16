@@ -23,7 +23,7 @@ namespace Epos.Utilities
         public void DictionaryEntry() {
             Assert.That(new DictionaryEntry(1, "One").Dump(), Is.EqualTo("{ 1: One }"));
             Assert.That(
-                new DictionaryEntry(2.2, new KeyValuePair<int, string>(3, "Three")).Dump(), 
+                new DictionaryEntry(2.2, new KeyValuePair<int, string>(3, "Three")).Dump(),
                 Is.EqualTo("{ 2.2: { 3: Three } }")
             );
         }
@@ -89,16 +89,14 @@ namespace Epos.Utilities
 
         private sealed class ExampleClass
         {
-            #pragma warning disable 169
+#pragma warning disable 169
+#pragma warning disable 414
             private int myOne = 1;
-            
-            // ReSharper disable InconsistentNaming
             private string _two = "Two";
-            // ReSharper disable once UnusedMember.Local
             private DateTime date = new DateTime(2099, 9, 9);
-            // ReSharper restore InconsistentNaming
-            
-            #pragma warning restore 169
+
+#pragma warning restore 169
+#pragma warning disable 414
         }
 
         #endregion

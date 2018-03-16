@@ -12,6 +12,7 @@
     <Company>Epos</Company>
     <PackageLicenseUrl>https://github.com/eposgmbh/Epos.Foundation/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/eposgmbh/Epos.Foundation</PackageProjectUrl>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

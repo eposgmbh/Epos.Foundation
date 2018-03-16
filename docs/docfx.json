@@ -5,10 +5,11 @@
         {
           "src": "../src/",
           "files": [
-            "Epos.Utilities/**/*.cs",
-            "Epos.CmdLine/**/*.cs"
+            "**/*.csproj"
           ],
           "exclude": [
+            "**/*.Sample/**",
+            "**/*.Tests/**",
             "**/obj/**",
             "**/bin/**"
           ]
@@ -58,6 +59,6 @@
     ],
     "postProcessors": [],
     "noLangKeyword": false,
-    "xref": "msdn.4.5.2.zip"
+    "xrefservice": "https://xref.docs.microsoft.com/query?uid={uid}"
   }
 }

@@ -14,13 +14,12 @@
         },
         {
             "label": "test Epos.Foundation",
-            "command": "dotnet",
+            "command": "powershell",
             "type": "process",
             "args": [
-                "test",
-                "${workspaceFolder}/Epos.Foundation.sln"
+                "-File",
+                "${workspaceFolder}/scripts/RunTests.ps1"
             ],
-            "problemMatcher": "$msCompile",
             "group": "test"
         }
     ]

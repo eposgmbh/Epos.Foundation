@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <AssemblyName>Epos.CmdLine.Tests</AssemblyName>
-    <RootNamespace>Epos.CmdLine</RootNamespace>
+    <AssemblyName>Epos.Utilities.Web.Tests</AssemblyName>
+    <RootNamespace>Epos.Utilities.Web</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,7 +11,7 @@
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
 
-    <ProjectReference Include="..\Epos.CmdLine\Epos.CmdLine.csproj" />
+    <ProjectReference Include="..\Epos.Utilities.Web\Epos.Utilities.Web.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Epos.Utilities</AssemblyName>
-    <RootNamespace>Epos.Utilities</RootNamespace>
+    <AssemblyName>Epos.Utilities.Web</AssemblyName>
+    <RootNamespace>Epos.Utilities.Web</RootNamespace>
     <AssemblyVersion>9.9.9</AssemblyVersion>
     <AssemblyInformationalVersion>9.9.9</AssemblyInformationalVersion>
     <PackageVersion>9.9.9</PackageVersion>
@@ -14,5 +14,11 @@
     <PackageProjectUrl>https://github.com/eposgmbh/Epos.Foundation</PackageProjectUrl>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+    <PackageReference Include="Polly" Version="5.8.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.1" />
+  </ItemGroup>
 
 </Project>

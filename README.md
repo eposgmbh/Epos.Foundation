@@ -11,7 +11,7 @@ Build and Release deployment (Docs Website and [NuGet](https://www.nuget.org/)) 
 ## Docs
 
 Epos.Foundation is the Github Repo for foundational utilities like String or Dictionary extension methods
-(NuGet package **Epos.Utilities**) and a powerful and simple command line parser (NuGet package **Epos.CmdLine**).
+(NuGet package **Epos.Utilities**), utilities for web apps and web APIs (NuGet package **Epos.Utilities.Web**) and a powerful and simple command line parser (NuGet package **Epos.CmdLine**).
 
 The packages are implemented using .NET Standard (2.0+). Therefore you can use them cross-platform on any supported platform and
 also with the full .NET Framework (4.6.1+).
@@ -22,20 +22,21 @@ also with the full .NET Framework (4.6.1+).
 
 Via NuGet you can install the NuGet packages **Epos.Utilities** and **Epos.CmdLine**.
 
-```
-PM> Install-Package Epos.Utilities
-PM> Install-Package Epos.CmdLine
+```bash
+$ dotnet add package Epos.Utilities
+$ dotnet add package Epos.Utilities.Web
+$ dotnet add package Epos.CmdLine
 ```
 
 You can install them separately, the packages are independent from each other.
 
 ## Usage
 
-**Epos.Utilities** are more or less self-documenting simple utility classes. You can take a look at the corresponding
-unit tests in [this Github Repo](https://github.com/eposgmbh/Epos.Foundation/tree/master/Epos.Utilities.Tests).
+**Epos.Utilities** and **Epos.Utilities.Web** are more or less self-documenting simple utility classes. You can take a
+look at the corresponding unit tests in [this Github Repo](https://github.com/eposgmbh/Epos.Foundation/tree/master/src/Epos.Utilities.Tests).
 
 **Epos.CmdLine** is a full fledged yet simple command line parser. Source code for a demo console app can be found in
-[this Github Repo](https://github.com/eposgmbh/Epos.Foundation/tree/master/Epos.CmdLine.Sample).
+[this Github Repo](https://github.com/eposgmbh/Epos.Foundation/tree/master/src/Epos.CmdLine.Sample).
 
 ### Epos.Utilities
 
@@ -55,30 +56,6 @@ int theSum = theAddIntegers(theInteger, 33); // 34
 
 var theMultiplyDoubles = Arithmetics.CreateMultiplyOperation<double>();
 double theProduct = theMultiplyDoubles(11.0, 6.5); // 71.5
-```
-
-#### JsonServiceClient
-
-Use the `JsonServiceClient` to initiate JSON Web API calls (see
-[JSONPlaceholder Fake REST API](https://jsonplaceholder.typicode.com/)):
-
-```csharp
-public class Post
-{
-    public int    UserId { get; set; }
-    public int    Id     { get; set; }
-    public string Title  { get; set; }
-    public string Body   { get; set; }
-}
-
-// ...
-
-var theClient = new JsonServiceClient("https://jsonplaceholder.typicode.com/");
-
-IEnumerable<Post> thePosts = await theClient.GetManyAsync<Post>(
-    apiUrl: "posts",
-    queryParams: ("userId", 1) // Use one or more tuples for query params
-);
 ```
 
 #### StringExtensions
@@ -145,9 +122,46 @@ theContainer
 var theTestService = theContainer.Resolve<ITestService>();
 ```
 
+### Epos.Utilities.Web
+
+Highlights of the **Epos.Utilities.Web** package are:
+
+#### JsonRestClient
+
+Use the `JsonRestClient` or `ResilientJsonRestClient` to initiate JSON Web API calls (see
+[JSONPlaceholder Fake REST API](https://jsonplaceholder.typicode.com/) for the following example).
+
+The `ResilientJsonRestClient` uses the `IPolicyProvider` interface. The default implementation `PolicyProvider` has a Polly retry policy of 5, exponential back-off and a circuit breaker allowing 5 `HttpRequestException` exceptions.
+
+```csharp
+public class Post
+{
+    public int    UserId { get; set; }
+    public int    Id     { get; set; }
+    public string Title  { get; set; }
+    public string Body   { get; set; }
+}
+
+// ...
+
+IJsonRestClient theClient = new JsonRestClient("https://jsonplaceholder.typicode.com/");
+// or ... new ResilientJsonRestClient(new PolicyProvider(), "https...");
+
+var (theStatusCode, thePosts) = await theClient.GetManyAsync<Post>(
+    apiUrl: "posts",
+    queryParams: ("userId", 1) // Use one or more tuples for query params
+);
+
+if (theStatusCode == HttpStatusCode.OK) {
+    foreach (Post thePost in thePosts) {
+        // ...
+    }
+}
+```
+
 ### Epos.CmdLine
 
-`BuildOptions` class for strongly typed access of the command line parameters:
+Sample `BuildOptions` class for strongly typed access of the command line parameters:
 
 ```csharp
 public class BuildOptions
