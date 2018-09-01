@@ -35,7 +35,7 @@ namespace Epos.Utilities
 
             return (
                 from theMethodInfo in type.GetMethods(bindingAttr)
-                where theMethodInfo.Name == name
+                where theMethodInfo.IsGenericMethodDefinition && theMethodInfo.Name == name
                 let theParameterInfos = theMethodInfo.GetParameters()
                 where theParameterInfos.Length == paramTypes.Length
                 let theGenericMethodInfo = theMethodInfo.MakeGenericMethod(typeArguments)

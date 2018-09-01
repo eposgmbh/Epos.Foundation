@@ -24,7 +24,7 @@ namespace Epos.Utilities.Web
             Assert.That(theGetOneResult.Response.Format, Is.EqualTo(20));
         }
 
-        [Test]
+        [Test, Ignore("jsonplaceholder not reliant.")]
         public async Task GetMany() {
             var theClient = CreateClient("https://jsonplaceholder.typicode.com/");
 
@@ -48,7 +48,7 @@ namespace Epos.Utilities.Web
             ));
         }
 
-        [Test]
+        [Test, Ignore("jsonplaceholder not reliant.")]
         public async Task Post() {
             var theClient = CreateClient("https://jsonplaceholder.typicode.com/");
 
@@ -64,7 +64,7 @@ namespace Epos.Utilities.Web
             Assert.That(theStatusCode, Is.EqualTo(HttpStatusCode.Created));
         }
 
-        [Test]
+        [Test, Ignore("jsonplaceholder not reliant.")]
         public async Task Put() {
             var theClient = CreateClient("https://jsonplaceholder.typicode.com/");
 
@@ -81,7 +81,7 @@ namespace Epos.Utilities.Web
             Assert.That(theStatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
 
-        [Test]
+        [Test, Ignore("jsonplaceholder not reliant.")]
         public async Task Delete() {
             var theClient = CreateClient("https://jsonplaceholder.typicode.com/");
 
