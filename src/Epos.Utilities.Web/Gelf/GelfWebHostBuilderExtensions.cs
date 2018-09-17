@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace Microsoft.Extensions.Configuration
 {
     /// <summary> Extension methods for the <b>IWebHostBuilder</b> type. </summary>
-    public static class WebHostBuilderExtensions
+    public static class GelfWebHostBuilderExtensions
     {
         /// <summary> Configures GELF logging (Graylog). </summary>
         /// <param name="hostBuilder">Web host builder</param>
