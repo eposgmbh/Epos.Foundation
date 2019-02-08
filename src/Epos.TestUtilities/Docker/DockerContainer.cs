@@ -1,16 +1,17 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
 namespace Epos.TestUtilities.Docker
 {
     /// <summary> Represents a Docker container that can be started and stopped. </summary>
-    public sealed class DockerContainer
+    public sealed class DockerContainer : IDisposable
     {
         /// <summary> Starts a container and optionally waits for a readyness log phrase. </summary>
         /// <param name="options">Options</param>
         /// <returns>Docker container</returns>
-        public static DockerContainer StartAndWaitForOpenPort(DockerContainerOptions options) {
+        public static DockerContainer StartAndWaitForReadynessLogPhrase(DockerContainerOptions options) {
             if (options == null) {
                 throw new ArgumentNullException(nameof(options));
             }
@@ -19,18 +20,21 @@ namespace Epos.TestUtilities.Docker
                 throw new ArgumentNullException("options.ImageName");
             }
 
-            var theDockerArguments = new StringBuilder(
-                $"run --detach --publish {options.HostPort}:{options.ContainerPort}"
-            );
+            var theDockerArguments = new StringBuilder($"run --detach");
 
-            foreach ((string key, string value) in options.EnvironmentVariables) {
-                theDockerArguments
-                    .Append(" -e \"").Append(key)
-                    .Append("=").Append(value).Append("\"");
+            if (options.Hostname != null) {
+                theDockerArguments.Append($" --hostname {options.Hostname}");
             }
 
-            theDockerArguments
-                .Append(' ').Append(options.ImageName);
+            foreach ((int hostPort, int containerPort) in options.Ports) {
+                theDockerArguments.Append($" --publish {hostPort}:{containerPort}");
+            }
+
+            foreach ((string key, string value) in options.EnvironmentVariables) {
+                theDockerArguments.Append($" -e \"{key}={value}\"");
+            }
+
+            theDockerArguments.Append(' ').Append(options.ImageName);
 
             string theContainerId = ExecuteDockerCli(theDockerArguments.ToString()).Substring(0, 10);
 
@@ -45,6 +49,9 @@ namespace Epos.TestUtilities.Docker
             Id = id;
             StartOptions = options;
         }
+
+        /// <summary> Destroys (force removes) the container. </summary>
+        ~DockerContainer() => ForceRemove();
 
         /// <summary> Gets the container start options </summary>
         public DockerContainerOptions StartOptions { get; }
@@ -61,14 +68,13 @@ namespace Epos.TestUtilities.Docker
         /// <summary> Gets the container image name. </summary>
         public string ImageName => StartOptions.ImageName;
 
-        /// <summary> Gets the host port. </summary>
-        public int HostPort => StartOptions.HostPort;
-
-        /// <summary> Gets the container port. </summary>
-        public int ContainerPort => StartOptions.ContainerPort;
+        /// <summary> Gets the port list. </summary>
+        public List<(int hostPort, int containerPort)> Ports => StartOptions.Ports;
 
         /// <summary> Force removes the container. </summary>
         public void ForceRemove() => ExecuteDockerCli($"rm --volumes --force {Id}");
+
+        void IDisposable.Dispose() => ForceRemove();
 
         #region --- Helper methods ---
 
