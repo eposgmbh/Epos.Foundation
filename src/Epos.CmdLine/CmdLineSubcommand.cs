@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -26,7 +26,7 @@ namespace Epos.CmdLine
 
         internal override int Execute(IEnumerable<CmdLineToken> argTokens, CmdLineDefinition definition) {
             var theOptions = new TOptions();
-            var theOptionsType = typeof(TOptions);
+            Type theOptionsType = typeof(TOptions);
 
             foreach (CmdLineToken theArgToken in argTokens) {
                 if (theArgToken.Kind != CmdLineTokenKind.Subcommand) {

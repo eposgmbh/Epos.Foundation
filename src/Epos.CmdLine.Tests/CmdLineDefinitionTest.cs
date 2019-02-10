@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using NUnit.Framework;
 
@@ -266,8 +266,8 @@ namespace Epos.CmdLine
                 theConsoleOutput.ToString(),
                 Is.EqualTo(
                     "Usage: sample build [-p, --project-number <int>] [-m, --memory <string=\"1 GB\">]" + Lf +
-                    "                    [-d] [-z] <dummy:string>"                                           + DbLf +
-                    "Error: Missing parameter: dummy"                                                   + DbLf +
+                    "                    [-d] [-z] <dummy:string>"                                      + DbLf +
+                    "Error: Missing option: -p, --project-number"                                       + DbLf +
                     "Options"                                                                           + Lf +
                     "  -p, --project-number   Sets the project number."                                 + Lf +
                     "  -m, --memory           Sets the used memory. >>> defaults to \"1 GB\""           + Lf +
@@ -280,14 +280,14 @@ namespace Epos.CmdLine
 
             theConsoleOutput.GetStringBuilder().Clear();
 
-            theCmdLineDefinition.Try(new[] { "build", "dummy" });
+            theCmdLineDefinition.Try(new[] { "build", "-p", "0", "dummy" });
             Assert.That(theBuildOptions.ProjectNumber, Is.EqualTo(0));
             Assert.That(theBuildOptions.Memory, Is.EqualTo("1 GB"));
             Assert.That(theBuildOptions.DummyParameter, Is.EqualTo("dummy"));
             Assert.That(theBuildOptions.Disable, Is.False);
             Assert.That(theConsoleOutput.ToString(), Is.Empty);
 
-            theCmdLineDefinition.Try(new[] { "build", "-d", "dummy" });
+            theCmdLineDefinition.Try(new[] { "build", "-d", "-p", "0", "dummy" });
             Assert.That(theBuildOptions.ProjectNumber, Is.EqualTo(0));
             Assert.That(theBuildOptions.Memory, Is.EqualTo("1 GB"));
             Assert.That(theBuildOptions.DummyParameter, Is.EqualTo("dummy"));

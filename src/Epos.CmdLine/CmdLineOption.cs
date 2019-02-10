@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using Epos.Utilities;
 
@@ -75,7 +75,7 @@ namespace Epos.CmdLine
         }
 
         internal string ToLongCmdLineString() {
-            var theResult = new StringBuilder()
+            StringBuilder theResult = new StringBuilder()
                 .Append('[')
                 .Append(ToShortCmdLineString());
 

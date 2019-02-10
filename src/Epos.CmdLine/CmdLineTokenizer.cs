@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Epos.CmdLine
@@ -174,6 +174,13 @@ namespace Epos.CmdLine
                                 Value = theDefaultValue
                             }
                         );
+                    }
+                } else {
+                    // Kein Default value => Option muss gesetzt sein (außer bei Switch)
+                    if (!theOption.IsSwitch &&
+                        !cmdLineTokens.Any(t => t.Kind == CmdLineTokenKind.Option &&
+                        t.Name == theOption.Letter.ToString())) {
+                        myUsageWriter.WriteAndExit(subcommand, $"Missing option: {theOption.ToShortCmdLineString()}");
                     }
                 }
             }
