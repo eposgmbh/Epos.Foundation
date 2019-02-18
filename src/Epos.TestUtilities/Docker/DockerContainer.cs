@@ -36,7 +36,7 @@ namespace Epos.TestUtilities.Docker
 
             theDockerArguments.Append(' ').Append(options.ImageName);
 
-            string theContainerId = ExecuteDockerCli(theDockerArguments.ToString()).Substring(0, 10);
+            string theContainerId = ExecuteDockerCli(theDockerArguments.ToString()).Substring(0, 8);
 
             var theContainer = new DockerContainer(theContainerId, options);
 
