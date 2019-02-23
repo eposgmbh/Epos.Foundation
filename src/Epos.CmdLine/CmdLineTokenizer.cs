@@ -15,6 +15,7 @@ namespace Epos.CmdLine
 
         public List<CmdLineToken> Tokenize(string[] args, ref CmdLineSubcommand subcommand) {
             var theResult = new List<CmdLineToken>();
+            var theExclusionGroupCounts = new Dictionary<string, List<CmdLineOption>>();
 
             int theParameterIndex = 0;
             for (int theIndex = 0; theIndex < args.Length; theIndex++) {
@@ -45,11 +46,22 @@ namespace Epos.CmdLine
                         string theOptionTextWithoutDashes = isLongNameOption ? theArg.Substring(2) : theArg.Substring(1);
 
                         CmdLineOption theOption =
-                            theArg.StartsWith("--") ?
+                            isLongNameOption ?
                                 subcommand.Options.SingleOrDefault(o => o.LongName == theOptionTextWithoutDashes) :
                                 subcommand.Options.SingleOrDefault(o => o.Letter.ToString() == theOptionTextWithoutDashes);
 
                         if (theOption != null) {
+                            foreach (string theExclusionGroup in theOption.ExclusionGroups) {
+                                if (theExclusionGroupCounts.TryGetValue(theExclusionGroup,
+                                    out List<CmdLineOption> theOptions)) {
+                                    theOptions.Add(theOption);
+                                    theExclusionGroupCounts[theExclusionGroup] = theOptions;
+                                } else {
+                                    theOptions = new List<CmdLineOption> { theOption };
+                                    theExclusionGroupCounts[theExclusionGroup] = theOptions;
+                                }
+                            }
+
                             object theValue = true;
                             if (!theOption.IsSwitch) {
                                 if (theIndex < args.Length - 1) {
@@ -82,6 +94,17 @@ namespace Epos.CmdLine
                                     theOption = subcommand.Options.SingleOrDefault(o => o.Letter == theOptionLetter);
 
                                     if (theOption != null && theOption.IsSwitch) {
+                                        foreach (string theExclusionGroup in theOption.ExclusionGroups) {
+                                            if (theExclusionGroupCounts.TryGetValue(theExclusionGroup,
+                                                out List<CmdLineOption> theOptions)) {
+                                                theOptions.Add(theOption);
+                                                theExclusionGroupCounts[theExclusionGroup] = theOptions;
+                                            } else {
+                                                theOptions = new List<CmdLineOption> { theOption };
+                                                theExclusionGroupCounts[theExclusionGroup] = theOptions;
+                                            }
+                                        }
+
                                         theResult.Add(
                                             new CmdLineToken(CmdLineTokenKind.Option, theOptionLetter.ToString()) {
                                                 Value = true
@@ -126,6 +149,18 @@ namespace Epos.CmdLine
                             }
                         );
                     }
+                }
+            }
+
+            foreach (List<CmdLineOption> theOptions in theExclusionGroupCounts.Values) {
+                if (theOptions.Count > 1) {
+                    string theOptionStrings =
+                        theOptions.Select(o => o.ToLongCmdLineString()).Aggregate((s1, s2) => s1 + ", " + s2);
+
+                    myUsageWriter.WriteAndExit(
+                        subcommand,
+                        $"Only one of the following options may be set: {theOptionStrings}"
+                    );
                 }
             }
 

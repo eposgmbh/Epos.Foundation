@@ -208,8 +208,8 @@ namespace Epos.CmdLine
                                 LongName = "memory",
                                 DefaultValue = "1 GB"
                             },
-                            new CmdLineSwitch('d', "Disables the command."),
-                            new CmdLineSwitch('z', "Zzzz...")
+                            new CmdLineSwitch('d', "Disables the command.") { ExclusionGroups = { "E1" } },
+                            new CmdLineSwitch('z', "Zzzz...") { ExclusionGroups = { "E1" } }
                         },
                         Parameters = {
                             new CmdLineParameter<string>("dummy", "Sets a dummy value.")
@@ -302,13 +302,33 @@ namespace Epos.CmdLine
             Assert.That(theBuildOptions.Zzzz, Is.False);
             Assert.That(theConsoleOutput.ToString(), Is.Empty);
 
-            theCmdLineDefinition.Try(new[] { "build", "-dz", "--project-number", "99", "-m", "2 GB", "dummy" });
+            theCmdLineDefinition.Try(new[] { "build", "-d", "--project-number", "99", "-m", "2 GB", "dummy" });
             Assert.That(theBuildOptions.ProjectNumber, Is.EqualTo(99));
             Assert.That(theBuildOptions.Memory, Is.EqualTo("2 GB"));
             Assert.That(theBuildOptions.DummyParameter, Is.EqualTo("dummy"));
             Assert.That(theBuildOptions.Disable, Is.True);
-            Assert.That(theBuildOptions.Zzzz, Is.True);
+            Assert.That(theBuildOptions.Zzzz, Is.False);
             Assert.That(theConsoleOutput.ToString(), Is.Empty);
+
+            Assert.Throws<CmdLineError>(() => theCmdLineDefinition.Try(new[] { "build", "-dz", "-p", "99", "dummy" }));
+
+            Assert.That(
+                theConsoleOutput.ToString(),
+                Is.EqualTo(
+                    "Usage: sample build [-p, --project-number <int>] [-m, --memory <string=\"1 GB\">]" + Lf +
+                    "                    [-d] [-z] <dummy:string>" + DbLf +
+                    "Error: Only one of the following options may be set: [-d], [-z]" + DbLf +
+                    "Options" + Lf +
+                    "  -p, --project-number   Sets the project number." + Lf +
+                    "  -m, --memory           Sets the used memory. >>> defaults to \"1 GB\"" + Lf +
+                    "  -d                     Disables the command." + Lf +
+                    "  -z                     Zzzz..." + DbLf +
+                    "Parameters" + Lf +
+                    "  dummy                  Sets a dummy value." + DbLf
+                )
+            );
+
+            theConsoleOutput.GetStringBuilder().Clear();
 
             Assert.Throws<CmdLineError>(() => theCmdLineDefinition.Try(new[] { "build", "-p", "abc", "dummy" }));
 
