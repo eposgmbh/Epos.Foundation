@@ -168,7 +168,7 @@ namespace Epos.CmdLine
             ValidateCmdLineTokens(theResult, subcommand);
 
             // Option Defaults setzen
-            FillOptionDefaults(theResult, subcommand);
+            FillOptionDefaults(theResult, subcommand, theExclusionGroupCounts.Keys);
 
             // Schauen, ob alle benötigten Parameter gesetzt sind
             FillOptionalParameterDefaults(theResult, subcommand);
@@ -198,7 +198,9 @@ namespace Epos.CmdLine
             }
         }
 
-        private void FillOptionDefaults(ICollection<CmdLineToken> cmdLineTokens, CmdLineSubcommand subcommand) {
+        private void FillOptionDefaults(
+            ICollection<CmdLineToken> cmdLineTokens, CmdLineSubcommand subcommand, IEnumerable<string> exclusionGroups
+        ) {
             foreach (CmdLineOption theOption in subcommand.Options) {
                 object theDefaultValue = theOption.GetDefaultValue();
 
@@ -211,10 +213,12 @@ namespace Epos.CmdLine
                         );
                     }
                 } else {
-                    // Kein Default value => Option muss gesetzt sein (außer bei Switch)
+                    // Kein Default value => Option muss gesetzt sein (außer bei Switch, und falls exclusion group
+                    // bereits erfuellt)
                     if (!theOption.IsSwitch &&
                         !cmdLineTokens.Any(t => t.Kind == CmdLineTokenKind.Option &&
-                        t.Name == theOption.Letter.ToString())) {
+                        t.Name == theOption.Letter.ToString()) &&
+                       (!theOption.ExclusionGroups.Any() || theOption.ExclusionGroups.Except(exclusionGroups).Any())) {
                         myUsageWriter.WriteAndExit(subcommand, $"Missing option: {theOption.ToShortCmdLineString()}");
                     }
                 }

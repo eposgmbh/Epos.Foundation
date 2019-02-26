@@ -185,6 +185,108 @@ namespace Epos.CmdLine
         }
 
         [Test]
+        public void ExclusionGroups() {
+            var theConsoleOutput = new StringWriter();
+
+            TestOptions theTestOptions = null;
+
+            var theCmdLineDefinition = new CmdLineDefinition {
+                Name = "sample",
+                Configuration = new CmdLineConfiguration {
+                    UsageTextWriter = theConsoleOutput,
+                    ErrorAction = () => throw new CmdLineError()
+                },
+                Subcommands = {
+                    new CmdLineSubcommand<TestOptions>("test", "Tests something.") {
+                        Options = {
+                            new CmdLineOption<int>('f', "From.") { ExclusionGroups = { "EG1" } },
+                            new CmdLineOption<int>('t', "To.") { ExclusionGroups = { "EG2" } },
+                            new CmdLineSwitch('a', "All.") { ExclusionGroups = { "EG1", "EG2" } },
+                            new CmdLineOption<int>('s', "Single.") { ExclusionGroups = { "EG1", "EG2" } }
+                        },
+                        CmdLineFunc = (o, _) => {
+                            theTestOptions = o;
+                            return 0;
+                        }
+                    },
+                    new CmdLineSubcommand<object>("build", "Builds something.")
+                }
+            };
+
+            Assert.Throws<CmdLineError>(() => theCmdLineDefinition.Try(new[] { "test" }));
+            Assert.That(
+                theConsoleOutput.ToString(),
+                Is.EqualTo(
+                    "Usage: sample test [-f <int>] [-t <int>] [-a] [-s <int>]" + DbLf +
+                    "Error: Missing option: -f" + DbLf +
+                    "Options" + Lf +
+                    "  -f   From." + Lf +
+                    "  -t   To." + Lf +
+                    "  -a   All." + Lf +
+                    "  -s   Single." + DbLf
+                )
+            );
+
+            theConsoleOutput.GetStringBuilder().Clear();
+
+            theCmdLineDefinition.Try(new[] { "test", "-a" });
+            Assert.That(theTestOptions.All, Is.True);
+            Assert.That(theTestOptions.From, Is.EqualTo(0));
+            Assert.That(theTestOptions.To, Is.EqualTo(0));
+            Assert.That(theTestOptions.Single, Is.EqualTo(0));
+
+            theConsoleOutput.GetStringBuilder().Clear();
+
+            theCmdLineDefinition.Try(new[] { "test", "-s", "123" });
+            Assert.That(theTestOptions.All, Is.False);
+            Assert.That(theTestOptions.From, Is.EqualTo(0));
+            Assert.That(theTestOptions.To, Is.EqualTo(0));
+            Assert.That(theTestOptions.Single, Is.EqualTo(123));
+
+            theConsoleOutput.GetStringBuilder().Clear();
+
+            Assert.Throws<CmdLineError>(() => theCmdLineDefinition.Try(new[] { "test", "-a", "-s", "123" }));
+            Assert.That(
+                theConsoleOutput.ToString(),
+                Is.EqualTo(
+                    "Usage: sample test [-f <int>] [-t <int>] [-a] [-s <int>]" + DbLf +
+                    "Error: Only one of the following options may be set: [-a], [-s <int>]" + DbLf +
+                    "Options" + Lf +
+                    "  -f   From." + Lf +
+                    "  -t   To." + Lf +
+                    "  -a   All." + Lf +
+                    "  -s   Single." + DbLf
+                )
+            );
+
+            theConsoleOutput.GetStringBuilder().Clear();
+
+            theCmdLineDefinition.Try(new[] { "test", "-f", "123", "-t", "456" });
+            Assert.That(theTestOptions.All, Is.False);
+            Assert.That(theTestOptions.From, Is.EqualTo(123));
+            Assert.That(theTestOptions.To, Is.EqualTo(456));
+            Assert.That(theTestOptions.Single, Is.EqualTo(0));
+
+            theConsoleOutput.GetStringBuilder().Clear();
+
+            Assert.Throws<CmdLineError>(() => theCmdLineDefinition.Try(
+                new[] { "test", "-f", "123", "-t", "456", "-a" }
+            ));
+            Assert.That(
+                theConsoleOutput.ToString(),
+                Is.EqualTo(
+                    "Usage: sample test [-f <int>] [-t <int>] [-a] [-s <int>]" + DbLf +
+                    "Error: Only one of the following options may be set: [-f <int>], [-a]" + DbLf +
+                    "Options" + Lf +
+                    "  -f   From." + Lf +
+                    "  -t   To." + Lf +
+                    "  -a   All." + Lf +
+                    "  -s   Single." + DbLf
+                )
+            );
+        }
+
+        [Test]
         public void OptionsAndShowHelp() {
             var theConsoleOutput = new StringWriter();
 
@@ -363,6 +465,21 @@ namespace Epos.CmdLine
         }
 
         private class CmdLineError : Exception { }
+
+        internal class TestOptions
+        {
+            [CmdLineOption('f')]
+            public int From { get; set; }
+
+            [CmdLineOption('t')]
+            public int To { get; set; }
+
+            [CmdLineOption('s')]
+            public int Single { get; set; }
+
+            [CmdLineOption('a')]
+            public bool All { get; set; }
+        }
 
         internal class BuildOptions
         {
