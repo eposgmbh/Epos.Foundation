@@ -7,7 +7,7 @@
     <AssemblyVersion>9.9.9</AssemblyVersion>
     <AssemblyInformationalVersion>9.9.9</AssemblyInformationalVersion>
     <PackageVersion>9.9.9</PackageVersion>
-    <Description>.NET Standard Command line parser and PowerShell adapter</Description>
+    <Description>.NET Standard Command line parser</Description>
     <Authors>Jan Bohlen</Authors>
     <Company>Epos</Company>
     <PackageLicenseUrl>https://github.com/eposgmbh/Epos.Foundation/blob/master/LICENSE</PackageLicenseUrl>
