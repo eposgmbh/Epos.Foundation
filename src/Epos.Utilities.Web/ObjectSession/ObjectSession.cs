@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 using Microsoft.AspNetCore.Http;
@@ -10,8 +11,8 @@ namespace Epos.Utilities.Web
         private const string ObjectSessionKey = "ObjectSession";
 
         private readonly IHttpContextAccessor myHttpContextAccessor;
-        private static readonly Dictionary<Guid, IDictionary<string, object>> mySession =
-            new Dictionary<Guid, IDictionary<string, object>>();
+        private static readonly IDictionary<Guid, IDictionary<string, object>> mySession =
+            new ConcurrentDictionary<Guid, IDictionary<string, object>>();
 
         public ObjectSession(IHttpContextAccessor httpContextAccessor) {
             myHttpContextAccessor = httpContextAccessor;
@@ -19,14 +20,14 @@ namespace Epos.Utilities.Web
 
         public object this[string key] {
             get {
-                var theGuidString = myHttpContextAccessor.HttpContext.Session.GetString(ObjectSessionKey);
+                string theGuidString = myHttpContextAccessor.HttpContext.Session.GetString(ObjectSessionKey);
                 if (theGuidString == null) {
                     return null;
                 }
 
-                Guid theGuid = Guid.Parse(theGuidString);
+                var theGuid = Guid.Parse(theGuidString);
 
-                var theSession = mySession.Get(theGuid);
+                IDictionary<string, object> theSession = mySession.Get(theGuid);
                 if (theSession == null) {
                     theSession = new Dictionary<string, object>();
                     mySession[theGuid] = theSession;
@@ -36,15 +37,15 @@ namespace Epos.Utilities.Web
             }
 
             set {
-                var theGuidString = myHttpContextAccessor.HttpContext.Session.GetString(ObjectSessionKey);
+                string theGuidString = myHttpContextAccessor.HttpContext.Session.GetString(ObjectSessionKey);
                 if (theGuidString == null) {
                     theGuidString = Guid.NewGuid().ToString();
                     myHttpContextAccessor.HttpContext.Session.SetString(ObjectSessionKey, theGuidString);
                 }
 
-                Guid theGuid = Guid.Parse(theGuidString);
+                var theGuid = Guid.Parse(theGuidString);
 
-                var theSession = mySession.Get(theGuid);
+                IDictionary<string, object> theSession = mySession.Get(theGuid);
                 if (theSession == null) {
                     theSession = new Dictionary<string, object>();
                     mySession[theGuid] = theSession;
