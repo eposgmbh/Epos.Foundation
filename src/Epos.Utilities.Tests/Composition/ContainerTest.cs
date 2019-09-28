@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using NUnit.Framework;
 
@@ -8,14 +8,12 @@ namespace Epos.Utilities.Composition
     public class ContainerTest
     {
         [Test]
-        public void ConstructorWithNullArgumentForInstaller() {
-            // ReSharper disable once ObjectCreationAsStatement
-            Assert.Throws<ArgumentNullException>(() => new Container(null));
-        }
+        public void ConstructorWithNullArgumentForInstaller() =>
+            Assert.Throws<ArgumentNullException>(() => new Container(null!));
 
         [Test]
         public void VerySimpleRegistrationAndResolval() {
-            Container theContainer = new Container();
+            var theContainer = new Container();
 
             theContainer.Register<Dog>();
             theContainer.Register<IFood>().ImplementedBy<DogFood>();
@@ -30,7 +28,7 @@ namespace Epos.Utilities.Composition
 
         [Test]
         public void SimpleRegistrationAndResolval() {
-            Container theContainer = new Container();
+            var theContainer = new Container();
 
             theContainer.Register<IAnimal>();
             Assert.Throws<InvalidOperationException>(() => theContainer.Resolve<IAnimal>());
@@ -49,7 +47,7 @@ namespace Epos.Utilities.Composition
 
         [Test]
         public void RegistrationAndResolvalWithSingletonFood() {
-            Container theContainer = new Container();
+            var theContainer = new Container();
 
             theContainer.Register<IAnimal>().ImplementedBy<Dog>();
             theContainer.Register<IFood>().ImplementedBy<DogFood>().WithLifetime(Lifetime.Singleton);
@@ -63,7 +61,7 @@ namespace Epos.Utilities.Composition
 
         [Test]
         public void RegistrationAndResolvalWithSingletonAnimal() {
-            Container theContainer = new Container();
+            var theContainer = new Container();
 
             theContainer.Register<IAnimal>().ImplementedBy<Dog>().WithLifetime(Lifetime.Singleton);
             theContainer.Register<IFood>().ImplementedBy<DogFood>();
@@ -77,7 +75,7 @@ namespace Epos.Utilities.Composition
 
         [Test]
         public void ConstructorParameters() {
-            Container theContainer = new Container();
+            var theContainer = new Container();
 
             theContainer
                 .Register<ITestService>()

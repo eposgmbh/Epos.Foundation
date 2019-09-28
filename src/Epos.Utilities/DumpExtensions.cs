@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -20,7 +20,7 @@ namespace Epos.Utilities
         /// <paramref name="value"/>.</summary>
         /// <param name="value">Value</param>
         /// <returns>Pretty-print string representation</returns>
-        public static string Dump(this object value) {
+        public static string Dump(this object? value) {
             // Simple cases:
             switch (value) {
                 case null:
@@ -46,9 +46,9 @@ namespace Epos.Utilities
                     return theTypeToDump.Dump();
             }
 
-            Type theType = value.GetType();
+            Type theType = value!.GetType();
             if (theType.IsGenericType && theType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>)) {
-                var theBuilder =
+                StringBuilder theBuilder =
                     new StringBuilder("{ ")
                         .Append(theType.GetProperty("Key").GetValue(value, null).Dump())
                         .Append(": ")
@@ -59,14 +59,14 @@ namespace Epos.Utilities
             }
 			
             // Find ToString() method and call, if available (not with anonymous types!):
-            MethodInfo theToStringMethodInfo = GetToStringMethodInfo(theType);
+            MethodInfo? theToStringMethodInfo = GetToStringMethodInfo(theType);
             if (theToStringMethodInfo != null && !theType.Name.StartsWith("<>f__Anonymous")) {
                 if (theToStringMethodInfo.GetParameters().Length == 1) {
-                    return theToStringMethodInfo.Invoke(
+                    return (string) theToStringMethodInfo.Invoke(
                         value, new object[] { CultureInfo.InvariantCulture }
-                    ) as string;
+                    );
                 } else {
-                    return theToStringMethodInfo.Invoke(value, null) as string;
+                    return (string) theToStringMethodInfo.Invoke(value, null);
                 }
             }
 
@@ -80,7 +80,7 @@ namespace Epos.Utilities
 
             // Only object.ToString() respectively ValueType.ToString() is possible.
             // That's not enough.
-            var theFieldInfos = theType.GetFields(
+            FieldInfo[] theFieldInfos = theType.GetFields(
                 BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static
             );
 
@@ -214,7 +214,7 @@ namespace Epos.Utilities
             }
 
             if (theStringBuilder.Length != 1) {
-                theStringBuilder.Length = theStringBuilder.Length - 2;
+                theStringBuilder.Length -= 2;
             }
 			
             theStringBuilder.Append("]");
@@ -222,8 +222,8 @@ namespace Epos.Utilities
             return theStringBuilder.ToString();
         }
 
-        private static MethodInfo GetToStringMethodInfo(Type type) {
-            MethodInfo theResult = null;
+        private static MethodInfo? GetToStringMethodInfo(Type type) {
+            MethodInfo? theResult = null;
 
             Type theSearchType = type;
             while (theSearchType != typeof(object) &&

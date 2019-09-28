@@ -7,8 +7,8 @@ namespace Epos.Utilities.Composition
 {
     internal sealed class ComponentRegistration
     {
-        private ConstructorInfo myConstructurInfo;
-        private ComponentCreationStrategy myComponentCreationStrategy;
+        private ConstructorInfo? myConstructurInfo;
+        private ComponentCreationStrategy? myComponentCreationStrategy;
 
         public ComponentRegistration(Type type, Container container) {
             Container = container;
@@ -23,21 +23,19 @@ namespace Epos.Utilities.Composition
 
         public IDictionary<string, object> Parameters { get; } 
 
-        public Delegate FactoryMethod { get; set; }
+        public Delegate? FactoryMethod { get; set; }
 
         public ConstructorInfo ConstructurInfo => myConstructurInfo ?? (myConstructurInfo = GetConstructorInfo());
 
         public ComponentCreationStrategy ComponentCreationStrategy {
-            get => myComponentCreationStrategy;
+            get => myComponentCreationStrategy!;
             set {
                 myComponentCreationStrategy = value;
                 myComponentCreationStrategy.ComponentRegistration = this;
             }
         }
 
-        internal object GetComponentInstance() {
-            return myComponentCreationStrategy.GetInstance();
-        }
+        internal object GetComponentInstance() => ComponentCreationStrategy.GetInstance();
 
         #region Hilfsmethoden
 

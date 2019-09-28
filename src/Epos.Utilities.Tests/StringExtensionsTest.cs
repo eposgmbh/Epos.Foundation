@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using NUnit.Framework;
 
@@ -9,9 +9,9 @@ namespace Epos.Utilities
     {
         [Test]
         public void Extract() {
-            Assert.Throws<ArgumentNullException>(() => StringExtensions.Extract(null, "1", "2"));
-            Assert.Throws<ArgumentNullException>(() => "0".Extract(null, "2"));
-            Assert.Throws<ArgumentNullException>(() => "0".Extract("1", null));
+            Assert.Throws<ArgumentNullException>(() => StringExtensions.Extract(null!, "1", "2"));
+            Assert.Throws<ArgumentNullException>(() => "0".Extract(null!, "2"));
+            Assert.Throws<ArgumentNullException>(() => "0".Extract("1", null!));
 
             string theExtract = "123abxyzcd789".Extract(between: "ab", and: "cd");
             Assert.That(theExtract, Is.EqualTo("xyz"));
@@ -35,8 +35,8 @@ namespace Epos.Utilities
 
         [Test]
         public void Matches() {
-            Assert.Throws<ArgumentNullException>(() => StringExtensions.Matches(null, "1"));
-            Assert.Throws<ArgumentNullException>(() => "0".Matches(null));
+            Assert.Throws<ArgumentNullException>(() => StringExtensions.Matches(null!, "1"));
+            Assert.Throws<ArgumentNullException>(() => "0".Matches(null!));
 
             Assert.That("1.1.1".Matches(@"\d+\.\d+\.\d+"), Is.True);
             Assert.That("99.01.16".Matches(@"\d+\.\d+\.\d+"), Is.True);
@@ -45,7 +45,7 @@ namespace Epos.Utilities
 
         [Test]
         public void IsValidEmailAddress() {
-            Assert.Throws<ArgumentNullException>(() => StringExtensions.IsValidEmailAddress(null));
+            Assert.Throws<ArgumentNullException>(() => StringExtensions.IsValidEmailAddress(null!));
 
             Assert.That("jan.bohlen@outlook.de".IsValidEmailAddress, Is.True);
             Assert.That("jan.bohlen@outlook".IsValidEmailAddress, Is.False);
@@ -56,7 +56,7 @@ namespace Epos.Utilities
         [Test]
         public void TryConvert()
         {
-            bool isSuccess = "33".TryConvert(typeof(int), CultureInfo.InvariantCulture, out object theObject);
+            bool isSuccess = "33".TryConvert(typeof(int), CultureInfo.InvariantCulture, out object? theObject);
             Assert.That(theObject, Is.EqualTo(33));
             Assert.That(isSuccess, Is.True);
 

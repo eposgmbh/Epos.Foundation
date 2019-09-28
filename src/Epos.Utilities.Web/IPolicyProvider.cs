@@ -8,7 +8,7 @@ namespace Epos.Utilities.Web
     {
         /// <summary> Provides a Polly policy. </summary>
         /// <param name="url">URL for caching</param>
-        /// <returns><see cref="PolicyWrap"/> instance</returns>
-        PolicyWrap ProvidePolicy(string url);
+        /// <returns><see cref="AsyncPolicyWrap"/> instance</returns>
+        AsyncPolicyWrap ProvidePolicy(string url);
     }
 }

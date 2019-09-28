@@ -1,4 +1,4 @@
-﻿namespace Epos.CmdLine.Sample
+namespace Epos.CmdLine.Sample
 {
     public class BuildOptions
     {
@@ -6,7 +6,7 @@
         public int ProjectNumber { get; set; }
 
         [CmdLineOption('m')]
-        public string Memory { get; set; }
+        public string? Memory { get; set; }
 
         [CmdLineOption('d')]
         public bool Disabled { get; set; }
@@ -15,6 +15,6 @@
         public bool Zzzz { get; set; }
 
         [CmdLineParameter("Filename")]
-        public string File { get; set; }
+        public string? File { get; set; }
     }
 }

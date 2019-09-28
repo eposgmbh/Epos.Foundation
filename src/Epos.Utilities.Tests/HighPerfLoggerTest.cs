@@ -1,4 +1,4 @@
-﻿#if  DEBUG // Tests machen nur in DEBUG Sinn, da HighPerfLogger-Aufrufe im Release-Build entfernt werden.
+#if  DEBUG // Tests machen nur in DEBUG Sinn, da HighPerfLogger-Aufrufe im Release-Build entfernt werden.
 
 using System;
 using System.Text;
@@ -19,12 +19,12 @@ namespace Epos.Utilities
             HighPerfLogger.Log("Hello World!");
             Assert.That(isLoggerActionCalled, Is.True);
 
-            Assert.Throws<ArgumentNullException>(() => HighPerfLogger.SetLogAction(null));
+            Assert.Throws<ArgumentNullException>(() => HighPerfLogger.SetLogAction(null!));
         }
 
         [Test]
         public void Log() {
-            StringBuilder theBuilder = new StringBuilder();
+            var theBuilder = new StringBuilder();
             HighPerfLogger.SetLogAction(s => theBuilder.Append(s));
 
             HighPerfLogger.Log("This ");
@@ -37,7 +37,7 @@ namespace Epos.Utilities
 
         [Test]
         public void LogLine() {
-            StringBuilder theBuilder = new StringBuilder();
+            var theBuilder = new StringBuilder();
             HighPerfLogger.SetLogAction(s => theBuilder.Append(s));
 
             HighPerfLogger.LogLine("This");

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using Epos.Utilities;
 
 namespace Epos.CmdLine
@@ -10,7 +11,7 @@ namespace Epos.CmdLine
     /// <typeparam name="T">Option data type</typeparam>
     public class CmdLineOption<T> : CmdLineOption
     {
-        private T myDefaultValue;
+        private T myDefaultValue = default!;
         private bool myIsDefaultValueSet;
 
         static CmdLineOption() {
@@ -33,7 +34,7 @@ namespace Epos.CmdLine
             }
         }
 
-        internal override object GetDefaultValue() => myIsDefaultValueSet ? (object) DefaultValue : null;
+        internal override object? GetDefaultValue() => myIsDefaultValueSet ? (object?) DefaultValue : null;
     }
 
     /// <summary> Command line option base class.</summary>
@@ -61,7 +62,7 @@ namespace Epos.CmdLine
 
         /// <summary> Gets or sets the long name ("--example").
         /// </summary>
-        public string LongName { get; set; }
+        public string? LongName { get; set; }
 
         /// <summary> Exclusion groups to which this option belongs. </summary>
         /// <remarks> Two options with the same exclusion group cannot be used together. </remarks>
@@ -89,7 +90,7 @@ namespace Epos.CmdLine
                     .Append(" <")
                     .Append(DataType.Dump());
 
-                object theDefaultValue = GetDefaultValue();
+                object? theDefaultValue = GetDefaultValue();
                 if (theDefaultValue != null) {
                     theResult
                         .Append("=");
@@ -113,6 +114,6 @@ namespace Epos.CmdLine
             return theResult.ToString();
         }
 
-        internal abstract object GetDefaultValue();
+        internal abstract object? GetDefaultValue();
     }
 }

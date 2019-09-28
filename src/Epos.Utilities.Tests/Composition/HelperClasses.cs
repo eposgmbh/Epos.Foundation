@@ -1,4 +1,4 @@
-﻿namespace Epos.Utilities.Composition
+namespace Epos.Utilities.Composition
 {
     #region ITestService
 
@@ -36,12 +36,12 @@
 
     public interface IAnimal
     {
-        IFood Food { get; set; }
+        IFood? Food { get; set; }
     }
 
     public class Dog : IAnimal
     {
-        public IFood Food { get; set; }
+        public IFood? Food { get; set; }
 
         public Dog() {}
 

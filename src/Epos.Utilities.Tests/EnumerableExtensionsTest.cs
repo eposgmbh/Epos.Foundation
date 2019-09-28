@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,20 +13,20 @@ namespace Epos.Utilities
     {
         [Test]
         public void ToEnumerable() {
-            var theInt32Enumerable = 1.ToEnumerable();
+            IEnumerable<int> theInt32Enumerable = 1.ToEnumerable();
             Assert.That(theInt32Enumerable.Single(), Is.EqualTo(1));
 
-            var theStringEnumerable = "Hello".ToEnumerable();
+            IEnumerable<string> theStringEnumerable = "Hello".ToEnumerable();
             Assert.That(theStringEnumerable.Single(), Is.EqualTo("Hello"));
 
-            var theDateTimeEnumerable = new DateTime(2011, 04, 22).ToEnumerable();
+            IEnumerable<DateTime> theDateTimeEnumerable = new DateTime(2011, 04, 22).ToEnumerable();
             Assert.That(theDateTimeEnumerable.Single(), Is.EqualTo(new DateTime(2011, 04, 22)));
 
         }
 
         [Test]
         public void ForEach() {
-            var theStringEnumerable = new[] { "This ", "is ", "a ", "test." };
+            string[] theStringEnumerable = new[] { "This ", "is ", "a ", "test." };
             
             var theBuilder = new StringBuilder();
             theStringEnumerable.ForEach(s => theBuilder.Append(s));
@@ -34,9 +34,11 @@ namespace Epos.Utilities
             Assert.That(theBuilder.ToString(), Is.EqualTo("This is a test."));
 
 #if DEBUG
-            Assert.Throws<ArgumentNullException>(() => theStringEnumerable.ForEach(null));
+            Assert.Throws<ArgumentNullException>(() => theStringEnumerable.ForEach(null!));
 
-            Assert.Throws<ArgumentNullException>(() => EnumerableExtensions.ForEach(null, (Action<object>) (obj => { })));
+            Assert.Throws<ArgumentNullException>(
+                () => EnumerableExtensions.ForEach(null!, (Action<object>) (obj => { }))
+            );
 #endif
         }
 

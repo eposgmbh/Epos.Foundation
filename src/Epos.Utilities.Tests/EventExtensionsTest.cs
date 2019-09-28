@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 
 using NUnit.Framework;
@@ -12,7 +12,7 @@ namespace Epos.Utilities
         public void Raise1() {
             bool isFirstEventRaised = false;
 
-            EventHelper theHelper = new EventHelper();
+            var theHelper = new EventHelper();
             theHelper.FirstEvent += (sender, e) => {
                 Assert.That(sender, Is.EqualTo("Hello"));
                 Assert.That(e, Is.SameAs(EventArgs.Empty));
@@ -27,9 +27,9 @@ namespace Epos.Utilities
         [Test]
         public void Raise2() {
             bool isFirstEventRaised = false;
-            AsyncCompletedEventArgs theEventArgs = new AsyncCompletedEventArgs(null, false, null);
+            var theEventArgs = new AsyncCompletedEventArgs(null, false, null);
 
-            EventHelper theHelper = new EventHelper();
+            var theHelper = new EventHelper();
             theHelper.FirstEvent += (sender, e) => {
                 Assert.That(sender, Is.EqualTo("World"));
                 Assert.That(e, Is.SameAs(theEventArgs));
@@ -44,9 +44,9 @@ namespace Epos.Utilities
         [Test]
         public void Raise3() {
             bool isSecondEventRaised = false;
-            CancelEventArgs theEventArgs = new CancelEventArgs(false);
+            var theEventArgs = new CancelEventArgs(false);
 
-            EventHelper theHelper = new EventHelper();
+            var theHelper = new EventHelper();
             theHelper.SecondEvent += (sender, e) => {
                 Assert.That(sender, Is.EqualTo(1234));
                 Assert.That(e, Is.SameAs(theEventArgs));
@@ -62,25 +62,25 @@ namespace Epos.Utilities
         public void Raise4() {
             bool isThirdEventRaised = false;
             
-            EventHelper theHelper = new EventHelper();
+            var theHelper = new EventHelper();
             theHelper.ThirdEvent += (sender, e) => {
                 Assert.That(sender, Is.EqualTo(null));
                 Assert.That(e.PropertyName, Is.EqualTo("PropertyName"));
                 isThirdEventRaised = true;
             };
 
-            theHelper.ThirdEvent.Raise(null, "PropertyName");
+            theHelper.ThirdEvent.Raise(null!, "PropertyName");
 
             Assert.That(isThirdEventRaised);
         }
 
         private class EventHelper
         {
-            public EventHandler FirstEvent;
+            public EventHandler? FirstEvent;
 
-            public EventHandler<CancelEventArgs> SecondEvent;
+            public EventHandler<CancelEventArgs>? SecondEvent;
 
-            public PropertyChangedEventHandler ThirdEvent;
+            public PropertyChangedEventHandler? ThirdEvent;
         }
     }
 }

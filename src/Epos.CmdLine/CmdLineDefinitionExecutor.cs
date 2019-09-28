@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,7 +27,7 @@ namespace Epos.CmdLine
             }
 
             // Default Command suchen
-            CmdLineSubcommand theSubcommand = myDefinition.Subcommands.SingleOrDefault(
+            CmdLineSubcommand? theSubcommand = myDefinition.Subcommands.SingleOrDefault(
                 sc => sc.Name == CmdLineSubcommand.DefaultName
             );
 
@@ -43,7 +43,7 @@ namespace Epos.CmdLine
             List<CmdLineToken> theTokens = theTokenizer.Tokenize(myArgs, ref theSubcommand);
 
             // Subcommand ausführen
-            return theSubcommand.Execute(theTokens, myDefinition);
+            return theSubcommand!.Execute(theTokens, myDefinition);
         }
     }
 }

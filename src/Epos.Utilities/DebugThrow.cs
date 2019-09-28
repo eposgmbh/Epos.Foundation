@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -17,7 +17,7 @@ namespace Epos.Utilities
         [Conditional("DEBUG")]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Global
-        public static void IfNull<T>(T value, string paramName) where T : class {
+        public static void IfNull<T>(T? value, string paramName) where T : class {
             if (value == null) {
                 throw new ArgumentNullException(paramName);
             }

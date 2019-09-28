@@ -13,10 +13,10 @@ namespace Epos.Utilities.Composition
     /// <see cref="GetInstance(ConstructorInfo, object[])"/> must be implemented.</remarks>
     public abstract class ComponentCreationStrategy
     {
-        internal ComponentRegistration ComponentRegistration { get; set; }
+        internal ComponentRegistration? ComponentRegistration { get; set; }
 
         internal object GetInstance() {
-            Delegate theFactoryMethod = ComponentRegistration.FactoryMethod;
+            Delegate? theFactoryMethod = ComponentRegistration!.FactoryMethod;
             if (theFactoryMethod != null) {
                 return GetInstance(theFactoryMethod);
             } else {
@@ -53,8 +53,7 @@ namespace Epos.Utilities.Composition
         private object GetParameterValue(Container container, ParameterInfo parameterInfo) {
             Type theParameterType = parameterInfo.ParameterType;
 
-            object theParameterValue;
-            if (!ComponentRegistration.Parameters.TryGetValue(parameterInfo.Name, out theParameterValue)) {
+            if (!ComponentRegistration!.Parameters.TryGetValue(parameterInfo.Name, out object theParameterValue)) {
                 theParameterValue = container.Resolve(theParameterType);
             } else {
                 TestParameterValue(parameterInfo, theParameterValue);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using NUnit.Framework;
 
@@ -8,10 +8,8 @@ namespace Epos.Utilities
     public class CacheTest
     {
         [Test]
-        public void ConstructorExceptions() {
-            // ReSharper disable once ObjectCreationAsStatement
+        public void ConstructorExceptions() =>
             Assert.Throws<ArgumentOutOfRangeException>(() => { new Cache<object, object>(1); });
-        }
 
         [Test]
         public void ConstructorAndBasics() {
@@ -20,7 +18,7 @@ namespace Epos.Utilities
             // die freigegeben werden, sobald zu wenig Speicher
             // vorhanden ist und eine Garbage Collection läuft.
 
-            Cache<int, string> theCache = new Cache<int, string>(2);
+            var theCache = new Cache<int, string>(2);
             Assert.That(theCache.Capacity, Is.EqualTo(2));
             Assert.That(theCache.Count, Is.EqualTo(0));
 

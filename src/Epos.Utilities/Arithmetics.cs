@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,9 +57,7 @@ namespace Epos.Utilities
         /// <summary>Gets the zero value for the type <typeparamref name="T" />.</summary>
         /// <typeparam name="T">Type</typeparam>
         /// <returns>Zero value</returns>
-        public static T GetZeroValue<T>() {
-            return default(T);
-        }
+        public static T GetZeroValue<T>() => default!;
 
         /// <summary>Gets the one value for the type <typeparamref name="T" />.</summary>
         /// <typeparam name="T">Type</typeparam>
@@ -72,7 +70,7 @@ namespace Epos.Utilities
                     Func<T> theGetOneFunc = Expression.Lambda<Func<T>>(
                         Expression.MakeUnary(ExpressionType.Convert, Expression.Constant(1), theKey)
                     ).Compile();
-                    theOne = theGetOneFunc();
+                    theOne = theGetOneFunc()!;
                 } catch (InvalidOperationException) {
                     throw new InvalidOperationException($"Cannot create 1-value for the type '{theKey.Dump()}'.");
                 }
@@ -128,7 +126,7 @@ namespace Epos.Utilities
         /// <typeparamref name="T" />.</summary>
         /// <typeparam name="T">Type</typeparam>
         /// <returns><see cref="RoundOperation{T}" /></returns>
-        /// <remarks>Works only with the following types: <see cref="Double" />, <see cref="decimal" /></remarks>
+        /// <remarks>Works only with the following types: <see cref="double" />, <see cref="decimal" /></remarks>
         public static RoundOperation<T> CreateRoundOperation<T>() {
             Type theType = typeof(T);
 
@@ -187,7 +185,7 @@ namespace Epos.Utilities
         /// <typeparam name="T">Type</typeparam>
         /// <returns>Negate operation</returns>
         public static UnaryOperation<T> CreateNegateOperation<T>() {
-            var theKey = typeof(T);
+            Type theKey = typeof(T);
 
             if (!NegateOperations.TryGetValue(theKey, out Delegate theDelegate)) {
                 ParameterExpression theArg = Expression.Parameter(typeof(T));
@@ -197,16 +195,14 @@ namespace Epos.Utilities
                 NegateOperations[theKey] = theDelegate;
             }
 
-            return theDelegate as UnaryOperation<T>;
+            return (UnaryOperation<T>) theDelegate;
         }
 
         /// <summary>Creates the add operation for for the type
         /// <typeparamref name="T" />.</summary>
         /// <typeparam name="T">Type</typeparam>
         /// <returns>Add operation</returns>
-        public static BinaryOperation<T, T, T> CreateAddOperation<T>() {
-            return CreateAddOperation<T, T, T>();
-        }
+        public static BinaryOperation<T, T, T> CreateAddOperation<T>() => CreateAddOperation<T, T, T>();
 
         /// <summary>Creates the add operation for the types
         /// <typeparamref name="T1" /> and <typeparamref name="T2" />.</summary>
@@ -214,17 +210,14 @@ namespace Epos.Utilities
         /// <typeparam name="T2">Type for right operand</typeparam>
         /// <typeparam name="TResult">Return type</typeparam>
         /// <returns>Add operation that returns a <typeparamref name="TResult" /> instance</returns>
-        public static BinaryOperation<T1, T2, TResult> CreateAddOperation<T1, T2, TResult>() {
-            return GetBinaryOperation<T1, T2, TResult>(ExpressionType.Add, AddOperations);
-        }
+        public static BinaryOperation<T1, T2, TResult> CreateAddOperation<T1, T2, TResult>() =>
+            GetBinaryOperation<T1, T2, TResult>(ExpressionType.Add, AddOperations);
 
         /// <summary>Creates the subtract operation for for the type
         /// <typeparamref name="T" />.</summary>
         /// <typeparam name="T">Type</typeparam>
         /// <returns>Subtract operation</returns>
-        public static BinaryOperation<T, T, T> CreateSubtractOperation<T>() {
-            return CreateSubtractOperation<T, T, T>();
-        }
+        public static BinaryOperation<T, T, T> CreateSubtractOperation<T>() => CreateSubtractOperation<T, T, T>();
 
         /// <summary>Creates the subtract operation for the types
         /// <typeparamref name="T1" /> and <typeparamref name="T2" />.</summary>
@@ -232,25 +225,22 @@ namespace Epos.Utilities
         /// <typeparam name="T2">Type for right operand</typeparam>
         /// <typeparam name="TResult">Return type</typeparam>
         /// <returns>Subtract operation that returns a <typeparamref name="TResult" /> instance</returns>
-        public static BinaryOperation<T1, T2, TResult> CreateSubtractOperation<T1, T2, TResult>() {
-            return GetBinaryOperation<T1, T2, TResult>(ExpressionType.Subtract, SubtractOperations);
-        }
+        public static BinaryOperation<T1, T2, TResult> CreateSubtractOperation<T1, T2, TResult>() =>
+            GetBinaryOperation<T1, T2, TResult>(ExpressionType.Subtract, SubtractOperations);
 
         /// <summary>Creates the multiply operation for for the type
         /// <typeparamref name="T" />.</summary>
         /// <typeparam name="T">Type</typeparam>
         /// <returns>Multiply operation</returns>
-        public static BinaryOperation<T, T, T> CreateMultiplyOperation<T>() {
-            return GetBinaryOperation<T, T, T>(ExpressionType.Multiply, MultiplyOperations);
-        }
+        public static BinaryOperation<T, T, T> CreateMultiplyOperation<T>() =>
+            GetBinaryOperation<T, T, T>(ExpressionType.Multiply, MultiplyOperations);
 
         /// <summary>Creates the divide operation for for the type
         /// <typeparamref name="T" />.</summary>
         /// <typeparam name="T">Type</typeparam>
         /// <returns>Divide operation</returns>
-        public static BinaryOperation<T, T, T> CreateDivideOperation<T>() {
-            return GetBinaryOperation<T, T, T>(ExpressionType.Divide, DivideOperations);
-        }
+        public static BinaryOperation<T, T, T> CreateDivideOperation<T>() =>
+            GetBinaryOperation<T, T, T>(ExpressionType.Divide, DivideOperations);
 
         #region Helper methods
 
@@ -258,7 +248,7 @@ namespace Epos.Utilities
             ExpressionType expressionType,
             IDictionary<(Type T1, Type T2, Type TResult), Delegate> dictionary
         ) {
-            var theKey = (T1: typeof(T1), T2: typeof(T2), TResult: typeof(TResult));
+            (Type T1, Type T2, Type TResult) theKey = (T1: typeof(T1), T2: typeof(T2), TResult: typeof(TResult));
 
             if (!dictionary.TryGetValue(theKey, out Delegate theDelegate)) {
                 ParameterExpression theArg1 = Expression.Parameter(typeof(T1));
@@ -271,7 +261,7 @@ namespace Epos.Utilities
                 dictionary[theKey] = theDelegate;
             }
 
-            return theDelegate as BinaryOperation<T1, T2, TResult>;
+            return (BinaryOperation<T1, T2, TResult>) theDelegate;
         }
 
         #endregion

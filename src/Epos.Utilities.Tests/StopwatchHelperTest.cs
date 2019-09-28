@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
@@ -9,7 +9,7 @@ namespace Epos.Utilities
     {
         [Test]
         public void GetMilliseconds() {
-            Assert.Throws<ArgumentNullException>(() => StopwatchHelper.GetMilliseconds(null));
+            Assert.Throws<ArgumentNullException>(() => StopwatchHelper.GetMilliseconds(null!));
 
             long theMilliseconds = StopwatchHelper.GetMilliseconds(() => {
                 Task.Delay(100).Wait();

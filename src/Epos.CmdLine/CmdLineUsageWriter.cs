@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,7 +21,7 @@ namespace Epos.CmdLine
             myErrorAction = definition.Configuration.ErrorAction;
         }
 
-        public void WriteAndExit(string errorMessage = null) {
+        public void WriteAndExit(string? errorMessage = null) {
             var theResult = new StringBuilder("Usage: ");
 
             theResult
@@ -72,8 +72,8 @@ namespace Epos.CmdLine
             myErrorAction();
         }
 
-        public void WriteAndExit(CmdLineSubcommand subcommand, string errorMessage = null) {
-            var theResult = new StringBuilder()
+        public void WriteAndExit(CmdLineSubcommand subcommand, string? errorMessage = null) {
+            StringBuilder theResult = new StringBuilder()
                 .Append("Usage: ")
                 .Append(myDefinition.Name);
 
@@ -134,7 +134,7 @@ namespace Epos.CmdLine
                 foreach (CmdLineOption theOption in subcommand.Options) {
                     string theDescription = theOption.Description;
 
-                    object theDefaultValue = theOption.GetDefaultValue();
+                    object? theDefaultValue = theOption.GetDefaultValue();
                     if (theDefaultValue != null) {
                         theDescription += " " + GetDefaultsToText(theDefaultValue);
                     }
@@ -161,7 +161,7 @@ namespace Epos.CmdLine
                 foreach (CmdLineParameter theParameter in subcommand.Parameters) {
                     string theDescription = theParameter.Description;
                     if (theParameter.IsOptional) {
-                        theDescription += " " + GetDefaultsToText(theParameter.GetDefaultValue());
+                        theDescription += " " + GetDefaultsToText(theParameter.GetDefaultValue()!);
                     }
 
                     theResult.AppendFormat(
@@ -224,7 +224,7 @@ namespace Epos.CmdLine
             }
 
             if (theResult[theResult.Length - 1] == Space) {
-                theResult.Length = theResult.Length - 1;
+                theResult.Length -= 1;
             }
 
             return theResult.ToString();
@@ -253,7 +253,7 @@ namespace Epos.CmdLine
                 if (theLastSpaceIndex != -1) {
                     currentResult.Replace(
                         oldValue: Space.ToString(),
-                        newValue: Environment.NewLine + new String(Space, lineInsertionCount),
+                        newValue: Environment.NewLine + new string(Space, lineInsertionCount),
                         startIndex:
                         (theLastLineBreakIndex == -1 ? 0 : theLastLineBreakIndex + Environment.NewLine.Length) +
                         theLastSpaceIndex,

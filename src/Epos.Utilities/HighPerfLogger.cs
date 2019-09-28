@@ -12,7 +12,7 @@ namespace Epos.Utilities
         private static readonly object SyncLock = new object();
 
         [ThreadStatic]
-        private static Action<string> myLogAction;
+        private static Action<string>? myLogAction;
 
         /// <summary>Sets the log action on the current thread.</summary>
         /// <remarks>Calls to this method are only compiled, if the compilation

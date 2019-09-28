@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -51,21 +51,19 @@ namespace Epos.Utilities
         /// <param name="value">String</param>
         /// <param name="regexPattern">Regex pattern</param>
         /// <returns><b>true</b>, if the pattern matches the string; otherwise <b>false</b></returns>
-        public static bool Matches(this string value, string regexPattern) {
-            return Regex.IsMatch(value, regexPattern);
-        }
+        public static bool Matches(this string value, string regexPattern) => Regex.IsMatch(value, regexPattern);
 
         /// <summary>Determines whether the specified string is a valid email address.</summary>
         /// <param name="value">String</param>
         /// <returns><b>true</b>, if the specified string is a valid email address;
         /// otherwise <b>false</b></returns>
-        public static bool IsValidEmailAddress(this string value) {
-            return Regex.IsMatch(value,
+        public static bool IsValidEmailAddress(this string value) =>
+            Regex.IsMatch(
+                value,
                 @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$",
                 RegexOptions.IgnoreCase
             );
-        }
 
         /// <summary> Tries to convert a string into an instance of <paramref name="destinationType"/>.
         /// </summary>
@@ -75,9 +73,8 @@ namespace Epos.Utilities
         /// <param name="destinationType">Destination type</param>
         /// <param name="convertedValue">Converted value result</param>
         /// <returns><b>true</b>, if the conversion succeeds; otherwise <b>false</b></returns>
-        public static bool TryConvert(this string value, Type destinationType, out object convertedValue) {
-            return TryConvert(value, destinationType, CultureInfo.CurrentCulture, out convertedValue);
-        }
+        public static bool TryConvert(this string value, Type destinationType, out object? convertedValue) =>
+            TryConvert(value, destinationType, CultureInfo.CurrentCulture, out convertedValue);
 
         /// <summary> Tries to convert a string into an instance of <paramref name="destinationType"/>
         /// with the specified <paramref name="cultureInfo"/>.</summary>
@@ -87,7 +84,7 @@ namespace Epos.Utilities
         /// <param name="convertedValue">Converted value result</param>
         /// <returns><b>true</b>, if the conversion succeeds; otherwise <b>false</b></returns>
         public static bool TryConvert(this string value, Type destinationType, CultureInfo cultureInfo,
-            out object convertedValue) {
+            out object? convertedValue) {
             try {
                 bool isNullableType = destinationType.IsGenericType &&
                                       destinationType.GetGenericTypeDefinition() == typeof(Nullable<>);
@@ -118,9 +115,8 @@ namespace Epos.Utilities
         /// <param name="value">String</param>
         /// <param name="convertedValue">Converted value result</param>
         /// <returns><b>true</b>, if the conversion succeeds; otherwise <b>false</b></returns>
-        public static bool TryConvert<TDestinationType>(this string value, out TDestinationType convertedValue) {
-            return TryConvert(value, CultureInfo.CurrentCulture, out convertedValue);
-        }
+        public static bool TryConvert<TDestinationType>(this string value, out TDestinationType convertedValue) =>
+            TryConvert(value, CultureInfo.CurrentCulture, out convertedValue);
 
         /// <summary> Tries to convert a string into an instance of <typeparamref name="TDestinationType"/>.
         /// with the specified <paramref name="cultureInfo"/>.</summary>
@@ -131,12 +127,12 @@ namespace Epos.Utilities
         /// <returns><b>true</b>, if the conversion succeeds; otherwise <b>false</b></returns>
         public static bool TryConvert<TDestinationType>(this string value, CultureInfo cultureInfo,
             out TDestinationType convertedValue) {
-            bool theResult = TryConvert(value, typeof(TDestinationType), cultureInfo, out object theConvertedValue);
+            bool theResult = TryConvert(value, typeof(TDestinationType), cultureInfo, out object? theConvertedValue);
 
             if (theResult) {
-                convertedValue = (TDestinationType) theConvertedValue;
+                convertedValue = (TDestinationType) theConvertedValue!;
             } else {
-                convertedValue = default(TDestinationType);
+                convertedValue = default!;
             }
 
             return theResult;

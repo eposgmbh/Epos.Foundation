@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace Epos.Utilities
@@ -15,11 +15,11 @@ namespace Epos.Utilities
         /// <param name="key">Key</param>
         /// <returns>Value or <b>null</b>, if no value is found</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static TValue Get<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
+        public static TValue? Get<TKey, TValue>(this IDictionary<TKey, TValue?> dictionary, TKey key)
             where TValue : class {
             DebugThrow.IfNull(dictionary, nameof(dictionary));
 
-            dictionary.TryGetValue(key, out TValue theValue);
+            dictionary.TryGetValue(key, out TValue? theValue);
             return theValue;
         }
     }

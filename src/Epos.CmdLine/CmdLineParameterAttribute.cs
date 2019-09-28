@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Epos.CmdLine
 {
@@ -8,10 +8,6 @@ namespace Epos.CmdLine
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class CmdLineParameterAttribute : Attribute
     {
-        /// <summary> Initializes an instance of the <see cref="CmdLineParameterAttribute"/>
-        /// class. </summary>
-        public CmdLineParameterAttribute() { }
-
         /// <summary> Initializes an instance of the <see cref="CmdLineParameterAttribute"/>
         /// class associating the marked property with the specified parameter name. </summary>
         /// <param name="name">Parameter name</param>

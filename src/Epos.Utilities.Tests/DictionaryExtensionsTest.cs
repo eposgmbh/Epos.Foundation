@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Epos.Utilities
@@ -8,7 +8,7 @@ namespace Epos.Utilities
     {
         [Test]
         public void Get() {
-            var theDictionary = new Dictionary<int, string> {
+            var theDictionary = new Dictionary<int, string?> {
                 { 33, "Thirty three" },
                 { 44, "Forty four" }
             };

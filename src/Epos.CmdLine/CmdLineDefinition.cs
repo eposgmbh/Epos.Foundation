@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,8 +9,6 @@ namespace Epos.CmdLine
     /// for an example.</summary>
     public sealed class CmdLineDefinition
     {
-        private CmdLineConfiguration myConfiguration;
-
         /// <summary> Initializes an instance of the <see cref="CmdLineDefinition"/> class.
         /// </summary>
         public CmdLineDefinition() {
@@ -20,7 +18,7 @@ namespace Epos.CmdLine
         /// <summary> Gets or sets the name of the command line tool. If not specified
         /// (<b>null</b>) the .exe filename is used.
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>Gets or sets whether the definition has differentiated subcommands.
         /// </summary>
@@ -30,10 +28,7 @@ namespace Epos.CmdLine
 
         /// <summary>Gets or sets the configuration options. You normally should not
         /// change this property value.</summary>
-        public CmdLineConfiguration Configuration {
-            get => myConfiguration ?? (myConfiguration = new CmdLineConfiguration());
-            set => myConfiguration = value;
-        }
+        public CmdLineConfiguration Configuration { get; set; } = new CmdLineConfiguration();
 
         /// <summary>Gets the list of subcommands.</summary>
         /// <remarks>Here you can register your own subcommands. If you don't need

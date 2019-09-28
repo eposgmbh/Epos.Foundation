@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using NUnit.Framework;
@@ -29,8 +29,8 @@ namespace Epos.Utilities
 
             Assert.That(theList4.EqualsList(theList4));
 
-            Assert.Throws<ArgumentNullException>(() => ListExtensions.EqualsList(null, theList1));
-            Assert.Throws<ArgumentNullException>(() => theList1.EqualsList(null));
+            Assert.Throws<ArgumentNullException>(() => ListExtensions.EqualsList(null!, theList1));
+            Assert.Throws<ArgumentNullException>(() => theList1.EqualsList(null!));
         }
 
         [Test]
@@ -41,10 +41,10 @@ namespace Epos.Utilities
             var theStrings = new List<string> { "This", "is", "a", "test" };
             Assert.That(theStrings.GetListHashCode(), Is.Not.EqualTo(0));
 
-            var theStringsWithNull = new List<string> { "This", "is", "a", "test", "with", null };
+            var theStringsWithNull = new List<string?> { "This", "is", "a", "test", "with", null };
             Assert.That(theStringsWithNull.GetListHashCode(), Is.Not.EqualTo(0));
 
-            Assert.Throws<ArgumentNullException>(() => (null as List<object>).GetListHashCode());
+            Assert.Throws<ArgumentNullException>(() => (null as List<object>)!.GetListHashCode());
         }
     }
 }

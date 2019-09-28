@@ -1,4 +1,4 @@
-﻿#if DEBUG
+#if DEBUG
 
 using System;
 using System.ComponentModel;
@@ -11,14 +11,14 @@ namespace Epos.Utilities
     {
         [Test]
         public void IfNull() {
-            Assert.Throws<ArgumentNullException>(() => DebugThrow.IfNull((object) null, "param"));
+            Assert.Throws<ArgumentNullException>(() => DebugThrow.IfNull((object?) null, "param"));
 
             DebugThrow.IfNull("not-null", "param");
         }
 
         [Test]
         public void IfInvalidEnum() {
-            DateTimeKind theDateTimeKind = (DateTimeKind) 999;
+            var theDateTimeKind = (DateTimeKind) 999;
 
             Assert.Throws<InvalidEnumArgumentException>(() => DebugThrow.IfInvalidEnum(theDateTimeKind, "param"));
 

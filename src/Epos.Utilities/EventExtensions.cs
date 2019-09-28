@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 
 namespace Epos.Utilities
@@ -9,18 +9,15 @@ namespace Epos.Utilities
         /// <summary>Raises an <see cref="System.EventHandler"/> event.</summary>
         /// <param name="handler">Event handler</param>
         /// <param name="sender">Sender</param>
-        public static void Raise(this EventHandler handler, object sender) {
-            handler.Raise(sender, EventArgs.Empty);
-        }
+        public static void Raise(this EventHandler handler, object sender) => handler.Raise(sender, EventArgs.Empty);
 
         /// <summary>Raises an <see cref="System.EventHandler"/> event with the specified
         /// <see cref="System.EventArgs"/>.</summary>
         /// <param name="handler">Event handler</param>
         /// <param name="sender">Sender</param>
         /// <param name="e">Event args (if <b>null</b>, <see cref="EventArgs.Empty"/> is used)</param>
-        public static void Raise(this EventHandler handler, object sender, EventArgs e) {
+        public static void Raise(this EventHandler handler, object sender, EventArgs e) =>
             handler?.Invoke(sender, e ?? EventArgs.Empty);
-        }
 
         /// <summary>Raises an <see cref="System.EventHandler{TEventArgs}"/> event with the specified
         /// <typeparamref name="TEventArgs"/>.</summary>
@@ -43,8 +40,7 @@ namespace Epos.Utilities
         /// <param name="sender">Sender</param>
         /// <param name="propertyName">Property name (<b>null</b> means that all of
         /// the properties have changed)</param>
-        public static void Raise(this PropertyChangedEventHandler handler, object sender, string propertyName) {
+        public static void Raise(this PropertyChangedEventHandler handler, object sender, string propertyName) =>
             handler?.Invoke(sender, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

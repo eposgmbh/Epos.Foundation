@@ -13,7 +13,7 @@ namespace Epos.CmdLine
             myUsageWriter = usageWriter;
         }
 
-        public List<CmdLineToken> Tokenize(string[] args, ref CmdLineSubcommand subcommand) {
+        public List<CmdLineToken> Tokenize(string[] args, ref CmdLineSubcommand? subcommand) {
             var theResult = new List<CmdLineToken>();
             var theExclusionGroupCounts = new Dictionary<string, List<CmdLineOption>>();
 
@@ -62,13 +62,13 @@ namespace Epos.CmdLine
                                 }
                             }
 
-                            object theValue = true;
+                            object? theValue = true;
                             if (!theOption.IsSwitch) {
                                 if (theIndex < args.Length - 1) {
                                     theIndex++;
                                     string theRawValue = args[theIndex];
 
-                                    theValue = ParseUtils.ParseOption(theOption, theRawValue, out string theErrorMessage);
+                                    theValue = ParseUtils.ParseOption(theOption, theRawValue, out string? theErrorMessage);
 
                                     if (theErrorMessage != null) {
                                         myUsageWriter.WriteAndExit(subcommand, theErrorMessage);
@@ -84,7 +84,7 @@ namespace Epos.CmdLine
 
                             theResult.Add(
                                 new CmdLineToken(CmdLineTokenKind.Option, theOption.Letter.ToString()) {
-                                    Value = theValue
+                                    Value = theValue!
                                 }
                             );
                         } else {
@@ -135,8 +135,8 @@ namespace Epos.CmdLine
 
                         string theRawValue = args[theIndex];
 
-                        object theValue = ParseUtils.ParseParameter(
-                            theParameter, theRawValue, out string theErrorMessage
+                        object? theValue = ParseUtils.ParseParameter(
+                            theParameter, theRawValue, out string? theErrorMessage
                         );
 
                         if (theErrorMessage != null) {
@@ -145,7 +145,7 @@ namespace Epos.CmdLine
 
                         theResult.Add(
                             new CmdLineToken(CmdLineTokenKind.Parameter, theParameter.Name) {
-                                Value = theValue
+                                Value = theValue!
                             }
                         );
                     }
@@ -158,20 +158,20 @@ namespace Epos.CmdLine
                         theOptions.Select(o => o.ToLongCmdLineString()).Aggregate((s1, s2) => s1 + ", " + s2);
 
                     myUsageWriter.WriteAndExit(
-                        subcommand,
+                        subcommand!,
                         $"Only one of the following options may be set: {theOptionStrings}"
                     );
                 }
             }
 
             // Schauen, ob zuerst der SubcommandName, dann Options, dann Parameter gesetzt sind
-            ValidateCmdLineTokens(theResult, subcommand);
+            ValidateCmdLineTokens(theResult, subcommand!);
 
             // Option Defaults setzen
-            FillOptionDefaults(theResult, subcommand, theExclusionGroupCounts.Keys);
+            FillOptionDefaults(theResult, subcommand!, theExclusionGroupCounts.Keys);
 
             // Schauen, ob alle benötigten Parameter gesetzt sind
-            FillOptionalParameterDefaults(theResult, subcommand);
+            FillOptionalParameterDefaults(theResult, subcommand!);
 
             return theResult;
         }
@@ -202,7 +202,7 @@ namespace Epos.CmdLine
             ICollection<CmdLineToken> cmdLineTokens, CmdLineSubcommand subcommand, IEnumerable<string> exclusionGroups
         ) {
             foreach (CmdLineOption theOption in subcommand.Options) {
-                object theDefaultValue = theOption.GetDefaultValue();
+                object? theDefaultValue = theOption.GetDefaultValue();
 
                 if (theDefaultValue != null) {
                     if (!cmdLineTokens.Any(t => t.Kind == CmdLineTokenKind.Option && t.Name == theOption.Letter.ToString())) {
@@ -234,7 +234,7 @@ namespace Epos.CmdLine
                         // Optionaler Parameter
                         cmdLineTokens.Add(
                             new CmdLineToken(CmdLineTokenKind.Parameter, theParameter.Name) {
-                                Value = theParameter.GetDefaultValue()
+                                Value = theParameter.GetDefaultValue()!
                             }
                         );
                     }

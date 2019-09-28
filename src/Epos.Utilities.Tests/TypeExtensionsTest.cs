@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -13,19 +13,19 @@ namespace Epos.Utilities
         [Test]
         public void GetGenericMethod() {
             Assert.Throws<ArgumentNullException>(
-                () => TypeExtensions.GetGenericMethod(null, "0", BindingFlags.Default, new Type[] { }, new Type[] { })
+                () => TypeExtensions.GetGenericMethod(null!, "0", BindingFlags.Default, new Type[] { }, new Type[] { })
             );
             Assert.Throws<ArgumentNullException>(
-                () => typeof(int).GetGenericMethod(null, BindingFlags.Default, new Type[] { }, new Type[] { })
+                () => typeof(int).GetGenericMethod(null!, BindingFlags.Default, new Type[] { }, new Type[] { })
             );
             Assert.Throws<ArgumentNullException>(
-                () => typeof(int).GetGenericMethod("0", BindingFlags.Default, null, new Type[] { })
+                () => typeof(int).GetGenericMethod("0", BindingFlags.Default, null!, new Type[] { })
             );
             Assert.Throws<ArgumentNullException>(
-                () => typeof(int).GetGenericMethod("0", BindingFlags.Default, new Type[] { }, null)
+                () => typeof(int).GetGenericMethod("0", BindingFlags.Default, new Type[] { }, null!)
             );
 
-            var theMethodInfo = typeof(Enumerable).GetGenericMethod(
+            MethodInfo theMethodInfo = typeof(Enumerable).GetGenericMethod(
                 "Empty", BindingFlags.Static | BindingFlags.Public,
                 new[] { typeof(string) }, new Type[] { }
             );
@@ -40,7 +40,7 @@ namespace Epos.Utilities
 
         [Test]
         public void HasAttribute() {
-            Assert.Throws<ArgumentNullException>(() => TypeExtensions.HasAttribute<AttributeUsageAttribute>(null));
+            Assert.Throws<ArgumentNullException>(() => TypeExtensions.HasAttribute<AttributeUsageAttribute>(null!));
 
             Assert.That(typeof(AssemblyCompanyAttribute).HasAttribute<AttributeUsageAttribute>(), Is.True);
             Assert.That(typeof(int).HasAttribute<AttributeUsageAttribute>(), Is.False);
@@ -49,7 +49,7 @@ namespace Epos.Utilities
         [Test]
         public void GetAttribute()
         {
-            Assert.Throws<ArgumentNullException>(() => TypeExtensions.GetAttribute<AttributeUsageAttribute>(null));
+            Assert.Throws<ArgumentNullException>(() => TypeExtensions.GetAttribute<AttributeUsageAttribute>(null!));
 
             Assert.That(typeof(AssemblyCompanyAttribute).GetAttribute<AttributeUsageAttribute>(), Is.Not.Null);
             Assert.That(typeof(AssemblyCompanyAttribute).GetAttribute<AttributeUsageAttribute>().ValidOn, Is.EqualTo(AttributeTargets.Assembly));

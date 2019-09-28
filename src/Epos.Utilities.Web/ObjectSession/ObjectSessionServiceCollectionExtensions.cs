@@ -15,9 +15,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="services">Service collection</param>
         /// <returns>Service collection</returns>
-        public static IServiceCollection AddObjectSession(this IServiceCollection services) {
-            return services.AddObjectSession(configure: null);
-        }
+        public static IServiceCollection AddObjectSession(this IServiceCollection services) =>
+            services.AddObjectSession(configure: null!);
 
         /// <summary> Configures and adds an object session to the service collection.
         /// </summary>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using Epos.Utilities;
 
@@ -10,7 +10,7 @@ namespace Epos.CmdLine
     /// <typeparam name="T">Parameter data type</typeparam>
     public sealed class CmdLineParameter<T> : CmdLineParameter
     {
-        private T myDefaultValue;
+        private T myDefaultValue = default!;
         private bool myIsDefaultValueSet;
 
         static CmdLineParameter() {
@@ -34,9 +34,7 @@ namespace Epos.CmdLine
             }
         }
 
-        internal override object GetDefaultValue() {
-            return myIsDefaultValueSet ? (object)DefaultValue : null;
-        }
+        internal override object? GetDefaultValue() => myIsDefaultValueSet ? (object?) DefaultValue : null;
     }
 
     /// <summary> Command line parameter base class.</summary>
@@ -68,7 +66,7 @@ namespace Epos.CmdLine
         /// the parameter optional. </remarks>
         public bool IsOptional => GetDefaultValue() != null;
 
-        internal abstract object GetDefaultValue();
+        internal abstract object? GetDefaultValue();
 
         internal string ToCmdLineString() {
             var theResult = new StringBuilder();

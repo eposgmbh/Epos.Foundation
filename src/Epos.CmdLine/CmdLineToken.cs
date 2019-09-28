@@ -1,4 +1,4 @@
-﻿namespace Epos.CmdLine
+namespace Epos.CmdLine
 {
     internal sealed class CmdLineToken
     {
@@ -11,6 +11,6 @@
 
         public string Name { get; }
 
-        public object Value { get; set; }
+        public object? Value { get; set; }
     }
 }

@@ -11,14 +11,14 @@ namespace Epos.Utilities.Web
         private const string ObjectSessionKey = "ObjectSession";
 
         private readonly IHttpContextAccessor myHttpContextAccessor;
-        private static readonly IDictionary<Guid, IDictionary<string, object>> mySession =
-            new ConcurrentDictionary<Guid, IDictionary<string, object>>();
+        private static readonly IDictionary<Guid, IDictionary<string, object?>> Session =
+            new ConcurrentDictionary<Guid, IDictionary<string, object?>>();
 
         public ObjectSession(IHttpContextAccessor httpContextAccessor) {
-            myHttpContextAccessor = httpContextAccessor;
+            myHttpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
-        public object this[string key] {
+        public object? this[string key] {
             get {
                 string theGuidString = myHttpContextAccessor.HttpContext.Session.GetString(ObjectSessionKey);
                 if (theGuidString == null) {
@@ -27,10 +27,12 @@ namespace Epos.Utilities.Web
 
                 var theGuid = Guid.Parse(theGuidString);
 
-                IDictionary<string, object> theSession = mySession.Get(theGuid);
+#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+                IDictionary<string, object?>? theSession = Session.Get(theGuid);
+#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
                 if (theSession == null) {
-                    theSession = new Dictionary<string, object>();
-                    mySession[theGuid] = theSession;
+                    theSession = new Dictionary<string, object?>();
+                    Session[theGuid] = theSession;
                 }
 
                 return theSession.Get(key);
@@ -45,10 +47,12 @@ namespace Epos.Utilities.Web
 
                 var theGuid = Guid.Parse(theGuidString);
 
-                IDictionary<string, object> theSession = mySession.Get(theGuid);
+#pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
+                IDictionary<string, object?>? theSession = Session.Get(theGuid);
+#pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
                 if (theSession == null) {
-                    theSession = new Dictionary<string, object>();
-                    mySession[theGuid] = theSession;
+                    theSession = new Dictionary<string, object?>();
+                    Session[theGuid] = theSession;
                 }
 
                 theSession[key] = value;

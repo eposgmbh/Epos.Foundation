@@ -21,9 +21,9 @@ namespace Epos.CmdLine
                 }
             };
 
-            Assert.Throws<ArgumentNullException>(() => theCmdLineDefinition.Try(null));
+            Assert.Throws<ArgumentNullException>(() => theCmdLineDefinition.Try(null!));
 
-            Assert.Throws<ArgumentNullException>(() => theCmdLineDefinition.Try(new string[] { null }));
+            Assert.Throws<ArgumentNullException>(() => theCmdLineDefinition.Try(new string[] { null! }));
 
             Assert.Throws<InvalidOperationException>(() => theCmdLineDefinition.Try(new[] { "non-existing-subcommand" }));
 
@@ -88,9 +88,9 @@ namespace Epos.CmdLine
             // decimal als Parametertyp ist beispielsweise nicht erlaubt:
 
             // ReSharper disable once ObjectCreationAsStatement
-            Assert.Throws<TypeInitializationException>(() => new CmdLineParameter<decimal>(null, null));
+            Assert.Throws<TypeInitializationException>(() => new CmdLineParameter<decimal>(null!, null!));
 
-            BuildOptions theBuildOptions = null;
+            BuildOptions? theBuildOptions = null;
 
             var theCmdLineDefinition = new CmdLineDefinition {
                 Name = "sample",
@@ -159,7 +159,7 @@ namespace Epos.CmdLine
             theConsoleOutput.GetStringBuilder().Clear();
 
             theCmdLineDefinition.Try(new[] { "build", "33" });
-            Assert.That(theBuildOptions.ProjectNumber, Is.EqualTo(33));
+            Assert.That(theBuildOptions!.ProjectNumber, Is.EqualTo(33));
             Assert.That(theBuildOptions.Memory, Is.EqualTo("1 GB"));
             Assert.That(theBuildOptions.DummyParameter, Is.Null);
             Assert.That(theConsoleOutput.ToString(), Is.Empty);
@@ -188,7 +188,7 @@ namespace Epos.CmdLine
         public void ExclusionGroups() {
             var theConsoleOutput = new StringWriter();
 
-            TestOptions theTestOptions = null;
+            TestOptions? theTestOptions = null;
 
             var theCmdLineDefinition = new CmdLineDefinition {
                 Name = "sample",
@@ -230,7 +230,7 @@ namespace Epos.CmdLine
             theConsoleOutput.GetStringBuilder().Clear();
 
             theCmdLineDefinition.Try(new[] { "test", "-a" });
-            Assert.That(theTestOptions.All, Is.True);
+            Assert.That(theTestOptions!.All, Is.True);
             Assert.That(theTestOptions.From, Is.EqualTo(0));
             Assert.That(theTestOptions.To, Is.EqualTo(0));
             Assert.That(theTestOptions.Single, Is.EqualTo(0));
@@ -292,9 +292,9 @@ namespace Epos.CmdLine
 
             // decimal als Parametertyp ist beispielsweise nicht erlaubt:
             // ReSharper disable once ObjectCreationAsStatement
-            Assert.Throws<TypeInitializationException>(() => new CmdLineOption<decimal>('a', null));
+            Assert.Throws<TypeInitializationException>(() => new CmdLineOption<decimal>('a', null!));
 
-            BuildOptions theBuildOptions = null;
+            BuildOptions? theBuildOptions = null;
 
             var theCmdLineDefinition = new CmdLineDefinition {
                 Name = "sample",
@@ -339,7 +339,7 @@ namespace Epos.CmdLine
 
             theConsoleOutput.GetStringBuilder().Clear();
 
-            Assert.Throws<ArgumentNullException>(() => theCmdLineDefinition.ShowHelp(null));
+            Assert.Throws<ArgumentNullException>(() => theCmdLineDefinition.ShowHelp(null!));
             Assert.Throws<ArgumentException>(() => theCmdLineDefinition.ShowHelp("not-found"));
 
             theCmdLineDefinition.ShowHelp("build");
@@ -383,7 +383,7 @@ namespace Epos.CmdLine
             theConsoleOutput.GetStringBuilder().Clear();
 
             theCmdLineDefinition.Try(new[] { "build", "-p", "0", "dummy" });
-            Assert.That(theBuildOptions.ProjectNumber, Is.EqualTo(0));
+            Assert.That(theBuildOptions!.ProjectNumber, Is.EqualTo(0));
             Assert.That(theBuildOptions.Memory, Is.EqualTo("1 GB"));
             Assert.That(theBuildOptions.DummyParameter, Is.EqualTo("dummy"));
             Assert.That(theBuildOptions.Disable, Is.False);
@@ -487,7 +487,7 @@ namespace Epos.CmdLine
             public int ProjectNumber { get; set; }
 
             [CmdLineOption('m')]
-            public string Memory { get; set; }
+            public string? Memory { get; set; }
 
             [CmdLineOption('d')]
             public bool Disable { get; set; }
@@ -496,7 +496,7 @@ namespace Epos.CmdLine
             public bool Zzzz { get; set; }
 
             [CmdLineParameter("dummy")]
-            public string DummyParameter { get; set; }
+            public string? DummyParameter { get; set; }
         }
     }
 }

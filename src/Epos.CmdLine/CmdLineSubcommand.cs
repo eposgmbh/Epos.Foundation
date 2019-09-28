@@ -22,7 +22,7 @@ namespace Epos.CmdLine
         /// instance that is initialized with the command line arguments. The function is
         /// only called, if the command line can be parsed successfully. The function should
         /// return an error code (0 if successful). </remarks>
-        public Func<TOptions, CmdLineDefinition, int> CmdLineFunc { get; set; }
+        public Func<TOptions, CmdLineDefinition, int> CmdLineFunc { get; set; } =  (o, cd) => 0;
 
         internal override int Execute(IEnumerable<CmdLineToken> argTokens, CmdLineDefinition definition) {
             var theOptions = new TOptions();
@@ -75,7 +75,7 @@ namespace Epos.CmdLine
                 }
             }
 
-            return CmdLineFunc?.Invoke(theOptions, definition) ?? 0;
+            return CmdLineFunc.Invoke(theOptions, definition);
         }
     }
 
