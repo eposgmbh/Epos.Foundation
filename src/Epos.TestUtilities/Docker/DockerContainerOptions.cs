@@ -5,6 +5,9 @@ namespace Epos.TestUtilities.Docker
     /// <summary> Specifies options for container start. </summary>
     public sealed class DockerContainerOptions
     {
+        /// <summary> Gets or sets the container name. </summary>
+        public string Name { get; set;}
+
         /// <summary> Gets or sets the container image name. </summary>
         public string ImageName { get; set; }
 
