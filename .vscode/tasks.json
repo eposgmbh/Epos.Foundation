@@ -2,25 +2,16 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build Epos.Foundation",
+            "label": "buildEposCodeGenerationSample",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Epos.Foundation.sln"
+                "${workspaceFolder}/src/Epos.CodeGeneration.Sample/Epos.CodeGeneration.Sample.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
             ],
-            "problemMatcher": "$msCompile",
-            "group": "build"
-        },
-        {
-            "label": "test Epos.Foundation",
-            "command": "powershell",
-            "type": "process",
-            "args": [
-                "-File",
-                "${workspaceFolder}/scripts/RunTests.ps1"
-            ],
-            "group": "test"
+            "problemMatcher": "$msCompile"
         }
     ]
 }

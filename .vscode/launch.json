@@ -1,22 +1,16 @@
 {
-   // Use IntelliSense to find out which attributes exist for C# debugging
-   // Use hover for the description of the existing attributes
-   // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
-   "version": "0.2.0",
-   "configurations": [
+    "version": "0.2.0",
+    "configurations": [
         {
-            "name": ".NET Core Launch (console)",
+            "name": ".NET Core Launch - Epos.CodeGeneration.Sample",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/src/Epos.CmdLine.Sample/bin/Debug/netcoreapp2.0/Epos.CmdLine.Sample.dll",
+            "preLaunchTask": "buildEposCodeGenerationSample",
+            "program": "${workspaceFolder}/src/Epos.CodeGeneration.Sample/bin/Debug/netcoreapp3.1/Epos.CodeGeneration.Sample.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/Epos.CmdLine.Sample",
-            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+            "cwd": "${workspaceFolder}/src/Epos.CodeGeneration.Sample",
             "console": "internalConsole",
-            "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart"
+            "stopAtEntry": false
         },
         {
             "name": ".NET Core Attach",
@@ -24,5 +18,5 @@
             "request": "attach",
             "processId": "${command:pickProcess}"
         }
-    ,]
+    ]
 }

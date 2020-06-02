@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Epos.CodeGeneration</AssemblyName>
+    <LangVersion>8</LangVersion>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Epos.CodeGeneration</RootNamespace>
+    <AssemblyVersion>9.9.9</AssemblyVersion>
+    <AssemblyInformationalVersion>9.9.9</AssemblyInformationalVersion>
+    <PackageVersion>9.9.9</PackageVersion>
+    <Description>.NET Standard code generation utilities</Description>
+    <Authors>Jan Bohlen</Authors>
+    <Company>Epos</Company>
+    <PackageLicenseUrl>https://github.com/eposgmbh/Epos.Foundation/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/eposgmbh/Epos.Foundation</PackageProjectUrl>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.6.0" />
+  </ItemGroup>
+
+</Project>
