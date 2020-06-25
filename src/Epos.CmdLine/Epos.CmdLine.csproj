@@ -15,7 +15,15 @@
     <PackageLicenseUrl>https://github.com/eposgmbh/Epos.Foundation/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/eposgmbh/Epos.Foundation</PackageProjectUrl>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.6.0" />
