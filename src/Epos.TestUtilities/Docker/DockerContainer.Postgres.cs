@@ -14,7 +14,7 @@ namespace Epos.TestUtilities.Docker
                     new DockerContainerOptions
                     {
                         Name = "PostgresTestContainer",
-                        ImageName = "postgres:latest",
+                        ImageName = "postgres:10.6",
                         ReadynessLogPhrase = "ready to accept connections",
                         Ports = { (thePort, 5432) },
                         EnvironmentVariables = {
