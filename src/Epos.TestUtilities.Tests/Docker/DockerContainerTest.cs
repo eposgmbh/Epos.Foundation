@@ -15,7 +15,7 @@ namespace Epos.TestUtilities.Docker
                 new DockerContainerOptions
                 {
                     Name = "Gabbel123",
-                    ImageName = "postgres:latest",
+                    ImageName = "postgres:10.6",
                     ReadynessLogPhrase = "ready to accept connections",
                     Ports = { (31000, 5432) }
                 }
@@ -30,7 +30,7 @@ namespace Epos.TestUtilities.Docker
                 new DockerContainerOptions
                 {
                     Name = "Gabbel123",
-                    ImageName = "postgres:latest",
+                    ImageName = "postgres:10.6",
                     ReadynessLogPhrase = "ready to accept connections",
                     Ports = { (31000, 5432) }
                 }

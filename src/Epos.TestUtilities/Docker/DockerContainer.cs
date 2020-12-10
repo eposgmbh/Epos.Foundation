@@ -125,7 +125,7 @@ namespace Epos.TestUtilities.Docker
             while (theStopwatch.ElapsedMilliseconds < theTimeout) {
                 string theLogs = ExecuteDockerCli($"logs {container.Id}");
 
-                if (theLogs.Contains(theReadynessLogPhrase)) {
+                if (theLogs.IndexOf(theReadynessLogPhrase, StringComparison.InvariantCultureIgnoreCase) != -1) {
                     return;
                 }
             }

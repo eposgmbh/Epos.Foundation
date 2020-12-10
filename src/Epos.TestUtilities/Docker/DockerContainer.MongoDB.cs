@@ -14,8 +14,8 @@ namespace Epos.TestUtilities.Docker
                     new DockerContainerOptions
                     {
                         Name = "MongoDBTestContainer",
-                        ImageName = "mongo:latest",
-                        ReadynessLogPhrase = "waiting for connections",
+                        ImageName = "mongo:4.4",
+                        ReadynessLogPhrase = "Waiting for connections",
                         Ports = { (thePort, 27017) }
                     }
                 );
