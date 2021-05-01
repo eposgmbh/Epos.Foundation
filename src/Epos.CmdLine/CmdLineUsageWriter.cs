@@ -9,6 +9,7 @@ namespace Epos.CmdLine
     {
         private const char Space = ' ';
         private const int SeparatorCharCount = 3;
+        private const int DefaultWidth = 120;
 
         private readonly CmdLineDefinition myDefinition;
         private readonly TextWriter myTextWriter;
@@ -199,7 +200,19 @@ namespace Epos.CmdLine
             return theResult.ToString();
         }
 
-        private int ConsoleWindowWidth => myTextWriter == Console.Out ? Console.WindowWidth : 80;
+        private int ConsoleWindowWidth {
+            get {
+                if (myTextWriter == Console.Out) {
+                    try {
+                        return Console.WindowWidth;
+                    } catch {
+                        return DefaultWidth;
+                    }
+                } else {
+                    return DefaultWidth;
+                }
+            }
+        }
 
         private string GetLineBreakedText(string text, int lineInsertionCount) {
             var theResult = new StringBuilder();

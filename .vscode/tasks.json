@@ -2,12 +2,37 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "buildEposCodeGenerationSample",
+            "label": "build",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src/Epos.CodeGeneration.Sample/Epos.CodeGeneration.Sample.csproj",
+                "${workspaceFolder}/src/Epos.CmdLine.Sample/Epos.CmdLine.Sample.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "publish",
+                "${workspaceFolder}/src/Epos.CmdLine.Sample/Epos.CmdLine.Sample.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "${workspaceFolder}/src/Epos.CmdLine.Sample/Epos.CmdLine.Sample.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],

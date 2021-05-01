@@ -2,8 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Text;
+
+using static Epos.Utilities.Characters;
 
 namespace Epos.Utilities
 {
@@ -113,6 +116,120 @@ namespace Epos.Utilities
 
             return theStringBuilder.Append(" }").ToString();
         }
+
+        /// <summary>Returns a pretty-print string representation of the specified
+        /// <paramref name="table"/> object.</summary>
+        /// <param name="table">Table object</param>
+        /// <param name="tableInfoProvider">Table info provider</param>
+        /// <returns>Pretty-print string representation of the table</returns>
+        public static string DumpTableObject<T, TColumn, TRow>(
+            this T table, TableInfoProvider<TColumn, TRow> tableInfoProvider
+        ) where T : class {
+            if (table is null) {
+                throw new ArgumentNullException(nameof(table));
+            }
+            if (tableInfoProvider is null) {
+                throw new ArgumentNullException(nameof(tableInfoProvider));
+            }
+
+            var theResult = new StringBuilder();
+
+            List<TextColumn<TColumn>> theColumns = GetTextColumns(tableInfoProvider);
+
+            string theSpaces = new string(' ', tableInfoProvider.LeadingSpaces);
+
+            theResult.Append(theSpaces);
+
+            int theColumnCount = theColumns.Count;
+            for (int theIndex = 0; theIndex < theColumnCount; theIndex++) {
+                TextColumn<TColumn> theColumn = theColumns[theIndex];
+                theResult.Append(string.Format(GetAlignmentString(theColumn), theColumn.Header));
+
+                if (theIndex < theColumnCount - 1) {
+                    theResult.Append(" | ");
+                }
+            }
+
+            if (theColumns.Any(c => c.SecondaryHeader != null)) {
+                theResult
+                    .Append(Lf)
+                    .Append(theSpaces);
+
+                for (int theIndex = 0; theIndex < theColumnCount; theIndex++) {
+                    TextColumn<TColumn> theColumn = theColumns[theIndex];
+
+                    theResult.Append(string.Format(GetAlignmentString(theColumn), theColumn.SecondaryHeader));
+
+                    if (theIndex < theColumnCount - 1) {
+                        theResult.Append(" | ");
+                    }
+                }
+            }
+
+            if (theColumns.Any(c => c.DataType != null)) {
+                theResult
+                  .Append(Lf)
+                    .Append(theSpaces);
+
+                for (int theIndex = 0; theIndex < theColumnCount; theIndex++) {
+                    TextColumn<TColumn> theColumn = theColumns[theIndex];
+
+                    theResult.Append(string.Format(GetAlignmentString(theColumn), theColumn.DataType));
+
+                    if (theIndex < theColumnCount - 1) {
+                        theResult.Append(" | ");
+                    }
+                }
+            }
+
+            theResult.Append(Lf);
+
+            var theSeperatorLine = new StringBuilder(theSpaces);
+            for (int theIndex = 0; theIndex < theColumnCount; theIndex++) {
+                theSeperatorLine.Append('-', theColumns[theIndex].Width);
+                if (theIndex < theColumnCount - 1) {
+                    theSeperatorLine.Append("-|-");
+                }
+            }
+
+            theResult
+                .Append(theSeperatorLine)
+                .Append(Lf);
+
+            int theRowCount = theColumns.First().Rows.Count;
+
+            string? theEmptyTableText = tableInfoProvider.EmptyTableText;
+
+            if (theEmptyTableText != null && theRowCount == 0) {
+                theResult
+                    .Append(theSpaces)
+                    .Append(theEmptyTableText)
+                    .Append(Lf);
+            } else {
+                for (int theRowIndex = 0; theRowIndex < theRowCount; theRowIndex++) {
+                    theResult.Append(theSpaces);
+
+                    for (int theIndex = 0; theIndex < theColumnCount; theIndex++) {
+                        TextColumn<TColumn> theColumn = theColumns[theIndex];
+
+                        theResult.Append(string.Format(GetAlignmentString(theColumn), theColumn.Rows[theRowIndex]));
+
+                        if (theIndex < theColumnCount - 1) {
+                            theResult.Append(" | ");
+                        }
+                    }
+
+                    theResult.Append(Lf);
+                }
+            }
+
+            if (tableInfoProvider.HasTrailingSeperatorLine && (theRowCount != 0 || theEmptyTableText != null)) {
+                theResult.Append(theSeperatorLine).Append(Lf);
+            }
+
+            return theResult.ToString();
+        }
+
 
         #region Helper methods
 
@@ -252,6 +369,52 @@ namespace Epos.Utilities
             }
 			
             return null;
+        }
+
+        private static string GetAlignmentString<TColumn>(TextColumn<TColumn> column) {
+            return
+                column.Alignright ?
+                $"{{0,{column.Width}}}" :
+                $"{{0,-{column.Width}}}";
+        }
+
+        private static List<TextColumn<TColumn>> GetTextColumns<TColumn, TRow>(
+            TableInfoProvider<TColumn, TRow> tableInfoProvider
+        ) {
+            var theResult = new List<TextColumn<TColumn>>();
+
+            var theColumns = tableInfoProvider.GetColumns();
+
+            int theColumnIndex = 0;
+            foreach (TColumn theColumn in theColumns) {
+                ColumnInfo theColumnInfo = tableInfoProvider.GetColumnInfo(theColumn, theColumnIndex);
+
+                theResult.Add(
+                    new TextColumn<TColumn>(theColumnInfo.Header, theColumnIndex, theColumn, theColumnInfo.AlignRight) {
+                        SecondaryHeader = theColumnInfo.SecondaryHeader,
+                        DataType = theColumnInfo.DataType
+                    }
+                );
+
+                theColumnIndex++;
+            }
+
+            var theRows = tableInfoProvider.GetRows();
+
+            foreach (TRow theRow in theRows) {
+                for (int theIndex = 0; theIndex < theResult.Count; theIndex++) {
+                    TextColumn<TColumn> theTextColumn = theResult[theIndex];
+
+                    string theCellValue =
+                        tableInfoProvider.GetCellValue(theRow, theTextColumn.Column, theTextColumn.Index);
+                    
+                    theTextColumn.Rows.Add(theCellValue);
+                    
+                    theTextColumn.Width = Math.Max(theTextColumn.Width, theCellValue.Length);
+                }
+            }
+
+            return theResult;
         }
 
         #endregion

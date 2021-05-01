@@ -347,15 +347,15 @@ namespace Epos.CmdLine
             Assert.That(
                 theConsoleOutput.ToString(),
                 Is.EqualTo(
-                    "Usage: sample build [-p, --project-number <int>] [-m, --memory <string=\"1 GB\">]" + Lf +
-                    "                    [-d] [-z] <dummy:string>" + DbLf +
-                    "Options" + Lf +
-                    "  -p, --project-number   Sets the project number." + Lf +
-                    "  -m, --memory           Sets the used memory. >>> defaults to \"1 GB\"" + Lf +
-                    "  -d                     Disables the command." + Lf +
-                    "  -z                     Zzzz..." + DbLf +
-                    "Parameters" + Lf +
-                    "  dummy                  Sets a dummy value." + DbLf
+                    "Usage: sample build [-p, --project-number <int>] [-m, --memory <string=\"1 GB\">]" +
+                    " [-d] [-z] <dummy:string>"                                                         + DbLf +
+                    "Options"                                                                           + Lf +
+                    "  -p, --project-number   Sets the project number."                                 + Lf +
+                    "  -m, --memory           Sets the used memory. >>> defaults to \"1 GB\""           + Lf +
+                    "  -d                     Disables the command."                                    + Lf +
+                    "  -z                     Zzzz..."                                                  + DbLf +
+                    "Parameters"                                                                        + Lf +
+                    "  dummy                  Sets a dummy value."                                      + DbLf
                 )
             );
 
@@ -367,8 +367,8 @@ namespace Epos.CmdLine
             Assert.That(
                 theConsoleOutput.ToString(),
                 Is.EqualTo(
-                    "Usage: sample build [-p, --project-number <int>] [-m, --memory <string=\"1 GB\">]" + Lf +
-                    "                    [-d] [-z] <dummy:string>"                                      + DbLf +
+                    "Usage: sample build [-p, --project-number <int>] [-m, --memory <string=\"1 GB\">]" +
+                    " [-d] [-z] <dummy:string>"                                                         + DbLf +
                     "Error: Missing option: -p, --project-number"                                       + DbLf +
                     "Options"                                                                           + Lf +
                     "  -p, --project-number   Sets the project number."                                 + Lf +
@@ -417,8 +417,8 @@ namespace Epos.CmdLine
             Assert.That(
                 theConsoleOutput.ToString(),
                 Is.EqualTo(
-                    "Usage: sample build [-p, --project-number <int>] [-m, --memory <string=\"1 GB\">]" + Lf +
-                    "                    [-d] [-z] <dummy:string>" + DbLf +
+                    "Usage: sample build [-p, --project-number <int>] [-m, --memory <string=\"1 GB\">]" +
+                    " [-d] [-z] <dummy:string>" + DbLf +
                     "Error: Only one of the following options may be set: [-d], [-z]" + DbLf +
                     "Options" + Lf +
                     "  -p, --project-number   Sets the project number." + Lf +
@@ -437,8 +437,8 @@ namespace Epos.CmdLine
             Assert.That(
                 theConsoleOutput.ToString(),
                 Is.EqualTo(
-                    "Usage: sample build [-p, --project-number <int>] [-m, --memory <string=\"1 GB\">]" + Lf +
-                    "                    [-d] [-z] <dummy:string>"                                           + DbLf +
+                    "Usage: sample build [-p, --project-number <int>] [-m, --memory <string=\"1 GB\">]" +
+                    " [-d] [-z] <dummy:string>"                                                         + DbLf +
                     "Error: Value \"abc\" for option [-p, --project-number <int>] is invalid."          + DbLf +
                     "Options"                                                                           + Lf +
                     "  -p, --project-number   Sets the project number."                                 + Lf +
@@ -457,8 +457,8 @@ namespace Epos.CmdLine
             Assert.That(
                 theConsoleOutput.ToString(),
                 Does.StartWith(
-                    "Usage: sample build [-p, --project-number <int>] [-m, --memory <string=\"1 GB\">]" + Lf +
-                    "                    [-d] [-z] <dummy:string>"                                      + DbLf +
+                    "Usage: sample build [-p, --project-number <int>] [-m, --memory <string=\"1 GB\">]" +
+                    " [-d] [-z] <dummy:string>"                                                         + DbLf +
                     "Error: Missing value for option [-p, --project-number <int>]."
                 )
             );
