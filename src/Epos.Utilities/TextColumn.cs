@@ -9,11 +9,9 @@ namespace Epos.Utilities
             Header = header;
             Index = index;
             Column = column;
-            Alignright = alignRight;
+            AlignRight = alignRight;
 
             Width = header.Length;
-
-            Rows = new List<string>();
         }
 
         public string Header { get; }
@@ -22,7 +20,7 @@ namespace Epos.Utilities
 
         public TColumn Column { get; }
 
-        public bool Alignright { get; }
+        public bool AlignRight { get; }
 
         private string? mySecondaryHeader;
         public string? SecondaryHeader {
@@ -50,6 +48,6 @@ namespace Epos.Utilities
 
         public int Width { get; set; }
 
-        public List<string> Rows { get; }
+        public List<(string CellValue, int ColSpan)> Rows { get; } = new();
     }
 }

@@ -77,7 +77,68 @@ namespace Epos.Utilities
             Assert.That(new ExampleClass().Dump(), Is.EqualTo("{ One = 1, Two = Two, Date = 09/09/2099 00:00:00 }"));
         }
 
+        [Test]
+        public void TableObject() {
+            string theActual = new MyTable().DumpTableObject(new MyTableInfoProvider());
+
+            var theExpected = @"
+Header1 | Header2 | Header3  | Header4 | Header5
+    int | string  | string   |  double | string 
+--------|---------|----------|---------|--------
+      1 | Gabbel  | World    |   34.45 | Guguck 
+      2 | Blofeld | Hello    |   43.89 | Moin   
+      3 | Kaputt  | Together |   99.23 | Hi     
+--------|---------|----------|---------|--------
+Sum                          |  177.57 |        
+".TrimStart();
+
+            Assert.That(theActual, Is.EqualTo(theExpected));
+        }
+
         #region Hilfsmember
+
+        private class MyTable { }
+
+        private class MyTableInfoProvider : TableInfoProvider<object, Row>
+        {
+            public override IEnumerable<object> GetColumns() {
+                return new object[5];
+            }
+
+            public override ColumnInfo GetColumnInfo(object column, int columnIndex) {
+                return columnIndex switch {
+                    0 => new ColumnInfo { Header = "Header1", AlignRight = true, DataType = "int" },
+                    1 => new ColumnInfo { Header = "Header2", DataType = "string" },
+                    2 => new ColumnInfo { Header = "Header3", DataType = "string" },
+                    3 => new ColumnInfo { Header = "Header4", AlignRight = true, DataType = "double" },
+                    4 => new ColumnInfo { Header = "Header5", DataType = "string" },
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+            }
+
+            public override IEnumerable<Row> GetRows() {
+                yield return new Row(1, "Gabbel", "World", 34.45, "Guguck"); 
+                yield return new Row(2, "Blofeld", "Hello", 43.89, "Moin"); 
+                yield return new Row(3, "Kaputt", "Together", 99.23, "Hi");
+                yield return new Row(new TableHeader("Sum", 3), (34.45 + 43.89 + 99.23), "");
+            }
+
+            public override (string CellValue, int ColSpan) GetCellValue(Row row, object column, int columnIndex) {
+                var theValue = row.Values[columnIndex];
+
+                if (theValue is TableHeader theHeader) {
+                    return (theHeader.Value, theHeader.ColSpan);
+                }
+
+                return (theValue.Dump(), 1);
+            }
+
+            public override bool HasSumRow => true;
+        }
+
+        private record Row(params object[] Values);
+
+        private record TableHeader(string Value, int ColSpan);
 
         private static IEnumerable GetEnumerable1() {
             return new[] { 1, 2, 3 };

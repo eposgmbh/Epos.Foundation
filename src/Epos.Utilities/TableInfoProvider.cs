@@ -18,11 +18,14 @@ namespace Epos.Utilities
         public abstract IEnumerable<TRow> GetRows();
 
         /// <summary>Gets the value of a specific table cell.</summary>
-        /// <returns>Cell value</returns>
-        public abstract string GetCellValue(TRow row, TColumn column, int columnIndex);
+        /// <returns>Cell value and column span</returns>
+        public abstract (string CellValue, int ColSpan) GetCellValue(TRow row, TColumn column, int columnIndex);
 
         ///<summary>Gets the number of leading spaces.</summary>
         public virtual int LeadingSpaces => 0;
+
+        ///<summary>Determines, whether to print a sum seperator line above the last row.</summary>
+        public virtual bool HasSumRow => false;
 
         ///<summary>Determines, whether to print a trailing seperator line under the table.</summary>
         public virtual bool HasTrailingSeperatorLine => false;

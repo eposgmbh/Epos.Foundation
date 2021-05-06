@@ -184,7 +184,7 @@ namespace Epos.Utilities
 
             theResult.Append(Lf);
 
-            var theSeperatorLine = new StringBuilder(theSpaces);
+            var theSeperatorLine = new StringBuilder();
             for (int theIndex = 0; theIndex < theColumnCount; theIndex++) {
                 theSeperatorLine.Append('-', theColumns[theIndex].Width);
                 if (theIndex < theColumnCount - 1) {
@@ -193,6 +193,7 @@ namespace Epos.Utilities
             }
 
             theResult
+                .Append(theSpaces)
                 .Append(theSeperatorLine)
                 .Append(Lf);
 
@@ -209,10 +210,34 @@ namespace Epos.Utilities
                 for (int theRowIndex = 0; theRowIndex < theRowCount; theRowIndex++) {
                     theResult.Append(theSpaces);
 
+                    if (theRowIndex == theRowCount - 1) {
+                        // Letzte Zeile
+                        if (tableInfoProvider.HasSumRow) {
+                            theResult
+                                .Append(theSeperatorLine)
+                                .Append(Lf)
+                                .Append(theSpaces);
+                        }
+                    }
+
                     for (int theIndex = 0; theIndex < theColumnCount; theIndex++) {
                         TextColumn<TColumn> theColumn = theColumns[theIndex];
 
-                        theResult.Append(string.Format(GetAlignmentString(theColumn), theColumn.Rows[theRowIndex]));
+                        (string theCellValue, int theColSpan) = theColumn.Rows[theRowIndex];
+
+                        string theAlignmentString;
+                        if (theColSpan == 1) {
+                            theAlignmentString = GetAlignmentString(theColumn);
+                        } else {
+                            int theWidth =
+                                theColumns.Skip(theIndex).Take(theColSpan).Sum(c => c.Width) + (theColSpan - 1) * 3;
+                            
+                            theAlignmentString = $"{{0,-{theWidth}}}";
+                        }
+
+                        theResult.Append(string.Format(theAlignmentString, theCellValue));
+
+                        theIndex += theColSpan - 1;
 
                         if (theIndex < theColumnCount - 1) {
                             theResult.Append(" | ");
@@ -224,12 +249,14 @@ namespace Epos.Utilities
             }
 
             if (tableInfoProvider.HasTrailingSeperatorLine && (theRowCount != 0 || theEmptyTableText != null)) {
-                theResult.Append(theSeperatorLine).Append(Lf);
+                theResult
+                    .Append(theSpaces)
+                    .Append(theSeperatorLine)
+                    .Append(Lf);
             }
 
             return theResult.ToString();
         }
-
 
         #region Helper methods
 
@@ -334,7 +361,7 @@ namespace Epos.Utilities
                 theStringBuilder.Length -= 2;
             }
 			
-            theStringBuilder.Append("]");
+            theStringBuilder.Append(']');
 			
             return theStringBuilder.ToString();
         }
@@ -372,10 +399,7 @@ namespace Epos.Utilities
         }
 
         private static string GetAlignmentString<TColumn>(TextColumn<TColumn> column) {
-            return
-                column.Alignright ?
-                $"{{0,{column.Width}}}" :
-                $"{{0,-{column.Width}}}";
+            return column.AlignRight ? $"{{0,{column.Width}}}" : $"{{0,-{column.Width}}}";
         }
 
         private static List<TextColumn<TColumn>> GetTextColumns<TColumn, TRow>(
@@ -402,15 +426,55 @@ namespace Epos.Utilities
             var theRows = tableInfoProvider.GetRows();
 
             foreach (TRow theRow in theRows) {
-                for (int theIndex = 0; theIndex < theResult.Count; theIndex++) {
-                    TextColumn<TColumn> theTextColumn = theResult[theIndex];
+                int theColumnCount = theResult.Count;
 
-                    string theCellValue =
-                        tableInfoProvider.GetCellValue(theRow, theTextColumn.Column, theTextColumn.Index);
-                    
-                    theTextColumn.Rows.Add(theCellValue);
-                    
-                    theTextColumn.Width = Math.Max(theTextColumn.Width, theCellValue.Length);
+                theColumnIndex = 0;
+                for (int theIndex = 0; theIndex < theColumnCount; theIndex++) {
+                    TextColumn<TColumn> theTextColumn = theResult[theColumnIndex];
+
+                    var theValue = tableInfoProvider.GetCellValue(theRow, theTextColumn.Column, theIndex);
+
+                    if (theValue.ColSpan < 1) {
+                        throw new InvalidOperationException("ColSpan must not be lower than 1.");
+                    } else if (theValue.ColSpan > 1) {
+                        int theRemainingColumnCount = theColumnCount - theIndex;
+
+                        if (theValue.ColSpan > theRemainingColumnCount) {
+                            throw new InvalidOperationException(
+                                $"ColSpan must not be greater than than the remaining column " +
+                                $"count ({theRemainingColumnCount})."
+                            );
+                        }
+                    }
+
+                    theTextColumn.Rows.Add(theValue);
+
+                    if (theValue.ColSpan == 1) {
+                        theTextColumn.Width = Math.Max(theTextColumn.Width, theValue.CellValue.Length);
+                    } else {
+                        int theTotalWidth = theTextColumn.Width;
+                        for (int theNextIndex = theIndex + 1; theNextIndex < theIndex + theValue.ColSpan; theNextIndex++) {
+                            TextColumn<TColumn> theNextTextColumn = theResult[theNextIndex];
+
+                            theNextTextColumn.Rows.Add((string.Empty, 1));
+                            theTotalWidth += theNextTextColumn.Width;
+                        }
+
+                        while (theTotalWidth < theValue.CellValue.Length) {
+                            for (int theNextIndex = theIndex; theNextIndex < theIndex + theValue.ColSpan; theNextIndex++) {
+                                TextColumn<TColumn> theNextTextColumn = theResult[theNextIndex];
+                                theNextTextColumn.Width++;
+
+                                theTotalWidth++;
+                                if (theTotalWidth == theValue.CellValue.Length) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    theColumnCount -= theValue.ColSpan - 1;
+                    theColumnIndex += theValue.ColSpan;
                 }
             }
 
