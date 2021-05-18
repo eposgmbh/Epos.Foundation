@@ -141,6 +141,47 @@ namespace Epos.Utilities
             theResult.Append(theSpaces);
 
             int theColumnCount = theColumns.Count;
+
+            if (theColumns.Any(c => c.Seperator != null)) {
+                for (int theIndex = 0; theIndex < theColumnCount; theIndex++) {
+                    TextColumn<TColumn> theColumn = theColumns[theIndex];
+
+                    ColumnSeperator? theSeperator = theColumn.Seperator;
+                    if (theSeperator != null) {
+                        int theColSpan = theSeperator.ColSpan;
+
+                        int theWidth;
+                        if (theColSpan == 1) {
+                            theWidth = theColumn.Width;
+                        } else {
+                            theWidth =
+                                theColumns.Skip(theIndex).Take(theColSpan).Sum(c => c.Width) + (theColSpan - 1) * 3;
+                        }
+
+                        var theCenteredHeader = new StringBuilder(theSeperator.Header);
+                        while (theCenteredHeader.Length < theWidth) {
+                            if (theCenteredHeader.Length % 2 == 0) {
+                                theCenteredHeader.Insert(0, ' ');
+                            } else {
+                                theCenteredHeader.Append(' ');
+                            }
+                        }
+    
+                        theResult.Append(theCenteredHeader);
+
+                        theIndex += theColSpan - 1;
+                    }
+
+                    if (theIndex < theColumnCount - 1) {
+                        theResult.Append(" | ");
+                    }
+                }
+
+                theResult
+                    .Append(Lf)
+                    .Append(theSpaces);
+            }
+
             for (int theIndex = 0; theIndex < theColumnCount; theIndex++) {
                 TextColumn<TColumn> theColumn = theColumns[theIndex];
                 theResult.Append(string.Format(GetAlignmentString(theColumn), theColumn.Header));
@@ -416,9 +457,14 @@ namespace Epos.Utilities
                 theResult.Add(
                     new TextColumn<TColumn>(theColumnInfo.Header, theColumnIndex, theColumn, theColumnInfo.AlignRight) {
                         SecondaryHeader = theColumnInfo.SecondaryHeader,
-                        DataType = theColumnInfo.DataType
+                        DataType = theColumnInfo.DataType,
+                        Seperator = theColumnInfo.Seperator
                     }
                 );
+                    
+                if ((theColumnInfo.Seperator?.ColSpan ?? int.MaxValue) < 1) {
+                    throw new InvalidOperationException("ColSpan must not be lower than 1.");
+                }               
 
                 theColumnIndex++;
             }

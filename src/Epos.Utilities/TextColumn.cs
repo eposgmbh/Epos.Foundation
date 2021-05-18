@@ -46,6 +46,8 @@ namespace Epos.Utilities
             }
         }
 
+        public ColumnSeperator? Seperator { get; set; }
+
         public int Width { get; set; }
 
         public List<(string CellValue, int ColSpan)> Rows { get; } = new();

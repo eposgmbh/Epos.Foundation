@@ -3,6 +3,10 @@ namespace Epos.Utilities
     /// <summary> Provides information details about an arbitrary table column. </summary>
     public sealed class ColumnInfo
     {
+        /// <summary>Gets or sets the column seperator.</summary>
+        /// <value>Column seperator</value>
+        public ColumnSeperator? Seperator { get; set; }
+
         /// <summary>Gets or sets the header.</summary>
         /// <value>Header</value>
         public string Header { get; set; } = string.Empty;

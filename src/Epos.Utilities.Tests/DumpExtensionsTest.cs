@@ -82,6 +82,7 @@ namespace Epos.Utilities
             string theActual = new MyTable().DumpTableObject(new MyTableInfoProvider());
 
             var theExpected = @"
+            Left             |       Right      
 Header1 | Header2 | Header3  | Header4 | Header5
     int | string  | string   |  double | string 
 --------|---------|----------|---------|--------
@@ -90,7 +91,7 @@ Header1 | Header2 | Header3  | Header4 | Header5
       3 | Kaputt  | Together |   99.23 | Hi     
 --------|---------|----------|---------|--------
 Sum                          |  177.57 |        
-".TrimStart();
+".Substring(Environment.NewLine.Length);
 
             Assert.That(theActual, Is.EqualTo(theExpected));
         }
@@ -107,10 +108,16 @@ Sum                          |  177.57 |
 
             public override ColumnInfo GetColumnInfo(object column, int columnIndex) {
                 return columnIndex switch {
-                    0 => new ColumnInfo { Header = "Header1", AlignRight = true, DataType = "int" },
+                    0 => new ColumnInfo {
+                        Header = "Header1", AlignRight = true, DataType = "int",
+                        Seperator = new ColumnSeperator { Header = "Left", ColSpan = 3 }
+                    },
                     1 => new ColumnInfo { Header = "Header2", DataType = "string" },
                     2 => new ColumnInfo { Header = "Header3", DataType = "string" },
-                    3 => new ColumnInfo { Header = "Header4", AlignRight = true, DataType = "double" },
+                    3 => new ColumnInfo {
+                        Header = "Header4", AlignRight = true, DataType = "double",
+                        Seperator = new ColumnSeperator { Header = "Right", ColSpan = 2 }
+                    },
                     4 => new ColumnInfo { Header = "Header5", DataType = "string" },
                     _ => throw new ArgumentOutOfRangeException()
                 };
