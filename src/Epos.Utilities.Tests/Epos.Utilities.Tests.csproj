@@ -1,9 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <AssemblyName>Epos.Utilities.Tests</AssemblyName>
     <RootNamespace>Epos.Utilities</RootNamespace>
     <DefineConstants>LOGGING</DefineConstants>
   </PropertyGroup>
