@@ -24,31 +24,42 @@ public static class HostExtensions
     /// <param name="host">Host</param>
     /// <param name="timeoutSeconds">Timeout in seconds</param>
     /// <param name="serviceUrlConfigurationEntries">Names of the Service URL configuration entries</param>
+    /// <returns> Host </returns>
     /// <exception cref="TimeoutException">Thrown when the timeout has run out.</exception>
-    public static void WaitForServiceAvailability(
+    public static IHost WaitForServiceAvailability(
         this IHost host, int timeoutSeconds, params string[] serviceUrlConfigurationEntries
     ) {
         if (host is null) {
             throw new ArgumentNullException(nameof(host));
         }
-        if (serviceUrlConfigurationEntries is null) {
-            throw new ArgumentNullException(nameof(serviceUrlConfigurationEntries));
-        }
 
         using IServiceScope theScope = host.Services.CreateScope();
-        IConfiguration theConfiguration = theScope.ServiceProvider.GetRequiredService<IConfiguration>();
-        ILogger theLogger = theScope.ServiceProvider.GetRequiredService<ILogger<LifeTime>>();
-        IHostEnvironment theEnvironment = theScope.ServiceProvider.GetRequiredService<IHostEnvironment>();
+        IServiceProvider theServiceProvider = theScope.ServiceProvider;
 
-        foreach (var theConfigurationEntry in serviceUrlConfigurationEntries) {
-            if (theConfigurationEntry is null) {
-                throw new ArgumentNullException(nameof(serviceUrlConfigurationEntries));
-            }
+        WaitForServiceAvailability(theServiceProvider, timeoutSeconds, serviceUrlConfigurationEntries);
 
-            string theServiceUrl = theConfiguration[theConfigurationEntry];
+        return host;
+    }
 
-            WaitForServiceAvailability(theServiceUrl, timeoutSeconds, theEnvironment.IsDevelopment(), theLogger);
+    /// <summary> Waits for the availability of the supplied Service URLs. After the provided timeout an exception is
+    /// thrown. </summary>
+    /// <remarks> Also supportes connection strings with "Server=" and "Port=" components. </remarks>
+    /// <param name="services">Service collection</param>
+    /// <param name="timeoutSeconds">Timeout in seconds</param>
+    /// <param name="serviceUrl">Service URL</param>
+    /// <exception cref="TimeoutException">Thrown when the timeout has run out.</exception>
+    public static void WaitForServiceAvailability(
+        this IServiceCollection services, int timeoutSeconds, string serviceUrl
+    ) {
+        if (services is null) {
+            throw new ArgumentNullException(nameof(services));
         }
+
+        IServiceProvider theServiceProvider = services.BuildServiceProvider();
+        IHostEnvironment theEnvironment = theServiceProvider.GetRequiredService<IHostEnvironment>();
+        ILogger theLogger = theServiceProvider.GetRequiredService<ILogger<LifeTime>>();
+
+        WaitForServiceAvailability(serviceUrl, timeoutSeconds, theEnvironment.IsDevelopment(), theLogger);
     }
 
     internal static void WaitForServiceAvailability(string serviceUrl, int timeoutSeconds, bool isDevelopment, ILogger logger) {
@@ -86,6 +97,31 @@ public static class HostExtensions
     }
 
     #region --- Helper methods ---
+
+    private static void WaitForServiceAvailability(
+        this IServiceProvider serviceProvider, int timeoutSeconds, string[] serviceUrlConfigurationEntries
+    ) {
+        if (serviceProvider is null) {
+            throw new ArgumentNullException(nameof(serviceProvider));
+        }
+        if (serviceUrlConfigurationEntries is null) {
+            throw new ArgumentNullException(nameof(serviceUrlConfigurationEntries));
+        }
+
+        IConfiguration theConfiguration = serviceProvider.GetRequiredService<IConfiguration>();
+        ILogger theLogger = serviceProvider.GetRequiredService<ILogger<LifeTime>>();
+        IHostEnvironment theEnvironment = serviceProvider.GetRequiredService<IHostEnvironment>();
+
+        foreach (var theConfigurationEntry in serviceUrlConfigurationEntries) {
+            if (theConfigurationEntry is null) {
+                throw new ArgumentNullException(nameof(serviceUrlConfigurationEntries));
+            }
+
+            string theServiceUrl = theConfiguration[theConfigurationEntry];
+
+            WaitForServiceAvailability(theServiceUrl, timeoutSeconds, theEnvironment.IsDevelopment(), theLogger);
+        }
+    }
 
     private static (string Host, int Port) GetHostAndPort(string serviceUrl) {
         try {
