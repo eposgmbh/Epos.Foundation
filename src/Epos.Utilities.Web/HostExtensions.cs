@@ -16,11 +16,9 @@ namespace Epos.Utilities.Web;
 /// <summary> Collection of <b>Host</b> extension methods. </summary>
 public static class HostExtensions
 {
-    internal class LifeTime { }
-
     /// <summary> Waits for the availability of the supplied Service URLs. After the provided timeout an exception is
     /// thrown. </summary>
-    /// <remarks> Also supportes connection strings with "Server=" and "Port=" components. </remarks>
+    /// <remarks> Also supports connection strings with "Server=" and "Port=" components. </remarks>
     /// <param name="host">Host</param>
     /// <param name="timeoutSeconds">Timeout in seconds</param>
     /// <param name="serviceUrlConfigurationEntries">Names of the Service URL configuration entries</param>
@@ -43,7 +41,7 @@ public static class HostExtensions
 
     /// <summary> Waits for the availability of the supplied Service URLs. After the provided timeout an exception is
     /// thrown. </summary>
-    /// <remarks> Also supportes connection strings with "Server=" and "Port=" components. </remarks>
+    /// <remarks> Also supports connection strings with "Server=" and "Port=" components. </remarks>
     /// <param name="services">Service collection</param>
     /// <param name="timeoutSeconds">Timeout in seconds</param>
     /// <param name="serviceUrl">Service URL</param>
@@ -56,21 +54,28 @@ public static class HostExtensions
         }
 
         IServiceProvider theServiceProvider = services.BuildServiceProvider();
-        IHostEnvironment theEnvironment = theServiceProvider.GetRequiredService<IHostEnvironment>();
-        ILogger theLogger = theServiceProvider.GetRequiredService<ILogger<LifeTime>>();
+        ILogger theLogger = theServiceProvider.GetRequiredService<ILogger<Logging>>();
 
-        WaitForServiceAvailability(serviceUrl, timeoutSeconds, theEnvironment.IsDevelopment(), theLogger);
+        WaitForServiceAvailability(serviceUrl, theLogger, timeoutSeconds);
     }
 
-    internal static void WaitForServiceAvailability(string serviceUrl, int timeoutSeconds, bool isDevelopment, ILogger logger) {
+    internal static void WaitForServiceAvailability(string serviceUrl, ILogger logger, int timeoutSeconds) {
         var theClient = new TcpClient();
         var theStopwatch = Stopwatch.StartNew();
 
         var (theHost, thePort) = GetHostAndPort(serviceUrl);
 
         bool theIsSuccessful = false;
+        bool theIsLogged = false;
         do {
             try {
+                if (!theIsLogged && theStopwatch.ElapsedMilliseconds >= 2000) {
+                    logger.LogInformation(
+                        $"Waiting for the availability of the host {theHost}:{thePort}..."
+                    );
+                    theIsLogged = true;
+                }
+
                 theClient.Connect(theHost, thePort);
                 theIsSuccessful = true;
             } catch (SocketException) {
@@ -84,15 +89,20 @@ public static class HostExtensions
             throw new TimeoutException(
                 $"Host {theHost}:{thePort} is not available after {timeoutSeconds} seconds."
             );
-        } else {
-            logger.LogInformation(
-                $"Host {theHost}:{thePort} is available after {theStopwatch.ElapsedMilliseconds} milliseconds."
-            );
+        }
+        
+        long theElapsedMilliseconds = theStopwatch.ElapsedMilliseconds;
 
-            if (!isDevelopment) {
-                // Let's wait another second for non-dev environments
-                Thread.Sleep(millisecondsTimeout: 1000);
-            }
+        logger.LogInformation(
+            $"Host {theHost}:{thePort} is available after {theElapsedMilliseconds} milliseconds."
+        );
+
+        if (theElapsedMilliseconds >= 1000) {
+            logger.LogInformation(
+                "Waiting an additional 5 seconds for initialization..."
+            );
+    
+            Thread.Sleep(millisecondsTimeout: 5000);
         }
     }
 
@@ -109,8 +119,7 @@ public static class HostExtensions
         }
 
         IConfiguration theConfiguration = serviceProvider.GetRequiredService<IConfiguration>();
-        ILogger theLogger = serviceProvider.GetRequiredService<ILogger<LifeTime>>();
-        IHostEnvironment theEnvironment = serviceProvider.GetRequiredService<IHostEnvironment>();
+        ILogger theLogger = serviceProvider.GetRequiredService<ILogger<Logging>>();
 
         foreach (var theConfigurationEntry in serviceUrlConfigurationEntries) {
             if (theConfigurationEntry is null) {
@@ -119,7 +128,7 @@ public static class HostExtensions
 
             string theServiceUrl = theConfiguration[theConfigurationEntry];
 
-            WaitForServiceAvailability(theServiceUrl, timeoutSeconds, theEnvironment.IsDevelopment(), theLogger);
+            WaitForServiceAvailability(theServiceUrl, theLogger, timeoutSeconds);
         }
     }
 
