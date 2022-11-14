@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,9 +10,10 @@ namespace Epos.Utilities
     /// <typeparam name="TValue">Cache value type (must be a <b>class</b>)</typeparam>
     public sealed class Cache<TKey, TValue> where TValue : class
     {
-        private const int ConcurrencyLevel = 4;
-        private readonly ConcurrentDictionary<TKey, TValue> myInternalCache;
-        private readonly List<TKey> myQueue;
+        private static readonly object SyncLock = new object();
+
+        private readonly Dictionary<TKey, TValue> myInternalCache;
+        private readonly Queue<TKey> myQueue;
 
         /// <summary>Initializes an instance of the <see cref="Cache{TKey,TValue}"/> class.</summary>
         /// <param name="capacity">Cache capacity</param>
@@ -27,8 +27,8 @@ namespace Epos.Utilities
             }
 
             Capacity = capacity;
-            myInternalCache = new ConcurrentDictionary<TKey, TValue>(ConcurrencyLevel, capacity + 1);
-            myQueue = new List<TKey>(capacity + 1);
+            myInternalCache = new Dictionary<TKey, TValue>(capacity + 1);
+            myQueue = new Queue<TKey>(capacity + 1);
         }
 		
         /// <summary>Sets or returns a cache value.</summary>
@@ -40,16 +40,16 @@ namespace Epos.Utilities
                 return theResult;
             }
             set {
-                if (!myInternalCache.ContainsKey(key)) {
-                    myQueue.Add(key);
-                }
-                myInternalCache[key] = value;
+                lock (SyncLock) {
+                    if (!myInternalCache.ContainsKey(key)) {
+                        myQueue.Enqueue(key);
+                    }
+                    myInternalCache[key] = value;
 
-                if (myQueue.Count > Capacity) {
-                    TKey theFirstKey = myQueue[0];
-                    myQueue.RemoveAt(0);
-
-                    myInternalCache.TryRemove(theFirstKey, out _);
+                    if (myQueue.Count > Capacity) {
+                        TKey theFirstKey = myQueue.Dequeue();
+                        myInternalCache.Remove(theFirstKey);
+                    }
                 }
             }
         }
@@ -65,14 +65,14 @@ namespace Epos.Utilities
         /// <summary>Returns a string that represents the cache.</summary>
         /// <returns>String representation of the cache</returns>
         public override string ToString() {
-            IEnumerable theDumpFriendlyEnumerable =
-                from theKey in myQueue
-                let theValue = this[theKey]
-                select new DictionaryEntry(theKey, theValue);
+            lock (SyncLock) {
+                IEnumerable theDumpFriendlyEnumerable =
+                    from theKey in myQueue
+                    let theValue = this[theKey]
+                    select new DictionaryEntry(theKey, theValue);
 
-            return theDumpFriendlyEnumerable.Dump();
+                return theDumpFriendlyEnumerable.Dump();
+            }
         }
     }
-
-    // DEV Hint: Implementation mit Weak-References lässt sich noch unter Changeset 94 finden.
 }

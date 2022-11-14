@@ -13,11 +13,6 @@ namespace Epos.Utilities
 
         [Test]
         public void ConstructorAndBasics() {
-            // Es kann sein, dass dieser Test nicht durchläuft,
-            // da im Cache intern Weak References verwendet werden,
-            // die freigegeben werden, sobald zu wenig Speicher
-            // vorhanden ist und eine Garbage Collection läuft.
-
             var theCache = new Cache<int, string>(2);
             Assert.That(theCache.Capacity, Is.EqualTo(2));
             Assert.That(theCache.Count, Is.EqualTo(0));
