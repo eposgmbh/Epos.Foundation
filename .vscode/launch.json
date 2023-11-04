@@ -2,13 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Epos.CmdLine.Sample - .NET Core Launch (console)",
+            "name": "Epos.CommandLine.Sample - .NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/Epos.CmdLine.Sample/bin/Debug/net5.0/Epos.CmdLine.Sample.dll",
+            "program": "${workspaceFolder}/src/Epos.CommandLine.Sample/bin/Debug/net5.0/Epos.CommandLine.Sample.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/src/Epos.CmdLine.Sample",
+            "cwd": "${workspaceFolder}/src/Epos.CommandLine.Sample",
             "console": "internalConsole",
             "stopAtEntry": false
         },

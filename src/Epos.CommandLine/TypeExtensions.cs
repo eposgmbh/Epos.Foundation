@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Epos.CmdLine
+namespace Epos.CommandLine
 {
     internal static class TypeExtensions
     {

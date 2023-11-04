@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>Epos.CmdLine</RootNamespace>
+    <RootNamespace>Epos.CommandLine</RootNamespace>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
@@ -11,7 +11,7 @@
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
 
-    <ProjectReference Include="..\Epos.CmdLine\Epos.CmdLine.csproj" />
+    <ProjectReference Include="..\Epos.CommandLine\Epos.CommandLine.csproj" />
   </ItemGroup>
 
 </Project>

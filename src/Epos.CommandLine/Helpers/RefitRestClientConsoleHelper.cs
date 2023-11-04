@@ -7,7 +7,7 @@ using Epos.Utilities;
 
 using Refit;
 
-namespace Epos.CmdLine.Helpers;
+namespace Epos.CommandLine.Helpers;
 
 /// <summary> Provides helper methods for any Refit REST Client. </summary>
 public static class RefitRestClientConsoleHelper
@@ -18,7 +18,7 @@ public static class RefitRestClientConsoleHelper
     /// <param name="refitRestClientFunc">REST client function</param>
     /// <param name="successAction">Success action that gets the reponse from the REST client</param>
     /// <returns>Exit code</returns>
-    public static int Execute<T>(
+    public static async Task<int> ExecuteAsync<T>(
         Func<Task<T>> refitRestClientFunc,
         Func<T, int> successAction
     ) {
@@ -30,14 +30,14 @@ public static class RefitRestClientConsoleHelper
         }
 
         try {
-            T theResponse = refitRestClientFunc().Result;
+            T theResponse = await refitRestClientFunc();
 
             Console.WriteLine();
 
             return successAction(theResponse);
         } catch (AggregateException theException) {
             Exception theInnerException = theException.InnerExceptions.First();
-            
+
             if (theInnerException is ApiException theApiException) {
                 return HandleApiException(theApiException);
             } else {
@@ -56,7 +56,7 @@ public static class RefitRestClientConsoleHelper
     /// <param name="refitRestClientFunc">REST client function</param>
     /// <param name="successAction">Success action that gets the reponse from the REST client</param>
     /// <returns>Exit code</returns>
-    public static int Execute(
+    public static async Task<int> ExecuteAsync(
         Func<Task> refitRestClientFunc,
         Func<int> successAction
     ) {
@@ -68,14 +68,14 @@ public static class RefitRestClientConsoleHelper
         }
 
         try {
-            refitRestClientFunc().Wait();
+            await refitRestClientFunc();
 
             Console.WriteLine();
 
             return successAction();
         } catch (AggregateException theException) {
             Exception theInnerException = theException.InnerExceptions.First();
-            
+
             if (theInnerException is ApiException theApiException) {
                 return HandleApiException(theApiException);
             } else {

@@ -3,7 +3,7 @@ using System.Net;
 
 using Epos.Utilities;
 
-namespace Epos.CmdLine.Helpers
+namespace Epos.CommandLine.Helpers
 {
     /// <summary> Provides helper methods for the DalSoft dynamic REST Client. </summary>
     public static class DalSoftRestClientConsoleHelper

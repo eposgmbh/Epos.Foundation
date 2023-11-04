@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 
-namespace Epos.CmdLine
+namespace Epos.CommandLine
 {
     /// <summary>Configuration class for the
-    /// <see cref="CmdLineDefinition"/>.</summary>
-    public sealed class CmdLineConfiguration
+    /// <see cref="CommandLineDefinition"/>.</summary>
+    public sealed class CommandLineConfiguration
     {
         /// <summary>Specifies the <see cref="System.IO.TextWriter"/> that is used
         /// to write usage help.</summary>

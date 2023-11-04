@@ -11,7 +11,7 @@ Build and Release deployment (Docs Website and [NuGet](https://www.nuget.org/)) 
 ## Docs
 
 Epos.Foundation is the Github Repo for foundational utilities like String or Dictionary extension methods
-(NuGet package **Epos.Utilities**), utilities for web apps and web APIs (NuGet package **Epos.Utilities.Web**) and a powerful and simple command line parser (NuGet package **Epos.CmdLine**).
+(NuGet package **Epos.Utilities**), utilities for web apps and web APIs (NuGet package **Epos.Utilities.Web**) and a powerful and simple command line parser (NuGet package **Epos.CommandLine**).
 
 The packages are implemented using .NET Standard (2.0+). Therefore you can use them cross-platform on any supported platform and
 also with the full .NET Framework (4.6.1+).
@@ -20,12 +20,12 @@ also with the full .NET Framework (4.6.1+).
 
 ## Installation
 
-Via NuGet you can install the NuGet packages **Epos.Utilities** and **Epos.CmdLine**.
+Via NuGet you can install the NuGet packages **Epos.Utilities** and **Epos.CommandLine**.
 
 ```bash
 $ dotnet add package Epos.Utilities
 $ dotnet add package Epos.Utilities.Web
-$ dotnet add package Epos.CmdLine
+$ dotnet add package Epos.CommandLine
 ```
 
 You can install them separately, the packages are independent from each other.
@@ -35,8 +35,8 @@ You can install them separately, the packages are independent from each other.
 **Epos.Utilities** and **Epos.Utilities.Web** are more or less self-documenting simple utility classes. You can take a
 look at the corresponding unit tests in [this Github Repo](https://github.com/eposgmbh/Epos.Foundation/tree/master/src/Epos.Utilities.Tests).
 
-**Epos.CmdLine** is a full fledged yet simple command line parser. Source code for a demo console app can be found in
-[this Github Repo](https://github.com/eposgmbh/Epos.Foundation/tree/master/src/Epos.CmdLine.Sample).
+**Epos.CommandLine** is a full fledged yet simple command line parser. Source code for a demo console app can be found in
+[this Github Repo](https://github.com/eposgmbh/Epos.Foundation/tree/master/src/Epos.CommandLine.Sample).
 
 ### Epos.Utilities
 
@@ -159,17 +159,17 @@ if (theStatusCode == HttpStatusCode.OK) {
 }
 ```
 
-### Epos.CmdLine
+### Epos.CommandLine
 
 Sample `BuildOptions` class for strongly typed access of the command line parameters:
 
 ```csharp
 public class BuildOptions
 {
-    [CmdLineOption('p')]
+    [CommandLineOption('p')]
     public int ProjectNumber { get; set; }
 
-    [CmdLineOption('m')]
+    [CommandLineOption('m')]
     public string Memory { get; set; }
 
     // ...
@@ -180,23 +180,23 @@ Sample `Main` method that uses the `BuildOptions` class for the subcommand `buil
 
 ```csharp
 public static int Main(string[] args) {
-    var theCmdLineDefinition = new CmdLineDefinition {
+    var theCommandLineDefinition = new CommandLineDefinition {
         Name = "sample", // <- if not specified, .exe-Filename is used
         Subcommands = {
-            new CmdLineSubcommand<BuildOptions>("build", "Builds something.") {
+            new CommandLineSubcommand<BuildOptions>("build", "Builds something.") {
                 Options = {
-                    new CmdLineOption<int>('p', "Sets the project number.") { LongName = "project-number" },
-                    new CmdLineOption<string>('m', "Sets the used memory.") {
+                    new CommandLineOption<int>('p', "Sets the project number.") { LongName = "project-number" },
+                    new CommandLineOption<string>('m', "Sets the used memory.") {
                         LongName = "memory",
                         DefaultValue = "1 GB"
                     },
-                    new CmdLineSwitch('d', "Disables the command."),
-                    new CmdLineSwitch('z', "Zzzz...")
+                    new CommandLineSwitch('d', "Disables the command."),
+                    new CommandLineSwitch('z', "Zzzz...")
                 },
                 Parameters = {
-                    new CmdLineParameter<string>("filename", "Sets the filename.")
+                    new CommandLineParameter<string>("filename", "Sets the filename.")
                 },
-                CmdLineFunc = (options, definition) => {
+                CommandLineFunc = (options, definition) => {
                     // Do something for the build subcommand
                     // ...
 
@@ -210,11 +210,11 @@ public static int Main(string[] args) {
         // further subcommands...
         //
         // If you don't want to specify subcommands, register one subcommand with the name "default"
-        // (or use the constant CmdLineSubcommand.DefaultName) and set the HasDifferentiatedSubcommands
-        // property of the CmdLineDefinition to false.
+        // (or use the constant CommandLineSubcommand.DefaultName) and set the HasDifferentiatedSubcommands
+        // property of the CommandLineDefinition to false.
     };
 
-    return theCmdLineDefinition.Try(args);
+    return theCommandLineDefinition.Try(args);
 }
 ```
 

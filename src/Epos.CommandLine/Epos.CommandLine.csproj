@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <AssemblyName>Epos.CmdLine</AssemblyName>
-    <RootNamespace>Epos.CmdLine</RootNamespace>
+    <AssemblyName>Epos.CommandLine</AssemblyName>
+    <RootNamespace>Epos.CommandLine</RootNamespace>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyVersion>9.9.9</AssemblyVersion>
     <AssemblyInformationalVersion>9.9.9</AssemblyInformationalVersion>

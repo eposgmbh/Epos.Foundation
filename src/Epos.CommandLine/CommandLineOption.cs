@@ -4,50 +4,54 @@ using System.Text;
 
 using Epos.Utilities;
 
-namespace Epos.CmdLine
+namespace Epos.CommandLine
 {
     /// <summary> Command line option, see <a href="/getting-started.html">Getting started</a>
     /// for an example.</summary>
     /// <typeparam name="T">Option data type</typeparam>
-    public class CmdLineOption<T> : CmdLineOption
+    public class CommandLineOption<T> : CommandLineOption
     {
         private T myDefaultValue = default!;
         private bool myIsDefaultValueSet;
 
-        static CmdLineOption() {
+        static CommandLineOption()
+        {
             typeof(T).TestAvailable();
         }
 
-        /// <summary> Initializes an instance of the <see cref="CmdLineOption{T}"/> class.
+        /// <summary> Initializes an instance of the <see cref="CommandLineOption{T}"/> class.
         /// </summary>
         /// <param name="letter">Option letter</param>
         /// <param name="description">Description</param>
-        public CmdLineOption(char letter, string description) : base(typeof(T), letter, description) { }
+        public CommandLineOption(char letter, string description) : base(typeof(T), letter, description) { }
 
         /// <summary> Gets or sets the default value that is used, if the option is not
         /// specified on the command line.</summary>
-        public T DefaultValue {
+        public T DefaultValue
+        {
             get => myDefaultValue;
-            set {
+            set
+            {
                 myDefaultValue = value;
                 myIsDefaultValueSet = true;
             }
         }
 
-        internal override object? GetDefaultValue() => myIsDefaultValueSet ? (object?) DefaultValue : null;
+        internal override object? GetDefaultValue() => myIsDefaultValueSet ? (object?)DefaultValue : null;
     }
 
     /// <summary> Command line option base class.</summary>
-    public abstract class CmdLineOption
+    public abstract class CommandLineOption
     {
-        /// <summary> Initializes an instance of the <see cref="CmdLineOption"/> class.
+        /// <summary> Initializes an instance of the <see cref="CommandLineOption"/> class.
         /// </summary>
         /// <param name="dataType">Option data type</param>
         /// <param name="letter">Option letter</param>
         /// <param name="description">Description</param>
-        protected CmdLineOption(Type dataType, char letter, string description) {
-            DataType    = dataType    ?? throw new ArgumentNullException(nameof(dataType));
-            Letter      = letter;
+        protected CommandLineOption(Type dataType, char letter, string description)
+        {
+            DataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
+            Letter = letter;
             Description = description ?? throw new ArgumentNullException(nameof(description));
         }
 
@@ -70,38 +74,45 @@ namespace Epos.CmdLine
 
         internal bool IsSwitch => DataType == typeof(bool);
 
-        internal string ToShortCmdLineString() {
+        internal string ToShortCommandLineString()
+        {
             string theOptionName = $"-{Letter}";
 
-            if (LongName != null) {
+            if (LongName != null)
+            {
                 theOptionName += $", --{LongName}";
             }
 
             return theOptionName;
         }
 
-        internal string ToLongCmdLineString() {
+        internal string ToLongCommandLineString()
+        {
             StringBuilder theResult = new StringBuilder()
                 .Append('[')
-                .Append(ToShortCmdLineString());
+                .Append(ToShortCommandLineString());
 
-            if (!IsSwitch) {
+            if (!IsSwitch)
+            {
                 theResult
                     .Append(" <")
                     .Append(DataType.Dump());
 
                 object? theDefaultValue = GetDefaultValue();
-                if (theDefaultValue != null) {
+                if (theDefaultValue != null)
+                {
                     theResult
                         .Append("=");
 
-                    if (theDefaultValue is string) {
+                    if (theDefaultValue is string)
+                    {
                         theResult.Append('"');
                     }
 
                     theResult.Append(theDefaultValue.Dump());
 
-                    if (theDefaultValue is string) {
+                    if (theDefaultValue is string)
+                    {
                         theResult.Append('"');
                     }
                 }

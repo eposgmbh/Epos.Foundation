@@ -1,6 +1,6 @@
-﻿namespace Epos.CmdLine
+﻿namespace Epos.CommandLine
 {
-    internal enum CmdLineTokenKind
+    internal enum CommandLineTokenKind
     {
         Subcommand,
         Option,

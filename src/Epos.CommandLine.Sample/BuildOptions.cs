@@ -1,20 +1,20 @@
-namespace Epos.CmdLine.Sample
+namespace Epos.CommandLine.Sample
 {
     public class BuildOptions
     {
-        [CmdLineOption('p')]
+        [CommandLineOption('p')]
         public int ProjectNumber { get; set; }
 
-        [CmdLineOption('m')]
+        [CommandLineOption('m')]
         public string? Memory { get; set; }
 
-        [CmdLineOption('d')]
+        [CommandLineOption('d')]
         public bool Disabled { get; set; }
 
-        [CmdLineOption('z')]
+        [CommandLineOption('z')]
         public bool Zzzz { get; set; }
 
-        [CmdLineParameter("Filename")]
+        [CommandLineParameter("Filename")]
         public string? File { get; set; }
     }
 }

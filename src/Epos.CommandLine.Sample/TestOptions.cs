@@ -1,8 +1,8 @@
-﻿namespace Epos.CmdLine.Sample
+﻿namespace Epos.CommandLine.Sample
 {
     public class TestOptions
     {
-        [CmdLineOption('h')]
+        [CommandLineOption('h')]
         public bool ShowHelp { get; set; }
     }
 }

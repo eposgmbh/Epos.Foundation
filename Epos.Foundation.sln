@@ -4,11 +4,11 @@ VisualStudioVersion = 16.0.28407.52
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{73C9739B-35D7-4153-B5EC-59A461BD39B2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epos.CmdLine", "src\Epos.CmdLine\Epos.CmdLine.csproj", "{73AB4500-0876-4244-B592-50E235A14DCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epos.CommandLine", "src\Epos.CommandLine\Epos.CommandLine.csproj", "{73AB4500-0876-4244-B592-50E235A14DCB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epos.CmdLine.Sample", "src\Epos.CmdLine.Sample\Epos.CmdLine.Sample.csproj", "{31CA76C4-83DA-461A-9018-FBC889A11386}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epos.CommandLine.Sample", "src\Epos.CommandLine.Sample\Epos.CommandLine.Sample.csproj", "{31CA76C4-83DA-461A-9018-FBC889A11386}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epos.CmdLine.Tests", "src\Epos.CmdLine.Tests\Epos.CmdLine.Tests.csproj", "{C465718C-4CC1-44CF-8240-AC7779B599FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epos.CommandLine.Tests", "src\Epos.CommandLine.Tests\Epos.CommandLine.Tests.csproj", "{C465718C-4CC1-44CF-8240-AC7779B599FC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Epos.Foundation.Docs", "docs\Epos.Foundation.Docs.csproj", "{A82487A9-DE80-451E-B700-2B93761E2D87}"
 EndProject
