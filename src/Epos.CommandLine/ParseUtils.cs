@@ -12,6 +12,7 @@ namespace Epos.CommandLine
             Type theDataType = option.DataType;
 
             if (theDataType == typeof(System.IO.FileInfo)) {
+                errorMessage = null;
                 return new System.IO.FileInfo(rawValue);
             }
 
@@ -32,6 +33,7 @@ namespace Epos.CommandLine
             Type theDataType = parameter.DataType;
 
             if (theDataType == typeof(System.IO.FileInfo)) {
+                errorMessage = null;
                 return new System.IO.FileInfo(rawValue);
             }
 
