@@ -11,6 +11,10 @@ namespace Epos.CommandLine
         {
             Type theDataType = option.DataType;
 
+            if (theDataType == typeof(System.IO.FileInfo)) {
+                return new System.IO.FileInfo(rawValue);
+            }
+
             if (rawValue.TryConvert(theDataType, CultureInfo.InvariantCulture, out object? theConvertedValue))
             {
                 errorMessage = null;
@@ -26,6 +30,10 @@ namespace Epos.CommandLine
         public static object? ParseParameter(CommandLineParameter parameter, string rawValue, out string? errorMessage)
         {
             Type theDataType = parameter.DataType;
+
+            if (theDataType == typeof(System.IO.FileInfo)) {
+                return new System.IO.FileInfo(rawValue);
+            }
 
             if (rawValue.TryConvert(theDataType, CultureInfo.InvariantCulture, out object? theConvertedValue))
             {
