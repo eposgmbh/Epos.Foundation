@@ -11,7 +11,8 @@ namespace Epos.CommandLine
             typeof(int),
             typeof(string),
             typeof(double),
-            typeof(DateTime)
+            typeof(DateTime),
+            typeof(System.IO.FileInfo)
         };
 
         public static void TestAvailable(this Type dataType) {

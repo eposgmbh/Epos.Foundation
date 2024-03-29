@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Text;
 using Epos.Utilities;
 
@@ -83,10 +84,15 @@ namespace Epos.CommandLine
 
             theResult
                 .Append('<')
-                .Append(Name)
-                .Append(":")
-                .Append(DataType.Dump())
-                .Append('>');
+                .Append(Name);
+
+            if (DataType != typeof(FileInfo)) {
+                theResult
+                    .Append(":")
+                    .Append(DataType.Dump());
+            }
+
+            theResult.Append('>');
 
             if (IsOptional)
             {
