@@ -17,19 +17,19 @@ namespace Epos.Utilities
         /// <param name="typeArguments">Type arguments</param>
         /// <param name="paramTypes">Parameter types</param>
         /// <returns>Constructed generic <see cref="System.Reflection.MethodInfo"/></returns>
-        public static MethodInfo GetGenericMethod(
+        public static MethodInfo? GetGenericMethod(
             this Type type, string name, BindingFlags bindingAttr, Type[] typeArguments, Type[] paramTypes
         ) {
-            if (type == null) {
+            if (type is null) {
                 throw new ArgumentNullException(nameof(type));
             }
-            if (name == null) {
+            if (name is null) {
                 throw new ArgumentNullException(nameof(name));
             }
-            if (typeArguments == null) {
+            if (typeArguments is null) {
                 throw new ArgumentNullException(nameof(typeArguments));
             }
-            if (paramTypes == null) {
+            if (paramTypes is null) {
                 throw new ArgumentNullException(nameof(paramTypes));
             }
 
@@ -49,21 +49,20 @@ namespace Epos.Utilities
         /// <typeparam name="TAttribute">Attribute type</typeparam>
         /// <param name="type">Type</param>
         /// <returns><b>true</b>, if the type has the specified attribute; otherwise <b>false</b></returns>
-        public static bool HasAttribute<TAttribute>(this Type type) where TAttribute : Attribute {
-            return type.GetAttribute<TAttribute>() != null;
-        }
+        public static bool HasAttribute<TAttribute>(this Type type) where TAttribute : Attribute
+            => type.GetAttribute<TAttribute>() is not null;
 
         /// <summary>Gets the attribute <typeparamref name="TAttribute"/> for the
         /// specified <see cref="System.Type" /> or <b>null</b>, if not found.</summary>
         /// <typeparam name="TAttribute">Attribute type</typeparam>
         /// <param name="type">Type</param>
         /// <returns>Attribute <typeparamref name="TAttribute"/> or <b>null</b>, if not found</returns>
-        public static TAttribute GetAttribute<TAttribute>(this Type type) where TAttribute : Attribute {
-            if (type == null) {
+        public static TAttribute? GetAttribute<TAttribute>(this Type type) where TAttribute : Attribute {
+            if (type is null) {
                 throw new ArgumentNullException(nameof(type));
             }
 
-            return (TAttribute) Attribute.GetCustomAttribute(type, typeof(TAttribute));
+            return (TAttribute?) Attribute.GetCustomAttribute(type, typeof(TAttribute));
         }
     }
 }

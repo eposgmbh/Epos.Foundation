@@ -21,7 +21,7 @@ namespace Epos.Utilities
         /// </param>
         [Conditional("LOGGING")]
         public static void SetLogAction(Action<string> logAction) {
-            if (logAction == null) {
+            if (logAction is null) {
                 throw new ArgumentNullException(nameof(logAction));
             }
 
@@ -36,7 +36,7 @@ namespace Epos.Utilities
         /// <param name="message">Log message</param>
         [Conditional("LOGGING")]
         public static void Log(string message) {
-            if (myLogAction != null) {
+            if (myLogAction is not null) {
                 lock (SyncLock) {
                     myLogAction(message);
                 }
@@ -50,7 +50,7 @@ namespace Epos.Utilities
         /// <param name="message">Log message</param>
         [Conditional("LOGGING")]
         public static void LogLine(string message) {
-            if (myLogAction != null) {
+            if (myLogAction is not null) {
                 lock (SyncLock) {
                     myLogAction(message);
                     myLogAction(Environment.NewLine);

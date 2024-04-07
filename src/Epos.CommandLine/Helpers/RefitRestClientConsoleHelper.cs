@@ -22,10 +22,10 @@ public static class RefitRestClientConsoleHelper
         Func<Task<T>> refitRestClientFunc,
         Func<T, int> successAction
     ) {
-        if (refitRestClientFunc == null) {
+        if (refitRestClientFunc is null) {
             throw new ArgumentNullException(nameof(refitRestClientFunc));
         }
-        if (successAction == null) {
+        if (successAction is null) {
             throw new ArgumentNullException(nameof(successAction));
         }
 
@@ -60,10 +60,10 @@ public static class RefitRestClientConsoleHelper
         Func<Task> refitRestClientFunc,
         Func<int> successAction
     ) {
-        if (refitRestClientFunc == null) {
+        if (refitRestClientFunc is null) {
             throw new ArgumentNullException(nameof(refitRestClientFunc));
         }
-        if (successAction == null) {
+        if (successAction is null) {
             throw new ArgumentNullException(nameof(successAction));
         }
 
@@ -111,7 +111,7 @@ public static class RefitRestClientConsoleHelper
             );
 
             return 4;
-        } else if (theApiException.ContentHeaders?.ContentType.MediaType == "text/html") {
+        } else if (theApiException.ContentHeaders?.ContentType?.MediaType == "text/html") {
             ColorConsole.WriteError(" ERROR ");
             Console.WriteLine(" Cannot connect to host (text/html proxy found, but no json REST response).");
 

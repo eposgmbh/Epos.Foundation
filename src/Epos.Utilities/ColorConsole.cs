@@ -40,7 +40,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object to the standard output stream
         /// in the color black. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteBlack(object value) => WriteBlack(value != null ? value.ToString() : string.Empty);
+        public static void WriteBlack(object value) => WriteBlack(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color black. </summary>
@@ -58,7 +58,7 @@ namespace Epos.Utilities
         /// in the color dark Blue. </summary>
         /// <param name="value">The value to write, or null.</param>
         public static void WriteDarkBlue(object value) =>
-            WriteDarkBlue(value != null ? value.ToString() : string.Empty);
+            WriteDarkBlue(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color dark Blue. </summary>
@@ -77,7 +77,7 @@ namespace Epos.Utilities
         /// in the color dark Green. </summary>
         /// <param name="value">The value to write, or null.</param>
         public static void WriteDarkGreen(object value) =>
-            WriteDarkGreen(value != null ? value.ToString() : string.Empty);
+            WriteDarkGreen(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color dark Green. </summary>
@@ -94,7 +94,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object to the standard output stream
         /// in the color dark Cyan. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteDarkCyan(object value) => WriteDarkCyan(value != null ? value.ToString() : string.Empty);
+        public static void WriteDarkCyan(object value) => WriteDarkCyan(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color dark Cyan. </summary>
@@ -111,7 +111,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object to the standard output stream
         /// in the color dark Red. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteDarkRed(object value) => WriteDarkRed(value != null ? value.ToString() : string.Empty);
+        public static void WriteDarkRed(object value) => WriteDarkRed(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color dark Red. </summary>
@@ -128,7 +128,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object to the standard output stream
         /// in the color dark Magenta. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteDarkMagenta(object value) => WriteDarkMagenta(value != null ? value.ToString() : string.Empty);
+        public static void WriteDarkMagenta(object value) => WriteDarkMagenta(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color dark Magenta. </summary>
@@ -145,7 +145,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object to the standard output stream
         /// in the color dark Yellow. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteDarkYellow(object value) => WriteDarkYellow(value != null ? value.ToString() : string.Empty);
+        public static void WriteDarkYellow(object value) => WriteDarkYellow(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color dark Yellow. </summary>
@@ -162,7 +162,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object to the standard output stream
         /// in the color gray. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteGray(object value) => WriteGray(value != null ? value.ToString() : string.Empty);
+        public static void WriteGray(object value) => WriteGray(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color gray. </summary>
@@ -179,7 +179,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object to the standard output stream
         /// in the color dark Gray. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteDarkGray(object value) => WriteDarkGray(value != null ? value.ToString() : string.Empty);
+        public static void WriteDarkGray(object value) => WriteDarkGray(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color dark Gray. </summary>
@@ -196,7 +196,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object to the standard output stream
         /// in the color blue. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteBlue(object value) => WriteBlue(value != null ? value.ToString() : string.Empty);
+        public static void WriteBlue(object value) => WriteBlue(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color blue. </summary>
@@ -213,7 +213,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object to the standard output stream
         /// in the color green. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteGreen(object value) => WriteGreen(value != null ? value.ToString() : string.Empty);
+        public static void WriteGreen(object value) => WriteGreen(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color green. </summary>
@@ -230,7 +230,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object to the standard output stream
         /// in the color cyan. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteCyan(object value) => WriteCyan(value != null ? value.ToString() : string.Empty);
+        public static void WriteCyan(object value) => WriteCyan(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color cyan. </summary>
@@ -247,7 +247,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object to the standard output stream
         /// in the color red. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteRed(object value) => WriteRed(value != null ? value.ToString() : string.Empty);
+        public static void WriteRed(object value) => WriteRed(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color red. </summary>
@@ -264,7 +264,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object to the standard output stream
         /// in the color magenta. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteMagenta(object value) => WriteMagenta(value != null ? value.ToString() : string.Empty);
+        public static void WriteMagenta(object value) => WriteMagenta(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color magenta. </summary>
@@ -281,7 +281,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object to the standard output stream
         /// in the color yellow. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteYellow(object value) => WriteYellow(value != null ? value.ToString() : string.Empty);
+        public static void WriteYellow(object value) => WriteYellow(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color yellow. </summary>
@@ -298,7 +298,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object to the standard output stream
         /// in the color white. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteWhite(object value) => WriteWhite(value != null ? value.ToString() : string.Empty);
+        public static void WriteWhite(object value) => WriteWhite(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value to the standard output stream
         /// in the color white. </summary>
@@ -315,7 +315,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object, followed by
         /// the current line terminator, to the standard output stream in the color black. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteLineBlack(object value) => WriteLineBlack(value != null ? value.ToString() : string.Empty);
+        public static void WriteLineBlack(object value) => WriteLineBlack(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color black. </summary>
@@ -332,7 +332,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object, followed by
         /// the current line terminator, to the standard output stream in the color dark Blue. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteLineDarkBlue(object value) => WriteLineDarkBlue(value != null ? value.ToString() : string.Empty);
+        public static void WriteLineDarkBlue(object value) => WriteLineDarkBlue(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color dark Blue. </summary>
@@ -349,7 +349,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object, followed by
         /// the current line terminator, to the standard output stream in the color dark Green. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteLineDarkGreen(object value) => WriteLineDarkGreen(value != null ? value.ToString() : string.Empty);
+        public static void WriteLineDarkGreen(object value) => WriteLineDarkGreen(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color dark Green. </summary>
@@ -366,7 +366,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object, followed by
         /// the current line terminator, to the standard output stream in the color dark Cyan. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteLineDarkCyan(object value) => WriteLineDarkCyan(value != null ? value.ToString() : string.Empty);
+        public static void WriteLineDarkCyan(object value) => WriteLineDarkCyan(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color dark Cyan. </summary>
@@ -383,7 +383,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object, followed by
         /// the current line terminator, to the standard output stream in the color dark Red. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteLineDarkRed(object value) => WriteLineDarkRed(value != null ? value.ToString() : string.Empty);
+        public static void WriteLineDarkRed(object value) => WriteLineDarkRed(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color dark Red. </summary>
@@ -400,7 +400,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object, followed by
         /// the current line terminator, to the standard output stream in the color dark Magenta. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteLineDarkMagenta(object value) => WriteLineDarkMagenta(value != null ? value.ToString() : string.Empty);
+        public static void WriteLineDarkMagenta(object value) => WriteLineDarkMagenta(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color dark Magenta. </summary>
@@ -417,7 +417,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object, followed by
         /// the current line terminator, to the standard output stream in the color dark Yellow. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteLineDarkYellow(object value) => WriteLineDarkYellow(value != null ? value.ToString() : string.Empty);
+        public static void WriteLineDarkYellow(object value) => WriteLineDarkYellow(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color dark Yellow. </summary>
@@ -434,7 +434,7 @@ namespace Epos.Utilities
         /// <summary> Writes the text representation of the specified object, followed by
         /// the current line terminator, to the standard output stream in the color gray. </summary>
         /// <param name="value">The value to write, or null.</param>
-        public static void WriteLineGray(object value) => WriteLineGray(value != null ? value.ToString() : string.Empty);
+        public static void WriteLineGray(object value) => WriteLineGray(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color gray. </summary>
@@ -453,7 +453,7 @@ namespace Epos.Utilities
         /// the current line terminator, to the standard output stream in the color dark Gray. </summary>
         /// <param name="value">The value to write, or null.</param>
         public static void WriteLineDarkGray(object value) =>
-            WriteLineDarkGray(value != null ? value.ToString() : string.Empty);
+            WriteLineDarkGray(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color dark Gray. </summary>
@@ -472,7 +472,7 @@ namespace Epos.Utilities
         /// the current line terminator, to the standard output stream in the color blue. </summary>
         /// <param name="value">The value to write, or null.</param>
         public static void WriteLineBlue(object value) =>
-            WriteLineBlue(value != null ? value.ToString() : string.Empty);
+            WriteLineBlue(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color blue. </summary>
@@ -491,7 +491,7 @@ namespace Epos.Utilities
         /// the current line terminator, to the standard output stream in the color green. </summary>
         /// <param name="value">The value to write, or null.</param>
         public static void WriteLineGreen(object value) =>
-            WriteLineGreen(value != null ? value.ToString() : string.Empty);
+            WriteLineGreen(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color green. </summary>
@@ -510,7 +510,7 @@ namespace Epos.Utilities
         /// the current line terminator, to the standard output stream in the color cyan. </summary>
         /// <param name="value">The value to write, or null.</param>
         public static void WriteLineCyan(object value) =>
-            WriteLineCyan(value != null ? value.ToString() : string.Empty);
+            WriteLineCyan(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color cyan. </summary>
@@ -529,7 +529,7 @@ namespace Epos.Utilities
         /// the current line terminator, to the standard output stream in the color red. </summary>
         /// <param name="value">The value to write, or null.</param>
         public static void WriteLineRed(object value) =>
-            WriteLineRed(value != null ? value.ToString() : string.Empty);
+            WriteLineRed(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color red. </summary>
@@ -548,7 +548,7 @@ namespace Epos.Utilities
         /// the current line terminator, to the standard output stream in the color magenta. </summary>
         /// <param name="value">The value to write, or null.</param>
         public static void WriteLineMagenta(object value) =>
-            WriteLineMagenta(value != null ? value.ToString() : string.Empty);
+            WriteLineMagenta(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color magenta. </summary>
@@ -567,7 +567,7 @@ namespace Epos.Utilities
         /// the current line terminator, to the standard output stream in the color yellow. </summary>
         /// <param name="value">The value to write, or null.</param>
         public static void WriteLineYellow(object value) =>
-            WriteLineYellow(value != null ? value.ToString() : string.Empty);
+            WriteLineYellow(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color yellow. </summary>
@@ -586,7 +586,7 @@ namespace Epos.Utilities
         /// the current line terminator, to the standard output stream in the color white. </summary>
         /// <param name="value">The value to write, or null.</param>
         public static void WriteLineWhite(object value) =>
-            WriteLineWhite(value != null ? value.ToString() : string.Empty);
+            WriteLineWhite(value is not null ? value.ToString() : string.Empty);
 
         /// <summary> Writes the specified string value, followed by the current line terminator,
         /// to the standard output stream in the color white. </summary>

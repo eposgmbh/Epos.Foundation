@@ -45,12 +45,12 @@ namespace Epos.TestUtilities.Docker
         [Test]
         public void BuiltinContainers()
         {
-            var theContainer = DockerContainer.Postgres.Start();
+            DockerContainer theContainer = DockerContainer.Postgres.Start();
 
             Assert.That(theContainer.Id, Is.Not.Null);
             Assert.That(theContainer.Name, Is.EqualTo("PostgresTestContainer"));
 
-            var (thePort, _) = theContainer.Ports.First();
+            (int thePort, int _) = theContainer.Ports.First();
 
             Assert.That(
                 theContainer.ConnectionString,

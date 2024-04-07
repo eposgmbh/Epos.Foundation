@@ -10,23 +10,19 @@ namespace Epos.CommandLine
         private readonly CommandLineDefinition myDefinition;
         private readonly string[] myArgs;
 
-        public CommandLineDefinitionExecutor(CommandLineDefinition definition, string[] args)
-        {
+        public CommandLineDefinitionExecutor(CommandLineDefinition definition, string[] args) {
             myDefinition = definition;
             myArgs = args;
         }
 
-        public async Task<int> TryAsync()
-        {
+        public async Task<int> TryAsync() {
             var theUsageWriter = new CommandLineUsageWriter(myDefinition);
 
-            if (myDefinition.HasDifferentiatedSubcommands && !myDefinition.Subcommands.Any())
-            {
+            if (myDefinition.HasDifferentiatedSubcommands && !myDefinition.Subcommands.Any()) {
                 throw new InvalidOperationException("At least one subcommand must be added to the definition.");
             }
 
-            if (myDefinition.HasDifferentiatedSubcommands && myArgs.Length < 1)
-            {
+            if (myDefinition.HasDifferentiatedSubcommands && myArgs.Length < 1) {
                 theUsageWriter.WriteAndExit();
                 return -1;
             }
@@ -36,8 +32,7 @@ namespace Epos.CommandLine
                 sc => sc.Name == CommandLineSubcommand.DefaultName
             );
 
-            if (!myDefinition.HasDifferentiatedSubcommands && theSubcommand == null)
-            {
+            if (!myDefinition.HasDifferentiatedSubcommands && theSubcommand is null) {
                 throw new InvalidOperationException(
                     "Without differentiated commands a subcommand with the name \"default\" must be added to the definition."
                 );

@@ -61,7 +61,7 @@ namespace Epos.Utilities
                 yield return theItem;
 
                 IEnumerable<T> theRecursiveEnumerable = recurseFunc(theItem);
-                if (theRecursiveEnumerable != null) {
+                if (theRecursiveEnumerable is not null) {
                     foreach (T theRecursiveItem in FlattenRecursiveHierarchy(theRecursiveEnumerable, recurseFunc)) {
                         yield return theRecursiveItem;
                     }

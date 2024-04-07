@@ -13,27 +13,27 @@ namespace Epos.Utilities
         [Test]
         public void GetGenericMethod() {
             Assert.Throws<ArgumentNullException>(
-                () => TypeExtensions.GetGenericMethod(null!, "0", BindingFlags.Default, new Type[] { }, new Type[] { })
+                () => TypeExtensions.GetGenericMethod(null!, "0", BindingFlags.Default, [], [])
             );
             Assert.Throws<ArgumentNullException>(
-                () => typeof(int).GetGenericMethod(null!, BindingFlags.Default, new Type[] { }, new Type[] { })
+                () => typeof(int).GetGenericMethod(null!, BindingFlags.Default, [], [])
             );
             Assert.Throws<ArgumentNullException>(
-                () => typeof(int).GetGenericMethod("0", BindingFlags.Default, null!, new Type[] { })
+                () => typeof(int).GetGenericMethod("0", BindingFlags.Default, null!, [])
             );
             Assert.Throws<ArgumentNullException>(
-                () => typeof(int).GetGenericMethod("0", BindingFlags.Default, new Type[] { }, null!)
+                () => typeof(int).GetGenericMethod("0", BindingFlags.Default, [], null!)
             );
 
-            MethodInfo theMethodInfo = typeof(Enumerable).GetGenericMethod(
+            MethodInfo? theMethodInfo = typeof(Enumerable).GetGenericMethod(
                 "Empty", BindingFlags.Static | BindingFlags.Public,
-                new[] { typeof(string) }, new Type[] { }
+                [typeof(string)], []
             );
             Assert.That(theMethodInfo, Is.Not.Null);
 
             theMethodInfo = typeof(Enumerable).GetGenericMethod(
                 "Single", BindingFlags.Static | BindingFlags.Public,
-                new[] { typeof(int) }, new[] { typeof(IEnumerable<int>) }
+                [typeof(int)], [typeof(IEnumerable<int>)]
             );
             Assert.That(theMethodInfo, Is.Not.Null);
         }
@@ -51,8 +51,9 @@ namespace Epos.Utilities
         {
             Assert.Throws<ArgumentNullException>(() => TypeExtensions.GetAttribute<AttributeUsageAttribute>(null!));
 
-            Assert.That(typeof(AssemblyCompanyAttribute).GetAttribute<AttributeUsageAttribute>(), Is.Not.Null);
-            Assert.That(typeof(AssemblyCompanyAttribute).GetAttribute<AttributeUsageAttribute>().ValidOn, Is.EqualTo(AttributeTargets.Assembly));
+            AttributeUsageAttribute? attribute = typeof(AssemblyCompanyAttribute).GetAttribute<AttributeUsageAttribute>();
+            Assert.That(attribute, Is.Not.Null);
+            Assert.That(attribute!.ValidOn, Is.EqualTo(AttributeTargets.Assembly));
             Assert.That(typeof(int).GetAttribute<AttributeUsageAttribute>(), Is.Null);
         }
     }

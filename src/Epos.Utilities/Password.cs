@@ -13,7 +13,7 @@ namespace Epos.Utilities
         /// <param name="password">Password to hash</param>
         /// <returns>Hashed password</returns>
         public static string Hash(string password) {
-            if (password == null) {
+            if (password is null) {
                 throw new ArgumentNullException(nameof(password));
             }
 

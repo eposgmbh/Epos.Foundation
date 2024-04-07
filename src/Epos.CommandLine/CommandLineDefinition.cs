@@ -12,8 +12,7 @@ namespace Epos.CommandLine
     {
         /// <summary> Initializes an instance of the <see cref="CommandLineDefinition"/> class.
         /// </summary>
-        public CommandLineDefinition()
-        {
+        public CommandLineDefinition() {
             Subcommands = new List<CommandLineSubcommand>();
         }
 
@@ -38,8 +37,7 @@ namespace Epos.CommandLine
         public IList<CommandLineSubcommand> Subcommands { get; }
 
         /// <summary>Writes the usage help to the console.</summary>
-        public void ShowHelp()
-        {
+        public void ShowHelp() {
             var theUsageWriter = new CommandLineUsageWriter(this);
             theUsageWriter.WriteAndExit();
         }
@@ -47,19 +45,14 @@ namespace Epos.CommandLine
         /// <summary>Writes the usage help for the specified subcommand to
         /// the console.</summary>
         /// <param name="subcommandName">Name of the subcommand</param>
-        public void ShowHelp(string subcommandName)
-        {
-            if (subcommandName == null)
-            {
+        public void ShowHelp(string subcommandName) {
+            if (subcommandName is null) {
                 throw new ArgumentNullException(nameof(subcommandName));
             }
 
-            CommandLineSubcommand theSubcommand = Subcommands.SingleOrDefault(sc => sc.Name == subcommandName);
-
-            if (theSubcommand == null)
-            {
+            CommandLineSubcommand? theSubcommand =
+                Subcommands.SingleOrDefault(sc => sc.Name == subcommandName) ??
                 throw new ArgumentException($"Subcommand \"{subcommandName}\" is not defined.");
-            }
 
             var theUsageWriter = new CommandLineUsageWriter(this);
             theUsageWriter.WriteAndExit(theSubcommand);
@@ -69,22 +62,17 @@ namespace Epos.CommandLine
         /// subcommand with the specied options and parameters.</summary>
         /// <param name="args">Command line arguments</param>
         /// <returns>Exit code</returns>
-        public int Try(string[] args)
-        {
-            if (args == null)
-            {
+        public int Try(string[] args) {
+            if (args is null) {
                 throw new ArgumentNullException(nameof(args));
             }
-            for (int theIndex = 0; theIndex < args.Length; theIndex++)
-            {
-                if (args[theIndex] == null)
-                {
+            for (int theIndex = 0; theIndex < args.Length; theIndex++) {
+                if (args[theIndex] is null) {
                     throw new ArgumentNullException($"args[{theIndex}]");
                 }
             }
 
-            if (Name == null)
-            {
+            if (Name is null) {
                 // Standardbelegung aus Dateinamen
                 string thePathToExe = Environment.GetCommandLineArgs().First();
                 Name = Path.GetFileNameWithoutExtension(thePathToExe).ToLower();
@@ -95,7 +83,7 @@ namespace Epos.CommandLine
             try {
                 return theCommandLineDefinitionExecutor.TryAsync().Result;
             } catch (AggregateException theException) {
-                throw theException.InnerException;
+                throw theException.InnerException!;
             }
         }
 
@@ -107,20 +95,16 @@ namespace Epos.CommandLine
         /// <param name="args">Command line arguments</param>
         /// <returns>Exit code</returns>
         public async Task<int> TryAsync(string[] args) {
-            if (args == null)
-            {
+            if (args is null) {
                 throw new ArgumentNullException(nameof(args));
             }
-            for (int theIndex = 0; theIndex < args.Length; theIndex++)
-            {
-                if (args[theIndex] == null)
-                {
+            for (int theIndex = 0; theIndex < args.Length; theIndex++) {
+                if (args[theIndex] is null) {
                     throw new ArgumentNullException($"args[{theIndex}]");
                 }
             }
 
-            if (Name == null)
-            {
+            if (Name is null) {
                 // Standardbelegung aus Dateinamen
                 string thePathToExe = Environment.GetCommandLineArgs().First();
                 Name = Path.GetFileNameWithoutExtension(thePathToExe).ToLower();

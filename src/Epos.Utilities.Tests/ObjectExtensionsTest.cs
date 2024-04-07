@@ -21,9 +21,10 @@ namespace Epos.Utilities
             Assert.Throws<ArgumentNullException>(() => ObjectExtensions.GetAttribute<AttributeUsageAttribute>(null!));
 
             var theAssemblyTitleAttribute = new AssemblyTitleAttribute("Hello");
-            AttributeUsageAttribute theAssemblyUsageAttribute =
+            AttributeUsageAttribute? theAssemblyUsageAttribute =
                 theAssemblyTitleAttribute.GetAttribute<AttributeUsageAttribute>();
-            Assert.That(theAssemblyUsageAttribute.ValidOn, Is.EqualTo(AttributeTargets.Assembly));
+            Assert.That(theAssemblyUsageAttribute, Is.Not.Null);
+            Assert.That(theAssemblyUsageAttribute!.ValidOn, Is.EqualTo(AttributeTargets.Assembly));
         }
     }
 }

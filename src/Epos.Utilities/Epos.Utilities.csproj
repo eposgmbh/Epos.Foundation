@@ -1,15 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>10</LangVersion>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <AssemblyName>Epos.Utilities</AssemblyName>
     <RootNamespace>Epos.Utilities</RootNamespace>
     <AssemblyVersion>9.9.9</AssemblyVersion>
     <AssemblyInformationalVersion>9.9.9</AssemblyInformationalVersion>
     <PackageVersion>9.9.9</PackageVersion>
-    <Description>.NET Standard utilities</Description>
+    <Description>Utilities</Description>
     <Authors>Jan Bohlen</Authors>
     <Company>Epos</Company>
     <PackageLicenseUrl>https://github.com/eposgmbh/Epos.Foundation/blob/master/LICENSE</PackageLicenseUrl>

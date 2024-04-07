@@ -14,8 +14,7 @@ namespace Epos.CommandLine
         private T myDefaultValue = default!;
         private bool myIsDefaultValueSet;
 
-        static CommandLineParameter()
-        {
+        static CommandLineParameter() {
             typeof(T).TestAvailable();
         }
 
@@ -28,17 +27,15 @@ namespace Epos.CommandLine
         /// <summary> Gets or sets the default value that is used, if the parameter is not
         /// specified on the command line.</summary>
         /// <remarks> Specifiying a default value makes the parameter an optional parameter. </remarks>
-        public T DefaultValue
-        {
+        public T DefaultValue {
             get => myDefaultValue;
-            set
-            {
+            set {
                 myDefaultValue = value;
                 myIsDefaultValueSet = true;
             }
         }
 
-        internal override object? GetDefaultValue() => myIsDefaultValueSet ? (object?)DefaultValue : null;
+        internal override object? GetDefaultValue() => myIsDefaultValueSet ? (object?) DefaultValue : null;
     }
 
     /// <summary> Command line parameter base class.</summary>
@@ -49,8 +46,7 @@ namespace Epos.CommandLine
         /// <param name="dataType">Parameter data type</param>
         /// <param name="name">Parameter name</param>
         /// <param name="description">Description</param>
-        protected CommandLineParameter(Type dataType, string name, string description)
-        {
+        protected CommandLineParameter(Type dataType, string name, string description) {
             DataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Description = description ?? throw new ArgumentNullException(nameof(description));
@@ -69,16 +65,14 @@ namespace Epos.CommandLine
         /// </summary>
         /// <remarks> A specified <see cref="CommandLineParameter{T}.DefaultValue"/> makes
         /// the parameter optional. </remarks>
-        public bool IsOptional => GetDefaultValue() != null;
+        public bool IsOptional => GetDefaultValue() is not null;
 
         internal abstract object? GetDefaultValue();
 
-        internal string ToCommandLineString()
-        {
+        internal string ToCommandLineString() {
             var theResult = new StringBuilder();
 
-            if (IsOptional)
-            {
+            if (IsOptional) {
                 theResult.Append('[');
             }
 
@@ -94,19 +88,16 @@ namespace Epos.CommandLine
 
             theResult.Append('>');
 
-            if (IsOptional)
-            {
+            if (IsOptional) {
                 theResult.Append("=");
 
-                if (DataType == typeof(string))
-                {
+                if (DataType == typeof(string)) {
                     theResult.Append('"');
                 }
 
                 theResult.Append(GetDefaultValue().Dump());
 
-                if (DataType == typeof(string))
-                {
+                if (DataType == typeof(string)) {
                     theResult.Append('"');
                 }
 

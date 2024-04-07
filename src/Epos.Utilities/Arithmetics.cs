@@ -65,7 +65,7 @@ namespace Epos.Utilities
         public static T GetOneValue<T>() {
             Type theKey = typeof(T);
 
-            if (!Ones.TryGetValue(theKey, out object theOne)) {
+            if (!Ones.TryGetValue(theKey, out object? theOne)) {
                 try {
                     Func<T> theGetOneFunc = Expression.Lambda<Func<T>>(
                         Expression.MakeUnary(ExpressionType.Convert, Expression.Constant(1), theKey)
@@ -88,10 +88,10 @@ namespace Epos.Utilities
         public static T GetMinValue<T>() {
             Type theKey = typeof(T);
 
-            if (!MinValues.TryGetValue(theKey, out object theMinValue)) {
-                FieldInfo theFieldInfo = theKey.GetField("MinValue", BindingFlags.Static | BindingFlags.Public);
-                if (theFieldInfo != null) {
-                    theMinValue = theFieldInfo.GetValue(null);
+            if (!MinValues.TryGetValue(theKey, out object? theMinValue)) {
+                FieldInfo? theFieldInfo = theKey.GetField("MinValue", BindingFlags.Static | BindingFlags.Public);
+                if (theFieldInfo is not null) {
+                    theMinValue = theFieldInfo.GetValue(null)!;
                     MinValues[theKey] = theMinValue;
                 } else {
                     throw new InvalidOperationException($"Cannot create MinValue for the type '{theKey.Dump()}'.");
@@ -109,10 +109,10 @@ namespace Epos.Utilities
         public static T GetMaxValue<T>() {
             Type theKey = typeof(T);
 
-            if (!MaxValues.TryGetValue(theKey, out object theMaxValue)) {
-                FieldInfo theFieldInfo = theKey.GetField("MaxValue", BindingFlags.Static | BindingFlags.Public);
-                if (theFieldInfo != null) {
-                    theMaxValue = theFieldInfo.GetValue(null);
+            if (!MaxValues.TryGetValue(theKey, out object? theMaxValue)) {
+                FieldInfo? theFieldInfo = theKey.GetField("MaxValue", BindingFlags.Static | BindingFlags.Public);
+                if (theFieldInfo is not null) {
+                    theMaxValue = theFieldInfo.GetValue(null)!;
                     MaxValues[theKey] = theMaxValue;
                 } else {
                     throw new InvalidOperationException($"Cannot create MaxValue for the type '{theKey.Dump()}'.");
@@ -130,7 +130,7 @@ namespace Epos.Utilities
         public static RoundOperation<T> CreateRoundOperation<T>() {
             Type theType = typeof(T);
 
-            if (!RoundOperations.TryGetValue(theType, out Delegate theDelegate)) {
+            if (!RoundOperations.TryGetValue(theType, out Delegate? theDelegate)) {
                 bool isNullableType = theType.IsGenericType && theType.GetGenericTypeDefinition() == typeof(Nullable<>);
                 Type theTypeToRound = isNullableType ? theType.GetGenericArguments().Single() : theType;
 
@@ -139,8 +139,8 @@ namespace Epos.Utilities
                 ParameterExpression theMidpointRoundingArgument = Expression.Parameter(typeof(MidpointRounding));
 
                 MethodInfo theRoundMethodInfo = typeof(Math).GetMethod(
-                    "Round", new[] { theTypeToRound, typeof(int), typeof(MidpointRounding) }
-                );
+                    "Round", [theTypeToRound, typeof(int), typeof(MidpointRounding)]
+                )!;
                 MethodCallExpression theCallRoundExpression = Expression.Call(
                     theRoundMethodInfo, theTypeToRoundArgument, theInt32Argument, theMidpointRoundingArgument
                 );
@@ -152,20 +152,20 @@ namespace Epos.Utilities
                 } else {
                     ParameterExpression theTypeArgument = Expression.Parameter(typeof(T));
 
-                    MethodInfo theGetHasValueMethodInfo = theType.GetMethod("get_HasValue");
-                    MethodCallExpression theCallGetHasValueExpression = 
+                    MethodInfo theGetHasValueMethodInfo = theType.GetMethod("get_HasValue")!;
+                    MethodCallExpression theCallGetHasValueExpression =
                         Expression.Call(theTypeArgument, theGetHasValueMethodInfo);
 
-                    MethodInfo theGetValueMethodInfo = theType.GetMethod("get_Value");
-                    MethodCallExpression theCallGetValueExpression = 
+                    MethodInfo theGetValueMethodInfo = theType.GetMethod("get_Value")!;
+                    MethodCallExpression theCallGetValueExpression =
                         Expression.Call(theTypeArgument, theGetValueMethodInfo);
 
                     theCallRoundExpression = Expression.Call(
                         theRoundMethodInfo, theCallGetValueExpression, theInt32Argument, theMidpointRoundingArgument
                     );
 
-                    ConstructorInfo theConstructorInfo = theType.GetConstructor(new[] { theTypeToRound });
-                    NewExpression theNewNullableExpression = 
+                    ConstructorInfo theConstructorInfo = theType.GetConstructor([theTypeToRound])!;
+                    NewExpression theNewNullableExpression =
                         Expression.New(theConstructorInfo, theCallRoundExpression);
 
                     theDelegate = Expression.Lambda<RoundOperation<T>>(
@@ -187,10 +187,10 @@ namespace Epos.Utilities
         public static UnaryOperation<T> CreateNegateOperation<T>() {
             Type theKey = typeof(T);
 
-            if (!NegateOperations.TryGetValue(theKey, out Delegate theDelegate)) {
+            if (!NegateOperations.TryGetValue(theKey, out Delegate? theDelegate)) {
                 ParameterExpression theArg = Expression.Parameter(typeof(T));
                 theDelegate = Expression.Lambda<UnaryOperation<T>>(
-                    Expression.MakeUnary(ExpressionType.Negate, theArg, null), theArg
+                    Expression.MakeUnary(ExpressionType.Negate, theArg, null!), theArg
                 ).Compile();
                 NegateOperations[theKey] = theDelegate;
             }
@@ -250,7 +250,7 @@ namespace Epos.Utilities
         ) {
             (Type T1, Type T2, Type TResult) theKey = (T1: typeof(T1), T2: typeof(T2), TResult: typeof(TResult));
 
-            if (!dictionary.TryGetValue(theKey, out Delegate theDelegate)) {
+            if (!dictionary.TryGetValue(theKey, out Delegate? theDelegate)) {
                 ParameterExpression theArg1 = Expression.Parameter(typeof(T1));
                 ParameterExpression theArg2 = Expression.Parameter(typeof(T2));
 

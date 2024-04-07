@@ -18,7 +18,7 @@ namespace Epos.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Global
         public static void IfNull<T>(T? value, string paramName) where T : class {
-            if (value == null) {
+            if (value is null) {
                 throw new ArgumentNullException(paramName);
             }
         }

@@ -14,8 +14,7 @@ namespace Epos.CommandLine
         private T myDefaultValue = default!;
         private bool myIsDefaultValueSet;
 
-        static CommandLineOption()
-        {
+        static CommandLineOption() {
             typeof(T).TestAvailable();
         }
 
@@ -27,17 +26,15 @@ namespace Epos.CommandLine
 
         /// <summary> Gets or sets the default value that is used, if the option is not
         /// specified on the command line.</summary>
-        public T DefaultValue
-        {
+        public T DefaultValue {
             get => myDefaultValue;
-            set
-            {
+            set {
                 myDefaultValue = value;
                 myIsDefaultValueSet = true;
             }
         }
 
-        internal override object? GetDefaultValue() => myIsDefaultValueSet ? (object?)DefaultValue : null;
+        internal override object? GetDefaultValue() => myIsDefaultValueSet ? (object?) DefaultValue : null;
     }
 
     /// <summary> Command line option base class.</summary>
@@ -48,8 +45,7 @@ namespace Epos.CommandLine
         /// <param name="dataType">Option data type</param>
         /// <param name="letter">Option letter</param>
         /// <param name="description">Description</param>
-        protected CommandLineOption(Type dataType, char letter, string description)
-        {
+        protected CommandLineOption(Type dataType, char letter, string description) {
             DataType = dataType ?? throw new ArgumentNullException(nameof(dataType));
             Letter = letter;
             Description = description ?? throw new ArgumentNullException(nameof(description));
@@ -74,45 +70,38 @@ namespace Epos.CommandLine
 
         internal bool IsSwitch => DataType == typeof(bool);
 
-        internal string ToShortCommandLineString()
-        {
+        internal string ToShortCommandLineString() {
             string theOptionName = $"-{Letter}";
 
-            if (LongName != null)
-            {
+            if (LongName is not null) {
                 theOptionName += $", --{LongName}";
             }
 
             return theOptionName;
         }
 
-        internal string ToLongCommandLineString()
-        {
+        internal string ToLongCommandLineString() {
             StringBuilder theResult = new StringBuilder()
                 .Append('[')
                 .Append(ToShortCommandLineString());
 
-            if (!IsSwitch)
-            {
+            if (!IsSwitch) {
                 theResult
                     .Append(" <")
                     .Append(DataType.Dump());
 
                 object? theDefaultValue = GetDefaultValue();
-                if (theDefaultValue != null)
-                {
+                if (theDefaultValue is not null) {
                     theResult
                         .Append("=");
 
-                    if (theDefaultValue is string)
-                    {
+                    if (theDefaultValue is string) {
                         theResult.Append('"');
                     }
 
                     theResult.Append(theDefaultValue.Dump());
 
-                    if (theDefaultValue is string)
-                    {
+                    if (theDefaultValue is string) {
                         theResult.Append('"');
                     }
                 }

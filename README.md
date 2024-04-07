@@ -6,26 +6,26 @@
 ![Downloads](https://img.shields.io/nuget/dt/Epos.Utilities.svg)
 
 Build and Release deployment (Docs Website and [NuGet](https://www.nuget.org/)) is automated with
-[Visual Studio Team Services](https://www.visualstudio.com/team-services). Try it, it's free and powerful.
+[Azure DevOps](https://dev.azure.com).
 
 ## Docs
 
 Epos.Foundation is the Github Repo for foundational utilities like String or Dictionary extension methods
 (NuGet package **Epos.Utilities**), utilities for web apps and web APIs (NuGet package **Epos.Utilities.Web**) and a powerful and simple command line parser (NuGet package **Epos.CommandLine**).
 
-The packages are implemented using .NET Standard (2.0+). Therefore you can use them cross-platform on any supported platform and
-also with the full .NET Framework (4.6.1+).
+The packages are implemented using .NET 8+. Therefore you can use them cross-platform on any supported platform.
 
 [See the Docs Website.](https://eposgmbh.github.io/getting-started.html)
 
 ## Installation
 
-Via NuGet you can install the NuGet packages **Epos.Utilities** and **Epos.CommandLine**.
+Via NuGet you can install the following NuGet packages:
 
 ```bash
 $ dotnet add package Epos.Utilities
 $ dotnet add package Epos.Utilities.Web
 $ dotnet add package Epos.CommandLine
+$ dotnet add package Epos.TestUtilities
 ```
 
 You can install them separately, the packages are independent from each other.
@@ -34,6 +34,8 @@ You can install them separately, the packages are independent from each other.
 
 **Epos.Utilities** and **Epos.Utilities.Web** are more or less self-documenting simple utility classes. You can take a
 look at the corresponding unit tests in [this Github Repo](https://github.com/eposgmbh/Epos.Foundation/tree/master/src/Epos.Utilities.Tests).
+
+**Epos.TestUtilities** allows spinning up Docker containers for integration or unit test runs. See the corresponging unit tests in [this Github Repo](https://github.com/eposgmbh/Epos.Foundation/tree/master/src/Epos.TestUtilities.Tests).
 
 **Epos.CommandLine** is a full fledged yet simple command line parser. Source code for a demo console app can be found in
 [this Github Repo](https://github.com/eposgmbh/Epos.Foundation/tree/master/src/Epos.CommandLine.Sample).
@@ -122,43 +124,6 @@ theContainer
 var theTestService = theContainer.Resolve<ITestService>();
 ```
 
-### Epos.Utilities.Web
-
-Highlights of the **Epos.Utilities.Web** package are:
-
-#### JsonRestClient
-
-Use the `JsonRestClient` or `ResilientJsonRestClient` to initiate JSON Web API calls (see
-[JSONPlaceholder Fake REST API](https://jsonplaceholder.typicode.com/) for the following example).
-
-The `ResilientJsonRestClient` uses the `IPolicyProvider` interface. The default implementation `PolicyProvider` has a Polly retry policy of 5, exponential back-off and a circuit breaker allowing 5 `HttpRequestException` exceptions.
-
-```csharp
-public class Post
-{
-    public int    UserId { get; set; }
-    public int    Id     { get; set; }
-    public string Title  { get; set; }
-    public string Body   { get; set; }
-}
-
-// ...
-
-IJsonRestClient theClient = new JsonRestClient("https://jsonplaceholder.typicode.com/");
-// or ... new ResilientJsonRestClient(new PolicyProvider(), "https...");
-
-var (theStatusCode, thePosts) = await theClient.GetManyAsync<Post>(
-    apiUrl: "posts",
-    queryParams: ("userId", 1) // Use one or more tuples for query params
-);
-
-if (theStatusCode == HttpStatusCode.OK) {
-    foreach (Post thePost in thePosts) {
-        // ...
-    }
-}
-```
-
 ### Epos.CommandLine
 
 Sample `BuildOptions` class for strongly typed access of the command line parameters:
@@ -176,46 +141,44 @@ public class BuildOptions
 }
 ```
 
-Sample `Main` method that uses the `BuildOptions` class for the subcommand `build`:
+Sample entry point that uses the `BuildOptions` class for the subcommand `build`:
 
 ```csharp
-public static int Main(string[] args) {
-    var theCommandLineDefinition = new CommandLineDefinition {
-        Name = "sample", // <- if not specified, .exe-Filename is used
-        Subcommands = {
-            new CommandLineSubcommand<BuildOptions>("build", "Builds something.") {
-                Options = {
-                    new CommandLineOption<int>('p', "Sets the project number.") { LongName = "project-number" },
-                    new CommandLineOption<string>('m', "Sets the used memory.") {
-                        LongName = "memory",
-                        DefaultValue = "1 GB"
-                    },
-                    new CommandLineSwitch('d', "Disables the command."),
-                    new CommandLineSwitch('z', "Zzzz...")
+var theCommandLineDefinition = new CommandLineDefinition {
+    Name = "sample", // <- if not specified, .exe-Filename is used
+    Subcommands = {
+        new CommandLineSubcommand<BuildOptions>("build", "Builds something.") {
+            Options = {
+                new CommandLineOption<int>('p', "Sets the project number.") { LongName = "project-number" },
+                new CommandLineOption<string>('m', "Sets the used memory.") {
+                    LongName = "memory",
+                    DefaultValue = "1 GB"
                 },
-                Parameters = {
-                    new CommandLineParameter<string>("filename", "Sets the filename.")
-                },
-                CommandLineFunc = (options, definition) => {
-                    // Do something for the build subcommand
-                    // ...
+                new CommandLineSwitch('d', "Disables the command."),
+                new CommandLineSwitch('z', "Zzzz...")
+            },
+            Parameters = {
+                new CommandLineParameter<string>("filename", "Sets the filename.")
+            },
+            CommandLineFunc = (options, definition) => {
+                // Do something for the build subcommand
+                // ...
 
-                    Console.WriteLine("sample command line application" + Lf);
-                    Console.WriteLine(options.Dump() + Lf);
+                Console.WriteLine("sample command line application" + Lf);
+                Console.WriteLine(options.Dump() + Lf);
 
-                    return 0; // <- your error code or 0, if successful
-                }
+                return 0; // <- your error code or 0, if successful
             }
-        },
-        // further subcommands...
-        //
-        // If you don't want to specify subcommands, register one subcommand with the name "default"
-        // (or use the constant CommandLineSubcommand.DefaultName) and set the HasDifferentiatedSubcommands
-        // property of the CommandLineDefinition to false.
-    };
+        }
+    },
+    // further subcommands...
+    //
+    // If you don't want to specify subcommands, register one subcommand with the name "default"
+    // (or use the constant CommandLineSubcommand.DefaultName) and set the HasDifferentiatedSubcommands
+    // property of the CommandLineDefinition to false.
+};
 
-    return theCommandLineDefinition.Try(args);
-}
+return theCommandLineDefinition.Try(args);
 ```
 
 This simple definition automatically produces help and usage console output like this:
@@ -246,7 +209,7 @@ your issue when I have time. Pull Requests are possible too.
 
 MIT License
 
-Copyright (c) 2017 eposgmbh
+Copyright (c) 2017-2024 eposgmbh
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

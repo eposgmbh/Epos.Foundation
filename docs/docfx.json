@@ -15,36 +15,23 @@
           ]
         }
       ],
-      "dest": "Api"
+      "dest": "api"
     }
   ],
   "build": {
     "content": [
       {
         "files": [
-          "Api/**.yml"
-        ]
-      },
-      {
-        "files": [
+          "api/**/*.yml",
           "toc.yml",
-          "getting-started.md",
-          "Articles/**.md",
-          "Articles/**/toc.yml"
-        ]
-      }
-    ],
-    "resource": [
-      {
-        "files": [
-          "Images/**"
+          "getting-started.md"
         ]
       }
     ],
     "overwrite": [
       {
         "files": [
-          "Overwrite/**.md"
+          "replace/**.md"
         ]
       }
     ],
@@ -52,13 +39,15 @@
       "_appTitle": "Epos.Foundation Docs",
       "_enableSearch": false
     },
-    "dest": "bin/Website",
+    "dest": "output/website",
     "fileMetadataFiles": [],
     "template": [
-      "Templates/Epos"
+      "default",
+      "modern"
     ],
-    "postProcessors": [],
     "noLangKeyword": false,
-    "xrefservice": "https://xref.docs.microsoft.com/query?uid={uid}"
+    "xref": [
+      "https://learn.microsoft.com/en-us/dotnet/.xrefmap.json"
+    ]
   }
 }

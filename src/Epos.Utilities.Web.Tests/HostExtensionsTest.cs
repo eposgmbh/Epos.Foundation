@@ -15,7 +15,7 @@ public class HostExtensionsTest
     public void Url() {
         var theLogger = new Logger();
 
-        var theUrl = "https://blog.eposgmbh.eu";
+        string theUrl = "https://blog.eposgmbh.eu";
 
         HostExtensions.WaitForServiceAvailability(theUrl, theLogger, 10);
 
@@ -26,7 +26,7 @@ public class HostExtensionsTest
     public void ConnectionString() {
         var theLogger = new Logger();
 
-        var theConnectionString = "Server=unknown.server.com;Port=5432;Database=db;User ID=admin;Password=admin";
+        string theConnectionString = "Server=unknown.server.com;Port=5432;Database=db;User ID=admin;Password=admin";
 
         try {
             HostExtensions.WaitForServiceAvailability(theConnectionString, theLogger, 5);
@@ -39,9 +39,9 @@ public class HostExtensionsTest
 
 public class Logger : ILogger
 {
-    public IDisposable BeginScope<TState>(TState state) { return null!; }
+    public IDisposable BeginScope<TState>(TState state) => null!;
 
-    public bool IsEnabled(LogLevel logLevel) { return true; }
+    public bool IsEnabled(LogLevel logLevel) => true;
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter) {
         var theFormattedLogValues = (IReadOnlyList<KeyValuePair<string, object?>>?) state;

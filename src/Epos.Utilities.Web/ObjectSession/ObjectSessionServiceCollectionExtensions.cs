@@ -27,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
         ) {
             services.AddDistributedMemoryCache();
 
-            if (configure != null) {
+            if (configure is not null) {
                 services.AddSession(configure);
             } else {
                 services.AddSession();

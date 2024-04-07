@@ -8,95 +8,71 @@ namespace Epos.CommandLine
         private readonly CommandLineDefinition myDefinition;
         private readonly CommandLineUsageWriter myUsageWriter;
 
-        public CommandLineTokenizer(CommandLineDefinition definition, CommandLineUsageWriter usageWriter)
-        {
+        public CommandLineTokenizer(CommandLineDefinition definition, CommandLineUsageWriter usageWriter) {
             myDefinition = definition;
             myUsageWriter = usageWriter;
         }
 
-        public List<CommandLineToken> Tokenize(string[] args, ref CommandLineSubcommand? subcommand)
-        {
+        public List<CommandLineToken> Tokenize(string[] args, ref CommandLineSubcommand? subcommand) {
             var theResult = new List<CommandLineToken>();
             var theExclusionGroupCounts = new Dictionary<string, List<CommandLineOption>>();
 
             int theParameterIndex = 0;
-            for (int theIndex = 0; theIndex < args.Length; theIndex++)
-            {
+            for (int theIndex = 0; theIndex < args.Length; theIndex++) {
                 string theArg = args[theIndex];
-                if (theIndex == 0 && myDefinition.HasDifferentiatedSubcommands)
-                {
+                if (theIndex == 0 && myDefinition.HasDifferentiatedSubcommands) {
                     // Muss Subcommand sein
                     subcommand = myDefinition.Subcommands.SingleOrDefault(sc => sc.Name == theArg);
-                    if (subcommand != null)
-                    {
+                    if (subcommand is not null) {
                         theResult.Add(new CommandLineToken(CommandLineTokenKind.Subcommand, theArg));
                         continue;
-                    }
-                    else
-                    {
-                        if (theArg.StartsWith("-"))
-                        {
+                    } else {
+                        if (theArg.StartsWith("-")) {
                             myUsageWriter.WriteAndExit("Subcommand is missing.");
-                        }
-                        else
-                        {
+                        } else {
                             myUsageWriter.WriteAndExit($"Unknown subcommand: {theArg}");
                         }
                     }
                 }
 
-                if (theArg.StartsWith("-"))
-                {
+                if (theArg.StartsWith("-")) {
                     // Option
-                    if (subcommand == null)
-                    {
+                    if (subcommand is null) {
                         myUsageWriter.WriteAndExit();
-                    }
-                    else
-                    {
+                    } else {
                         bool isLongNameOption = theArg.StartsWith("--");
 
                         string theOptionTextWithoutDashes = isLongNameOption ? theArg.Substring(2) : theArg.Substring(1);
 
-                        CommandLineOption theOption =
+                        CommandLineOption? theOption =
                             isLongNameOption ?
                                 subcommand.Options.SingleOrDefault(o => o.LongName == theOptionTextWithoutDashes) :
                                 subcommand.Options.SingleOrDefault(o => o.Letter.ToString() == theOptionTextWithoutDashes);
 
-                        if (theOption != null)
-                        {
-                            foreach (string theExclusionGroup in theOption.ExclusionGroups)
-                            {
+                        if (theOption is not null) {
+                            foreach (string theExclusionGroup in theOption.ExclusionGroups) {
                                 if (theExclusionGroupCounts.TryGetValue(theExclusionGroup,
-                                    out List<CommandLineOption> theOptions))
-                                {
+                                    out List<CommandLineOption>? theOptions)) {
                                     theOptions.Add(theOption);
                                     theExclusionGroupCounts[theExclusionGroup] = theOptions;
-                                }
-                                else
-                                {
+                                } else {
                                     theOptions = new List<CommandLineOption> { theOption };
                                     theExclusionGroupCounts[theExclusionGroup] = theOptions;
                                 }
                             }
 
                             object? theValue = true;
-                            if (!theOption.IsSwitch)
-                            {
-                                if (theIndex < args.Length - 1)
-                                {
+                            if (!theOption.IsSwitch) {
+                                if (theIndex < args.Length - 1) {
                                     theIndex++;
                                     string theRawValue = args[theIndex];
 
                                     theValue = ParseUtils.ParseOption(theOption, theRawValue, out string? theErrorMessage);
 
-                                    if (theErrorMessage != null)
-                                    {
+                                    if (theErrorMessage is not null) {
                                         myUsageWriter.WriteAndExit(subcommand, theErrorMessage);
                                     }
-                                }
-                                else
-                                {
+                                } else {
                                     // Value kommt nicht
                                     myUsageWriter.WriteAndExit(
                                         subcommand,
@@ -106,70 +82,49 @@ namespace Epos.CommandLine
                             }
 
                             theResult.Add(
-                                new CommandLineToken(CommandLineTokenKind.Option, theOption.Letter.ToString())
-                                {
+                                new CommandLineToken(CommandLineTokenKind.Option, theOption.Letter.ToString()) {
                                     Value = theValue!
                                 }
                             );
-                        }
-                        else
-                        {
+                        } else {
                             // Sind es vielleicht mehrere verkettete Switches (-abc)?
-                            if (!isLongNameOption && theOptionTextWithoutDashes.Length > 1)
-                            {
-                                foreach (char theOptionLetter in theOptionTextWithoutDashes)
-                                {
+                            if (!isLongNameOption && theOptionTextWithoutDashes.Length > 1) {
+                                foreach (char theOptionLetter in theOptionTextWithoutDashes) {
                                     theOption = subcommand.Options.SingleOrDefault(o => o.Letter == theOptionLetter);
 
-                                    if (theOption != null && theOption.IsSwitch)
-                                    {
-                                        foreach (string theExclusionGroup in theOption.ExclusionGroups)
-                                        {
+                                    if (theOption is not null && theOption.IsSwitch) {
+                                        foreach (string theExclusionGroup in theOption.ExclusionGroups) {
                                             if (theExclusionGroupCounts.TryGetValue(theExclusionGroup,
-                                                out List<CommandLineOption> theOptions))
-                                            {
+                                                out List<CommandLineOption>? theOptions)) {
                                                 theOptions.Add(theOption);
                                                 theExclusionGroupCounts[theExclusionGroup] = theOptions;
-                                            }
-                                            else
-                                            {
+                                            } else {
                                                 theOptions = new List<CommandLineOption> { theOption };
                                                 theExclusionGroupCounts[theExclusionGroup] = theOptions;
                                             }
                                         }
 
                                         theResult.Add(
-                                            new CommandLineToken(CommandLineTokenKind.Option, theOptionLetter.ToString())
-                                            {
+                                            new CommandLineToken(CommandLineTokenKind.Option, theOptionLetter.ToString()) {
                                                 Value = true
                                             }
                                         );
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         myUsageWriter.WriteAndExit(subcommand, $"Unknown switch: -{theOptionLetter}");
                                     }
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 // Unbekannte Option
                                 myUsageWriter.WriteAndExit(subcommand, $"Unknown option: {theArg}");
                             }
                         }
                     }
-                }
-                else
-                {
+                } else {
                     // Parameter
-                    if (subcommand == null)
-                    {
+                    if (subcommand is null) {
                         myUsageWriter.WriteAndExit();
-                    }
-                    else
-                    {
-                        if (theParameterIndex >= subcommand.Parameters.Count)
-                        {
+                    } else {
+                        if (theParameterIndex >= subcommand.Parameters.Count) {
                             myUsageWriter.WriteAndExit(
                                 subcommand, "Too many parameters: " + string.Join(" ", args.Skip(theIndex))
                             );
@@ -183,14 +138,12 @@ namespace Epos.CommandLine
                             theParameter, theRawValue, out string? theErrorMessage
                         );
 
-                        if (theErrorMessage != null)
-                        {
+                        if (theErrorMessage is not null) {
                             myUsageWriter.WriteAndExit(subcommand, theErrorMessage);
                         }
 
                         theResult.Add(
-                            new CommandLineToken(CommandLineTokenKind.Parameter, theParameter.Name)
-                            {
+                            new CommandLineToken(CommandLineTokenKind.Parameter, theParameter.Name) {
                                 Value = theValue!
                             }
                         );
@@ -198,10 +151,8 @@ namespace Epos.CommandLine
                 }
             }
 
-            foreach (List<CommandLineOption> theOptions in theExclusionGroupCounts.Values)
-            {
-                if (theOptions.Count > 1)
-                {
+            foreach (List<CommandLineOption> theOptions in theExclusionGroupCounts.Values) {
+                if (theOptions.Count > 1) {
                     string theOptionStrings =
                         theOptions.Select(o => o.ToLongCommandLineString()).Aggregate((s1, s2) => s1 + ", " + s2);
 
@@ -224,30 +175,23 @@ namespace Epos.CommandLine
             return theResult;
         }
 
-        private void ValidateCommandLineTokens(IEnumerable<CommandLineToken> CommandLineTokens, CommandLineSubcommand subcommand)
-        {
+        private void ValidateCommandLineTokens(
+            IEnumerable<CommandLineToken> commandLineTokens, CommandLineSubcommand subcommand
+        ) {
             bool isOption = false, isParameter = false;
-            foreach (CommandLineToken theArgToken in CommandLineTokens)
-            {
-                if (theArgToken.Kind == CommandLineTokenKind.Option)
-                {
+            foreach (CommandLineToken theArgToken in commandLineTokens) {
+                if (theArgToken.Kind == CommandLineTokenKind.Option) {
                     isOption = true;
 
-                    if (isParameter)
-                    {
+                    if (isParameter) {
                         // Parameter vor Option
                         myUsageWriter.WriteAndExit(subcommand, "Order of options and parameters is wrong.");
                     }
-                }
-                else if (theArgToken.Kind == CommandLineTokenKind.Parameter)
-                {
+                } else if (theArgToken.Kind == CommandLineTokenKind.Parameter) {
                     isParameter = true;
-                }
-                else
-                {
+                } else {
                     // SubcommandName
-                    if (isOption || isParameter)
-                    {
+                    if (isOption || isParameter) {
                         // Parameter oder Option vor SubcommandName
                         myUsageWriter.WriteAndExit(subcommand, "Order of options and parameters is wrong.");
                     }
@@ -256,56 +200,45 @@ namespace Epos.CommandLine
         }
 
         private void FillOptionDefaults(
-            ICollection<CommandLineToken> CommandLineTokens, CommandLineSubcommand subcommand, IEnumerable<string> exclusionGroups
-        )
-        {
-            foreach (CommandLineOption theOption in subcommand.Options)
-            {
+            ICollection<CommandLineToken> commandLineTokens, CommandLineSubcommand subcommand,
+            IEnumerable<string> exclusionGroups
+        ) {
+            foreach (CommandLineOption theOption in subcommand.Options) {
                 object? theDefaultValue = theOption.GetDefaultValue();
 
-                if (theDefaultValue != null)
-                {
-                    if (!CommandLineTokens.Any(t => t.Kind == CommandLineTokenKind.Option && t.Name == theOption.Letter.ToString()))
-                    {
-                        CommandLineTokens.Add(
-                            new CommandLineToken(CommandLineTokenKind.Option, theOption.Letter.ToString())
-                            {
+                if (theDefaultValue is not null) {
+                    if (!commandLineTokens.Any(t => t.Kind == CommandLineTokenKind.Option &&
+                        t.Name == theOption.Letter.ToString())) {
+                        commandLineTokens.Add(
+                            new CommandLineToken(CommandLineTokenKind.Option, theOption.Letter.ToString()) {
                                 Value = theDefaultValue
                             }
                         );
                     }
-                }
-                else
-                {
+                } else {
                     // Kein Default value => Option muss gesetzt sein (außer bei Switch, und falls exclusion group
                     // bereits erfuellt)
                     if (!theOption.IsSwitch &&
-                        !CommandLineTokens.Any(t => t.Kind == CommandLineTokenKind.Option &&
+                        !commandLineTokens.Any(t => t.Kind == CommandLineTokenKind.Option &&
                         t.Name == theOption.Letter.ToString()) &&
-                       (!theOption.ExclusionGroups.Any() || theOption.ExclusionGroups.Except(exclusionGroups).Any()))
-                    {
+                       (!theOption.ExclusionGroups.Any() || theOption.ExclusionGroups.Except(exclusionGroups).Any())) {
                         myUsageWriter.WriteAndExit(subcommand, $"Missing option: {theOption.ToShortCommandLineString()}");
                     }
                 }
             }
         }
 
-        private void FillOptionalParameterDefaults(ICollection<CommandLineToken> CommandLineTokens, CommandLineSubcommand subcommand)
-        {
-            foreach (CommandLineParameter theParameter in subcommand.Parameters)
-            {
-                if (!CommandLineTokens.Any(t => t.Kind == CommandLineTokenKind.Parameter && t.Name == theParameter.Name))
-                {
-                    if (!theParameter.IsOptional)
-                    {
+        private void FillOptionalParameterDefaults(
+            ICollection<CommandLineToken> commandLineTokens, CommandLineSubcommand subcommand
+        ) {
+            foreach (CommandLineParameter theParameter in subcommand.Parameters) {
+                if (!commandLineTokens.Any(t => t.Kind == CommandLineTokenKind.Parameter && t.Name == theParameter.Name)) {
+                    if (!theParameter.IsOptional) {
                         myUsageWriter.WriteAndExit(subcommand, $"Missing parameter: {theParameter.Name}");
-                    }
-                    else
-                    {
+                    } else {
                         // Optionaler Parameter
-                        CommandLineTokens.Add(
-                            new CommandLineToken(CommandLineTokenKind.Parameter, theParameter.Name)
-                            {
+                        commandLineTokens.Add(
+                            new CommandLineToken(CommandLineTokenKind.Parameter, theParameter.Name) {
                                 Value = theParameter.GetDefaultValue()!
                             }
                         );

@@ -15,7 +15,7 @@ namespace Epos.Utilities
         /// <param name="assembly">Assembly</param>
         /// <returns><b>true</b>, if the assembly has the specified attribute; otherwise <b>false</b></returns>
         public static bool HasAttribute<TAttribute>(this Assembly assembly) where TAttribute : Attribute {
-            return assembly.GetAttribute<TAttribute>() != null;
+            return assembly.GetAttribute<TAttribute>() is not null;
         }
 
         /// <summary>Gets the attribute <typeparamref name="TAttribute"/> for the
@@ -24,7 +24,7 @@ namespace Epos.Utilities
         /// <param name="assembly">Assembly</param>
         /// <returns>Attribute <typeparamref name="TAttribute"/> or <b>null</b>, if not found</returns>
         public static TAttribute GetAttribute<TAttribute>(this Assembly assembly) where TAttribute : Attribute {
-            if (assembly == null) {
+            if (assembly is null) {
                 throw new ArgumentNullException(nameof(assembly));
             }
 
@@ -38,7 +38,7 @@ namespace Epos.Utilities
         /// <returns>Attributes <typeparamref name="TAttribute"/></returns>
         public static IEnumerable<TAttribute> GetAttributes<TAttribute>(this Assembly assembly)
             where TAttribute : Attribute {
-            if (assembly == null) {
+            if (assembly is null) {
                 throw new ArgumentNullException(nameof(assembly));
             }
 

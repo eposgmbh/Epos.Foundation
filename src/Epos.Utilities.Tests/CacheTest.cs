@@ -17,23 +17,23 @@ namespace Epos.Utilities
             Assert.That(theCache.Capacity, Is.EqualTo(2));
             Assert.That(theCache.Count, Is.EqualTo(0));
 
-            theCache[1] = "One";
+            theCache.Add(1, "One");
             Assert.That(theCache.Capacity, Is.EqualTo(2));
             Assert.That(theCache.Count, Is.EqualTo(1));
             Assert.That(theCache[1], Is.EqualTo("One"));
 
-            theCache[1] = "Eins";
+            theCache.Add(1, "Eins");
             Assert.That(theCache.Capacity, Is.EqualTo(2));
             Assert.That(theCache.Count, Is.EqualTo(1));
             Assert.That(theCache[1], Is.EqualTo("Eins"));
 
-            theCache[2] = "Zwei";
+            theCache.Add(2, "Zwei");
             Assert.That(theCache.Capacity, Is.EqualTo(2));
             Assert.That(theCache.Count, Is.EqualTo(2));
             Assert.That(theCache[1], Is.EqualTo("Eins"));
             Assert.That(theCache[2], Is.EqualTo("Zwei"));
 
-            theCache[3] = "Drei";
+            theCache.Add(3, "Drei");
             Assert.That(theCache.Capacity, Is.EqualTo(2));
             Assert.That(theCache.Count, Is.EqualTo(2));
             Assert.That(theCache[1], Is.Null);

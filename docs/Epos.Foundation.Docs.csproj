@@ -1,27 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Api\**" />
-    <EmbeddedResource Remove="Api\**" />
-    <None Remove="Api\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="docfx.console" Version="2.59.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <Target Name="CopyFiles" BeforeTargets="Build">
+  <Target Name="docfx" BeforeTargets="Build">
     <Copy SourceFiles="../README.md" DestinationFiles="getting-started.md" />
-  </Target>
-
-  <Target Name="DeleteFiles" AfterTargets="DocBuild">
+    <Exec Command="dotnet tool install --global --version 2.76.0 docfx" IgnoreExitCode="true" />
+    <Exec Command="docfx" />
     <Delete Files="getting-started.md" />
   </Target>
 

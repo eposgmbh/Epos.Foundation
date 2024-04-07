@@ -11,13 +11,13 @@ using static Epos.Utilities.Characters;
 namespace Epos.Utilities
 {
     /// <summary>Provides utility methods for pretty-printing arbitrary object instances.</summary>
-    public static class DumpExtensions 
+    public static class DumpExtensions
     {
         private const string Null = "null";
         private const string My = "my";
         private const string Underscore = "_";
         private const string ToStringMethodName = "ToString";
-        private static readonly Type[] ToStringParameters = { typeof(IFormatProvider) };
+        private static readonly Type[] ToStringParameters = [typeof(IFormatProvider)];
 
         /// <summary>Returns a pretty-print string representation of the specified
         /// <paramref name="value"/>.</summary>
@@ -49,27 +49,25 @@ namespace Epos.Utilities
                     return theTypeToDump.Dump();
             }
 
-            Type theType = value!.GetType();
+            Type theType = value.GetType();
             if (theType.IsGenericType && theType.GetGenericTypeDefinition() == typeof(KeyValuePair<,>)) {
                 StringBuilder theBuilder =
                     new StringBuilder("{ ")
-                        .Append(theType.GetProperty("Key").GetValue(value, null).Dump())
+                        .Append(theType.GetProperty("Key")!.GetValue(value, null).Dump())
                         .Append(": ")
-                        .Append(theType.GetProperty("Value").GetValue(value, null).Dump())
+                        .Append(theType.GetProperty("Value")!.GetValue(value, null).Dump())
                         .Append(" }");
-				
+
                 return theBuilder.ToString();
             }
-			
+
             // Find ToString() method and call, if available (not with anonymous types!):
             MethodInfo? theToStringMethodInfo = GetToStringMethodInfo(theType);
-            if (theToStringMethodInfo != null && !theType.Name.StartsWith("<>f__Anonymous")) {
+            if (theToStringMethodInfo is not null && !theType.Name.StartsWith("<>f__Anonymous")) {
                 if (theToStringMethodInfo.GetParameters().Length == 1) {
-                    return (string) theToStringMethodInfo.Invoke(
-                        value, new object[] { CultureInfo.InvariantCulture }
-                    );
+                    return (string) theToStringMethodInfo.Invoke(value, [CultureInfo.InvariantCulture])!;
                 } else {
-                    return (string) theToStringMethodInfo.Invoke(value, null);
+                    return (string) theToStringMethodInfo.Invoke(value, null)!;
                 }
             }
 
@@ -93,22 +91,22 @@ namespace Epos.Utilities
             for (int theIndex = 0; theIndex < theFieldInfosLength; theIndex++) {
                 FieldInfo theFieldInfo = theFieldInfos[theIndex];
                 string theFieldName = theFieldInfo.Name;
-				
+
                 if (theFieldName.StartsWith(My, StringComparison.InvariantCulture)) {
                     theFieldName = theFieldName.Substring(2);
                 } else if (theFieldName.StartsWith(Underscore, StringComparison.InvariantCulture)) {
-                    theFieldName = 
+                    theFieldName =
                         theFieldName.Substring(1, 1).ToUpper(CultureInfo.CurrentCulture) + theFieldName.Substring(2);
                 } else if (theFieldName.StartsWith("<")) {
                     // Anonymous type fields:
                     theFieldName = theFieldName.Substring(1, theFieldName.IndexOf('>') - 1);
                 } else {
-                    theFieldName = 
+                    theFieldName =
                         theFieldName.Substring(0, 1).ToUpper(CultureInfo.CurrentCulture) + theFieldName.Substring(1);
                 }
-				
+
                 theStringBuilder.Append(theFieldName).Append(" = ").Append(theFieldInfo.GetValue(value).Dump());
-				
+
                 if (theIndex < theFieldInfosLength - 1) {
                     theStringBuilder.Append(", ");
                 }
@@ -142,12 +140,12 @@ namespace Epos.Utilities
 
             int theColumnCount = theColumns.Count;
 
-            if (theColumns.Any(c => c.Seperator != null)) {
+            if (theColumns.Any(c => c.Seperator is not null)) {
                 for (int theIndex = 0; theIndex < theColumnCount; theIndex++) {
                     TextColumn<TColumn> theColumn = theColumns[theIndex];
 
                     ColumnSeperator? theSeperator = theColumn.Seperator;
-                    if (theSeperator != null) {
+                    if (theSeperator is not null) {
                         int theColSpan = theSeperator.ColSpan;
 
                         int theWidth;
@@ -155,7 +153,7 @@ namespace Epos.Utilities
                             theWidth = theColumn.Width;
                         } else {
                             theWidth =
-                                theColumns.Skip(theIndex).Take(theColSpan).Sum(c => c.Width) + (theColSpan - 1) * 3;
+                                theColumns.Skip(theIndex).Take(theColSpan).Sum(c => c.Width) + ((theColSpan - 1) * 3);
                         }
 
                         var theCenteredHeader = new StringBuilder(theSeperator.Header);
@@ -166,7 +164,7 @@ namespace Epos.Utilities
                                 theCenteredHeader.Append(' ');
                             }
                         }
-    
+
                         theResult.Append(theCenteredHeader);
 
                         theIndex += theColSpan - 1;
@@ -191,7 +189,7 @@ namespace Epos.Utilities
                 }
             }
 
-            if (theColumns.Any(c => c.SecondaryHeader != null)) {
+            if (theColumns.Any(c => c.SecondaryHeader is not null)) {
                 theResult
                     .Append(Lf)
                     .Append(theSpaces);
@@ -207,7 +205,7 @@ namespace Epos.Utilities
                 }
             }
 
-            if (theColumns.Any(c => c.DataType != null)) {
+            if (theColumns.Any(c => c.DataType is not null)) {
                 theResult
                   .Append(Lf)
                     .Append(theSpaces);
@@ -242,7 +240,7 @@ namespace Epos.Utilities
 
             string? theEmptyTableText = tableInfoProvider.EmptyTableText;
 
-            if (theEmptyTableText != null && theRowCount == 0) {
+            if (theEmptyTableText is not null && theRowCount == 0) {
                 theResult
                     .Append(theSpaces)
                     .Append(theEmptyTableText)
@@ -271,8 +269,8 @@ namespace Epos.Utilities
                             theAlignmentString = GetAlignmentString(theColumn);
                         } else {
                             int theWidth =
-                                theColumns.Skip(theIndex).Take(theColSpan).Sum(c => c.Width) + (theColSpan - 1) * 3;
-                            
+                                theColumns.Skip(theIndex).Take(theColSpan).Sum(c => c.Width) + ((theColSpan - 1) * 3);
+
                             theAlignmentString = $"{{0,-{theWidth}}}";
                         }
 
@@ -289,7 +287,7 @@ namespace Epos.Utilities
                 }
             }
 
-            if (tableInfoProvider.HasTrailingSeperatorLine && (theRowCount != 0 || theEmptyTableText != null)) {
+            if (tableInfoProvider.HasTrailingSeperatorLine && (theRowCount != 0 || theEmptyTableText is not null)) {
                 theResult
                     .Append(theSpaces)
                     .Append(theSeperatorLine)
@@ -305,14 +303,14 @@ namespace Epos.Utilities
             if (type.IsGenericParameter) {
                 return type.Name;
             }
-			
+
             var theResult = new StringBuilder();
             string theFullName;
 
             bool isNullableType = type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
 
             if (type.IsNested) {
-                theResult.Append(type.DeclaringType.Dump()).Append(Type.Delimiter);
+                theResult.Append(type.DeclaringType!.Dump()).Append(Type.Delimiter);
                 theFullName = type.Name;
             } else {
                 theFullName = GetFriendlyName(type);
@@ -338,7 +336,7 @@ namespace Epos.Utilities
                 for (int theIndex = 0; theIndex < theTypeArgumentsLength; theIndex++) {
                     Type theTypeArgument = theTypeArguments[theIndex];
                     theResult.Append(theTypeArgument.Dump());
-					
+
                     if (theIndex < theTypeArgumentsLength - 1) {
                         theResult.Append(", ");
                     }
@@ -384,16 +382,16 @@ namespace Epos.Utilities
             } else if (type.FullName == "Epos.Core.Rational") {
                 return "Rational";
             } else {
-                return type.FullName;
+                return type.FullName!;
             }
         }
 
         private static string Dump(IEnumerator enumerator) {
             StringBuilder theStringBuilder = new StringBuilder().Append('[');
-			
+
             while (enumerator.MoveNext()) {
                 object theEntry = enumerator.Current;
-				
+
                 theStringBuilder.Append(theEntry.Dump());
                 theStringBuilder.Append(", ");
             }
@@ -401,9 +399,9 @@ namespace Epos.Utilities
             if (theStringBuilder.Length != 1) {
                 theStringBuilder.Length -= 2;
             }
-			
+
             theStringBuilder.Append(']');
-			
+
             return theStringBuilder.ToString();
         }
 
@@ -412,43 +410,43 @@ namespace Epos.Utilities
 
             Type theSearchType = type;
             while (theSearchType != typeof(object) &&
-                (theResult = theSearchType.GetMethod(
-                    ToStringMethodName, 
+                (theResult = theSearchType!.GetMethod(
+                    ToStringMethodName,
                     BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance,
                     null, ToStringParameters, null)
-                ) == null) {
-                theSearchType = theSearchType.BaseType;
+                ) is null) {
+                theSearchType = theSearchType.BaseType!;
             }
-            if (theResult != null) {
+
+            if (theResult is not null) {
                 return theResult;
             }
 
             theSearchType = type;
             while ((theResult =
-                theSearchType.GetMethod(
+                theSearchType!.GetMethod(
                     ToStringMethodName,
                     BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance,
                     null, Type.EmptyTypes, null
-                )) == null) {
-                theSearchType = theSearchType.BaseType;
+                )) is null) {
+                theSearchType = theSearchType.BaseType!;
             }
             if (theSearchType != typeof(object) && theSearchType != typeof(ValueType)) {
                 return theResult;
             }
-			
+
             return null;
         }
 
-        private static string GetAlignmentString<TColumn>(TextColumn<TColumn> column) {
-            return column.AlignRight ? $"{{0,{column.Width}}}" : $"{{0,-{column.Width}}}";
-        }
+        private static string GetAlignmentString<TColumn>(TextColumn<TColumn> column)
+            => column.AlignRight ? $"{{0,{column.Width}}}" : $"{{0,-{column.Width}}}";
 
         private static List<TextColumn<TColumn>> GetTextColumns<TColumn, TRow>(
             TableInfoProvider<TColumn, TRow> tableInfoProvider
         ) {
             var theResult = new List<TextColumn<TColumn>>();
 
-            var theColumns = tableInfoProvider.GetColumns();
+            IEnumerable<TColumn> theColumns = tableInfoProvider.GetColumns();
 
             int theColumnIndex = 0;
             foreach (TColumn theColumn in theColumns) {
@@ -461,15 +459,15 @@ namespace Epos.Utilities
                         Seperator = theColumnInfo.Seperator
                     }
                 );
-                    
+
                 if ((theColumnInfo.Seperator?.ColSpan ?? int.MaxValue) < 1) {
                     throw new InvalidOperationException("ColSpan must not be lower than 1.");
-                }               
+                }
 
                 theColumnIndex++;
             }
 
-            var theRows = tableInfoProvider.GetRows();
+            IEnumerable<TRow> theRows = tableInfoProvider.GetRows();
 
             foreach (TRow theRow in theRows) {
                 int theColumnCount = theResult.Count;
@@ -478,7 +476,8 @@ namespace Epos.Utilities
                 for (int theIndex = 0; theIndex < theColumnCount; theIndex++) {
                     TextColumn<TColumn> theTextColumn = theResult[theColumnIndex];
 
-                    var theValue = tableInfoProvider.GetCellValue(theRow, theTextColumn.Column, theIndex);
+                    (string CellValue, int ColSpan) theValue =
+                        tableInfoProvider.GetCellValue(theRow, theTextColumn.Column, theIndex);
 
                     if (theValue.ColSpan < 1) {
                         throw new InvalidOperationException("ColSpan must not be lower than 1.");

@@ -17,7 +17,7 @@ namespace Epos.Utilities.Composition
 
         internal object GetInstance() {
             Delegate? theFactoryMethod = ComponentRegistration!.FactoryMethod;
-            if (theFactoryMethod != null) {
+            if (theFactoryMethod is not null) {
                 return GetInstance(theFactoryMethod);
             } else {
                 ConstructorInfo theConstructurInfo = ComponentRegistration.ConstructurInfo;
@@ -53,7 +53,7 @@ namespace Epos.Utilities.Composition
         private object GetParameterValue(Container container, ParameterInfo parameterInfo) {
             Type theParameterType = parameterInfo.ParameterType;
 
-            if (!ComponentRegistration!.Parameters.TryGetValue(parameterInfo.Name, out object theParameterValue)) {
+            if (!ComponentRegistration!.Parameters.TryGetValue(parameterInfo.Name!, out object? theParameterValue)) {
                 theParameterValue = container.Resolve(theParameterType);
             } else {
                 TestParameterValue(parameterInfo, theParameterValue);
@@ -65,7 +65,7 @@ namespace Epos.Utilities.Composition
         private static void TestParameterValue(ParameterInfo parameterInfo, object parameterValue) {
             Type theParameterType = parameterInfo.ParameterType;
 
-            if (parameterValue != null) {
+            if (parameterValue is not null) {
                 if (parameterValue.GetType() != theParameterType) {
                     throw new InvalidOperationException(
                         $"Parameter '{parameterInfo.Name}' must be of type {theParameterType.Dump()} (is {parameterValue.GetType().Dump()})."

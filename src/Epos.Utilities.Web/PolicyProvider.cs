@@ -41,7 +41,7 @@ namespace Epos.Utilities.Web
 
         #region --- Helper methods ---
 
-        private AsyncPolicy[] CreatePolicies() => new AsyncPolicy[] {
+        private AsyncPolicy[] CreatePolicies() => [
             Policy
                 .Handle<HttpRequestException>()
                 .WaitAndRetryAsync(
@@ -69,7 +69,7 @@ namespace Epos.Utilities.Web
                         myLogger?.LogTrace("Circuit breaker reset");
                     }
                 )
-        };
+        ];
 
         #endregion
     }

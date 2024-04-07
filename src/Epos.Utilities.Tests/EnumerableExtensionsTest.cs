@@ -26,8 +26,8 @@ namespace Epos.Utilities
 
         [Test]
         public void ForEach() {
-            string[] theStringEnumerable = new[] { "This ", "is ", "a ", "test." };
-            
+            string[] theStringEnumerable = ["This ", "is ", "a ", "test."];
+
             var theBuilder = new StringBuilder();
             theStringEnumerable.ForEach(s => theBuilder.Append(s));
 

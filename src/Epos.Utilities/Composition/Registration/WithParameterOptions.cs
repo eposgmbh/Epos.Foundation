@@ -21,7 +21,7 @@ namespace Epos.Utilities.Composition
         /// <param name="value">Parameter value</param>
         /// <returns>Options following this fluent interface step</returns>
         public WithParameterOptions AndParameter(string parameterName, object value) {
-            if (parameterName == null) {
+            if (parameterName is null) {
                 throw new ArgumentNullException(nameof(parameterName));
             }
 

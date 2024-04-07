@@ -15,10 +15,10 @@ namespace Epos.CommandLine.Helpers
         /// <param name="successAction">Success action that gets the reponse from the REST client</param>
         /// <returns>Exit code</returns>
         public static int Execute(Func<dynamic> dalSoftRestClientFunc, Func<dynamic, int> successAction) {
-            if (dalSoftRestClientFunc == null) {
+            if (dalSoftRestClientFunc is null) {
                 throw new ArgumentNullException(nameof(dalSoftRestClientFunc));
             }
-            if (successAction == null) {
+            if (successAction is null) {
                 throw new ArgumentNullException(nameof(successAction));
             }
 

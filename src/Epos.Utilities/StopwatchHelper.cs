@@ -12,7 +12,7 @@ namespace Epos.Utilities
         /// <param name="action">Action</param>
         /// <returns>Number of milliseconds</returns>
         public static long GetMilliseconds(Action action) {
-            if (action == null) {
+            if (action is null) {
                 throw new ArgumentNullException(nameof(action));
             }
 

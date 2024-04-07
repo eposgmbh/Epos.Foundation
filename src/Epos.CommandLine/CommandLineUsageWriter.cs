@@ -15,16 +15,14 @@ namespace Epos.CommandLine
         private readonly TextWriter myTextWriter;
         private readonly Action myErrorAction;
 
-        public CommandLineUsageWriter(CommandLineDefinition definition)
-        {
+        public CommandLineUsageWriter(CommandLineDefinition definition) {
             myDefinition = definition;
 
             myTextWriter = definition.Configuration.UsageTextWriter;
             myErrorAction = definition.Configuration.ErrorAction;
         }
 
-        public void WriteAndExit(string? errorMessage = null)
-        {
+        public void WriteAndExit(string? errorMessage = null) {
             var theResult = new StringBuilder("Usage: ");
 
             theResult
@@ -34,8 +32,7 @@ namespace Epos.CommandLine
                 .Append('>')
                 .Append(Environment.NewLine);
 
-            if (errorMessage != null)
-            {
+            if (errorMessage is not null) {
                 theResult
                     .Append(Environment.NewLine)
                     .Append("Error: ")
@@ -58,8 +55,7 @@ namespace Epos.CommandLine
                 theMaxSubcommandNameLength + SeparatorCharCount
             );
 
-            foreach (CommandLineSubcommand theSubcommand in myDefinition.Subcommands)
-            {
+            foreach (CommandLineSubcommand theSubcommand in myDefinition.Subcommands) {
                 theResult.AppendFormat(
                     theFormatString,
                     theSubcommand.Name,
@@ -77,22 +73,19 @@ namespace Epos.CommandLine
             myErrorAction();
         }
 
-        public void WriteAndExit(CommandLineSubcommand subcommand, string? errorMessage = null)
-        {
+        public void WriteAndExit(CommandLineSubcommand subcommand, string? errorMessage = null) {
             StringBuilder theResult = new StringBuilder()
                 .Append("Usage: ")
                 .Append(myDefinition.Name);
 
             int theLineInsertionCount = theResult.Length;
 
-            if (subcommand.Name != CommandLineSubcommand.DefaultName)
-            {
+            if (subcommand.Name != CommandLineSubcommand.DefaultName) {
                 theResult.Append(Space).Append(subcommand.Name);
                 theLineInsertionCount += 2 + subcommand.Name.Length;
             }
 
-            foreach (CommandLineOption theOption in subcommand.Options)
-            {
+            foreach (CommandLineOption theOption in subcommand.Options) {
                 theResult
                     .Append(Space)
                     .Append(theOption.ToLongCommandLineString());
@@ -100,8 +93,7 @@ namespace Epos.CommandLine
                 MakeLineBreakIfNeccessary(theResult, theLineInsertionCount);
             }
 
-            foreach (CommandLineParameter theParameter in subcommand.Parameters)
-            {
+            foreach (CommandLineParameter theParameter in subcommand.Parameters) {
                 theResult
                     .Append(Space)
                     .Append(theParameter.ToCommandLineString());
@@ -111,8 +103,7 @@ namespace Epos.CommandLine
 
             theResult.Append(Environment.NewLine);
 
-            if (errorMessage != null)
-            {
+            if (errorMessage is not null) {
                 theResult
                     .Append(Environment.NewLine)
                     .Append("Error: ")
@@ -135,20 +126,17 @@ namespace Epos.CommandLine
                 theMaxOptionParameterLength + SeparatorCharCount
             );
 
-            if (subcommand.Options.Any())
-            {
+            if (subcommand.Options.Any()) {
                 theResult
                     .Append(Environment.NewLine)
                     .Append("Options")
                     .Append(Environment.NewLine);
 
-                foreach (CommandLineOption theOption in subcommand.Options)
-                {
+                foreach (CommandLineOption theOption in subcommand.Options) {
                     string theDescription = theOption.Description;
 
                     object? theDefaultValue = theOption.GetDefaultValue();
-                    if (theDefaultValue != null)
-                    {
+                    if (theDefaultValue is not null) {
                         theDescription += " " + GetDefaultsToText(theDefaultValue);
                     }
 
@@ -165,18 +153,15 @@ namespace Epos.CommandLine
                 }
             }
 
-            if (subcommand.Parameters.Any())
-            {
+            if (subcommand.Parameters.Any()) {
                 theResult
                     .Append(Environment.NewLine)
                     .Append("Parameters")
                     .Append(Environment.NewLine);
 
-                foreach (CommandLineParameter theParameter in subcommand.Parameters)
-                {
+                foreach (CommandLineParameter theParameter in subcommand.Parameters) {
                     string theDescription = theParameter.Description;
-                    if (theParameter.IsOptional)
-                    {
+                    if (theParameter.IsOptional) {
                         theDescription += " " + GetDefaultsToText(theParameter.GetDefaultValue()!);
                     }
 
@@ -197,67 +182,51 @@ namespace Epos.CommandLine
             myErrorAction();
         }
 
-        private static string GetDefaultsToText(object defaultValue)
-        {
+        private static string GetDefaultsToText(object defaultValue) {
             bool isString = defaultValue is string;
 
             var theResult = new StringBuilder(">>> defaults to ");
 
-            if (isString)
-            {
+            if (isString) {
                 theResult.Append('"');
             }
 
             theResult.Append(defaultValue);
 
-            if (isString)
-            {
+            if (isString) {
                 theResult.Append('"');
             }
 
             return theResult.ToString();
         }
 
-        private int ConsoleWindowWidth
-        {
-            get
-            {
-                if (myTextWriter == Console.Out)
-                {
-                    try
-                    {
+        private int ConsoleWindowWidth {
+            get {
+                if (myTextWriter == Console.Out) {
+                    try {
                         return Console.WindowWidth;
-                    }
-                    catch
-                    {
+                    } catch {
                         return DefaultWidth;
                     }
-                }
-                else
-                {
+                } else {
                     return DefaultWidth;
                 }
             }
         }
 
-        private string GetLineBreakedText(string text, int lineInsertionCount)
-        {
+        private string GetLineBreakedText(string text, int lineInsertionCount) {
             var theResult = new StringBuilder();
 
             int theLength = lineInsertionCount;
-            foreach (string theTextToken in text.Split())
-            {
-                if (theLength + theTextToken.Length + 1 > ConsoleWindowWidth)
-                {
+            foreach (string theTextToken in text.Split()) {
+                if (theLength + theTextToken.Length + 1 > ConsoleWindowWidth) {
                     theResult
                         .Append(Environment.NewLine)
                         .Append(Space, lineInsertionCount)
                         .Append(theTextToken)
                         .Append(Space);
                     theLength = lineInsertionCount + theTextToken.Length + 1;
-                }
-                else
-                {
+                } else {
                     theResult
                         .Append(theTextToken)
                         .Append(Space);
@@ -266,16 +235,14 @@ namespace Epos.CommandLine
                 }
             }
 
-            if (theResult[theResult.Length - 1] == Space)
-            {
+            if (theResult[theResult.Length - 1] == Space) {
                 theResult.Length -= 1;
             }
 
             return theResult.ToString();
         }
 
-        private void MakeLineBreakIfNeccessary(StringBuilder currentResult, int lineInsertionCount)
-        {
+        private void MakeLineBreakIfNeccessary(StringBuilder currentResult, int lineInsertionCount) {
             string theCurrentResult = currentResult.ToString();
             int theLastLineBreakIndex = theCurrentResult.LastIndexOf(Environment.NewLine, StringComparison.Ordinal);
 
@@ -286,19 +253,16 @@ namespace Epos.CommandLine
                     theCurrentResult.Substring(theLastLineBreakIndex + Environment.NewLine.Length);
 
             int theStartIndex = theCurrentLine.Length - 1;
-            if (theCurrentLine.Length > ConsoleWindowWidth)
-            {
+            if (theCurrentLine.Length > ConsoleWindowWidth) {
                 // Letztes Space suchen
                 int theLastSpaceIndex;
-                do
-                {
+                do {
                     theLastSpaceIndex = theCurrentLine.LastIndexOf(Space, theStartIndex);
                     theStartIndex = theLastSpaceIndex - 1;
                 } while (theLastSpaceIndex > ConsoleWindowWidth);
 
                 // Am letzten Space umbrechen und nächste Zeile mit lineInsertionCount vielen Leerzeichen beginnen
-                if (theLastSpaceIndex != -1)
-                {
+                if (theLastSpaceIndex != -1) {
                     currentResult.Replace(
                         oldValue: Space.ToString(),
                         newValue: Environment.NewLine + new string(Space, lineInsertionCount),

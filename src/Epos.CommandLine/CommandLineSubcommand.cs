@@ -39,55 +39,46 @@ namespace Epos.CommandLine
             var theOptions = new TOptions();
             Type theOptionsType = typeof(TOptions);
 
-            foreach (CommandLineToken theArgToken in argTokens)
-            {
-                if (theArgToken.Kind != CommandLineTokenKind.Subcommand)
-                {
+            foreach (CommandLineToken theArgToken in argTokens) {
+                if (theArgToken.Kind != CommandLineTokenKind.Subcommand) {
                     // Option oder Parameter
                     string thePropertyName = theArgToken.Name.Replace("-", string.Empty); // de-kebap-style
 
                     // Spezifische (Attribute) PropertyInfo finden
-                    PropertyInfo thePropertyInfo;
+                    PropertyInfo? thePropertyInfo;
 
-                    if (theArgToken.Kind == CommandLineTokenKind.Option)
-                    {
+                    if (theArgToken.Kind == CommandLineTokenKind.Option) {
                         thePropertyInfo =
                             theOptionsType
                                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                                 .SingleOrDefault(
-                                    pi => pi.GetCustomAttribute<CommandLineOptionAttribute>() != null &&
-                                          pi.GetCustomAttribute<CommandLineOptionAttribute>().Letter.ToString() == thePropertyName
+                                    pi => pi.GetCustomAttribute<CommandLineOptionAttribute>() is not null &&
+                                          pi.GetCustomAttribute<CommandLineOptionAttribute>()!.Letter.ToString() == thePropertyName
                                 );
-                    }
-                    else
-                    {
+                    } else {
                         // Parameter
                         thePropertyInfo =
                             theOptionsType
                                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                                 .SingleOrDefault(
-                                    pi => pi.GetCustomAttribute<CommandLineParameterAttribute>() != null &&
-                                          pi.GetCustomAttribute<CommandLineParameterAttribute>().Name.ToLower() == thePropertyName
+                                    pi => pi.GetCustomAttribute<CommandLineParameterAttribute>() is not null &&
+                                          pi.GetCustomAttribute<CommandLineParameterAttribute>()!.Name.ToLower() == thePropertyName
                                 );
                     }
 
-                    if (thePropertyInfo == null)
-                    {
+                    if (thePropertyInfo is null) {
                         // Property mit genau dem passenden Namen (case-insensitive) finden
                         thePropertyInfo = theOptionsType.GetProperty(
                             thePropertyName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase
                         );
                     }
 
-                    if (thePropertyInfo != null)
-                    {
+                    if (thePropertyInfo is not null) {
                         // Property gefunden, Wert setzen
-                        thePropertyInfo.SetMethod.Invoke(theOptions, new[] { theArgToken.Value });
-                    }
-                    else
-                    {
+                        thePropertyInfo.SetMethod?.Invoke(theOptions, [theArgToken.Value]);
+                    } else {
                         throw new InvalidOperationException(
-                            $"No property \"{thePropertyName}\" found on type {theOptionsType.FullName}."
+                            $"No property for \"{thePropertyName}\" found on options type {theOptionsType.FullName}."
                         );
                     }
                 }
@@ -112,8 +103,7 @@ namespace Epos.CommandLine
         /// </summary>
         /// <param name="name">Subcommand name</param>
         /// <param name="description">Description</param>
-        protected CommandLineSubcommand(string name, string description)
-        {
+        protected CommandLineSubcommand(string name, string description) {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Description = description ?? throw new ArgumentNullException(nameof(description));
 

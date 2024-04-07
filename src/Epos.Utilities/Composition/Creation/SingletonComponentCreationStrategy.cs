@@ -7,10 +7,10 @@ namespace Epos.Utilities.Composition
     {
         private object? mySingleton;
 
-        protected override object GetInstance(ConstructorInfo constructorInfo, object[] parameterValues) =>
-            mySingleton ?? (mySingleton = constructorInfo.Invoke(parameterValues));
+        protected override object GetInstance(ConstructorInfo constructorInfo, object[] parameterValues)
+            => mySingleton ??= constructorInfo.Invoke(parameterValues);
 
-        protected override object GetInstance(Delegate factoryMethod) =>
-            mySingleton ?? (mySingleton = factoryMethod.DynamicInvoke());
+        protected override object GetInstance(Delegate factoryMethod)
+            => mySingleton ??= factoryMethod.DynamicInvoke()!;
     }
 }

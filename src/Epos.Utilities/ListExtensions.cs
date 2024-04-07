@@ -14,10 +14,10 @@ namespace Epos.Utilities
         /// <param name="anotherList">List</param>
         /// <returns><b>true</b>, if both lists are equal; otherwise <b>false</b></returns>
         public static bool EqualsList<T>(this IList<T> list, IList<T> anotherList) {
-            if (list == null) {
+            if (list is null) {
                 throw new ArgumentNullException(nameof(list));
             }
-            if (anotherList == null) {
+            if (anotherList is null) {
                 throw new ArgumentNullException(nameof(anotherList));
             }
 
@@ -46,7 +46,7 @@ namespace Epos.Utilities
         /// <param name="list">List</param>
         /// <returns>List hashcode</returns>
         public static int GetListHashCode<T>(this IList<T> list) {
-            if (list == null) {
+            if (list is null) {
                 throw new ArgumentNullException(nameof(list));
             }
 

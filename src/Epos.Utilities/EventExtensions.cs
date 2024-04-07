@@ -27,7 +27,7 @@ namespace Epos.Utilities
         public static void Raise<TEventArgs>(
             this EventHandler<TEventArgs>? handler, object sender, TEventArgs e
         ) where TEventArgs : EventArgs {
-            if (e == null) {
+            if (e is null) {
                 throw new ArgumentNullException(nameof(e));
             }
 

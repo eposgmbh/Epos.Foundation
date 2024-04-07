@@ -14,7 +14,7 @@ namespace Epos.TestUtilities.Docker
         /// <param name="options">Options</param>
         /// <returns>Docker container</returns>
         public static DockerContainer StartAndWaitForReadynessLogPhrase(DockerContainerOptions options) {
-            if (options == null) {
+            if (options is null) {
                 throw new ArgumentNullException(nameof(options));
             }
 
@@ -22,13 +22,13 @@ namespace Epos.TestUtilities.Docker
                 throw new ArgumentException("options.Name must not be null or empty.");
             }
 
-            if (options.ImageName == null) {
+            if (options.ImageName is null) {
                 throw new ArgumentNullException("options.ImageName");
             }
 
             var theDockerArguments = new StringBuilder($"run --detach --name ").Append(options.Name);
 
-            if (options.Hostname != null) {
+            if (options.Hostname is not null) {
                 theDockerArguments.Append($" --hostname {options.Hostname}");
             }
 

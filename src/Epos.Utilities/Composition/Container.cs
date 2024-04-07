@@ -17,7 +17,7 @@ namespace Epos.Utilities.Composition
         /// specified <paramref name="installer"/>.</summary>
         /// <param name="installer">Container installer</param>
         public Container(ContainerInstaller installer) {
-            if (installer == null) {
+            if (installer is null) {
                 throw new ArgumentNullException(nameof(installer));
             }
 
@@ -58,7 +58,7 @@ namespace Epos.Utilities.Composition
         /// <typeparam name="T">Type</typeparam>
         /// <returns>Instance</returns>
         public T Resolve<T>() {
-            return (T) Resolve(typeof (T));
+            return (T) Resolve(typeof(T));
         }
 
         /// <summary>Resolves an instance for the abstraction
@@ -66,7 +66,7 @@ namespace Epos.Utilities.Composition
         /// <param name="type">Type</param>
         /// <returns>Instance</returns>
         public object Resolve(Type type) {
-            if (type == null) {
+            if (type is null) {
                 throw new ArgumentNullException(nameof(type));
             }
 

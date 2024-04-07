@@ -21,7 +21,7 @@ namespace Epos.Utilities.Web
         public object? this[string key] {
             get {
                 string theGuidString = myHttpContextAccessor.HttpContext.Session.GetString(ObjectSessionKey);
-                if (theGuidString == null) {
+                if (theGuidString is null) {
                     return null;
                 }
 
@@ -30,7 +30,7 @@ namespace Epos.Utilities.Web
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
                 IDictionary<string, object?>? theSession = Session.Get(theGuid);
 #pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
-                if (theSession == null) {
+                if (theSession is null) {
                     theSession = new Dictionary<string, object?>();
                     Session[theGuid] = theSession;
                 }
@@ -40,7 +40,7 @@ namespace Epos.Utilities.Web
 
             set {
                 string theGuidString = myHttpContextAccessor.HttpContext.Session.GetString(ObjectSessionKey);
-                if (theGuidString == null) {
+                if (theGuidString is null) {
                     theGuidString = Guid.NewGuid().ToString();
                     myHttpContextAccessor.HttpContext.Session.SetString(ObjectSessionKey, theGuidString);
                 }
@@ -50,7 +50,7 @@ namespace Epos.Utilities.Web
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
                 IDictionary<string, object?>? theSession = Session.Get(theGuid);
 #pragma warning restore CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
-                if (theSession == null) {
+                if (theSession is null) {
                     theSession = new Dictionary<string, object?>();
                     Session[theGuid] = theSession;
                 }

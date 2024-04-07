@@ -26,9 +26,9 @@ namespace Epos.CommandLine
 
             Assert.Throws<ArgumentNullException>(() => theCommandLineDefinition.Try(null!));
 
-            Assert.Throws<ArgumentNullException>(() => theCommandLineDefinition.Try(new string[] { null! }));
+            Assert.Throws<ArgumentNullException>(() => theCommandLineDefinition.Try([null!]));
 
-            Assert.Throws<InvalidOperationException>(() => theCommandLineDefinition.Try(new[] { "non-existing-subcommand" }));
+            Assert.Throws<InvalidOperationException>(() => theCommandLineDefinition.Try(["non-existing-subcommand"]));
 
             bool isRun = false;
             theCommandLineDefinition.Subcommands.Add(
@@ -38,7 +38,7 @@ namespace Epos.CommandLine
                 }
             );
 
-            theCommandLineDefinition.Try(new string[] { });
+            theCommandLineDefinition.Try([]);
 
             Assert.That(theConsoleOutput.ToString(), Is.Empty);
             Assert.That(isRun, Is.True);
@@ -61,7 +61,7 @@ namespace Epos.CommandLine
 
             Assert.That(theCommandLineDefinition.Name, Is.EqualTo("sample"));
 
-            Assert.Throws<InvalidOperationException>(() => theCommandLineDefinition.Try(new string[] { }));
+            Assert.Throws<InvalidOperationException>(() => theCommandLineDefinition.Try([]));
 
             theCommandLineDefinition.Subcommands.Add(
                 new CommandLineSubcommand<object>("build", "Builds something.")
@@ -75,7 +75,7 @@ namespace Epos.CommandLine
             Assert.That(theCommandLineDefinition.Subcommands[0].Options, Is.Empty);
             Assert.That(theCommandLineDefinition.Subcommands[1].Parameters, Is.Empty);
 
-            theCommandLineDefinition.Try(new string[] { });
+            theCommandLineDefinition.Try([]);
 
             Assert.That(
                 theConsoleOutput.ToString(),
@@ -124,7 +124,7 @@ namespace Epos.CommandLine
                 }
             };
 
-            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(new[] { "test" }));
+            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(["test"]));
 
             Assert.That(
                 theConsoleOutput.ToString(),
@@ -138,7 +138,7 @@ namespace Epos.CommandLine
 
             theConsoleOutput.GetStringBuilder().Clear();
 
-            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(new[] { "build" }));
+            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(["build"]));
 
             Assert.That(
                 theConsoleOutput.ToString(),
@@ -153,7 +153,7 @@ namespace Epos.CommandLine
 
             theConsoleOutput.GetStringBuilder().Clear();
 
-            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(new[] { "build", "no-number" }));
+            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(["build", "no-number"]));
 
             Assert.That(
                 theConsoleOutput.ToString(),
@@ -168,19 +168,19 @@ namespace Epos.CommandLine
 
             theConsoleOutput.GetStringBuilder().Clear();
 
-            theCommandLineDefinition.Try(new[] { "build", "33" });
+            theCommandLineDefinition.Try(["build", "33"]);
             Assert.That(theBuildOptions!.ProjectNumber, Is.EqualTo(33));
             Assert.That(theBuildOptions.Memory, Is.EqualTo("1 GB"));
             Assert.That(theBuildOptions.DummyParameter, Is.Null);
             Assert.That(theConsoleOutput.ToString(), Is.Empty);
 
-            theCommandLineDefinition.Try(new[] { "build", "66", "2 GB" });
+            theCommandLineDefinition.Try(["build", "66", "2 GB"]);
             Assert.That(theBuildOptions.ProjectNumber, Is.EqualTo(66));
             Assert.That(theBuildOptions.Memory, Is.EqualTo("2 GB"));
             Assert.That(theBuildOptions.DummyParameter, Is.Null);
             Assert.That(theConsoleOutput.ToString(), Is.Empty);
 
-            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(new[] { "build", "33", "2 GB", "Too much!" }));
+            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(["build", "33", "2 GB", "Too much!"]));
 
             Assert.That(
                 theConsoleOutput.ToString(),
@@ -226,7 +226,7 @@ namespace Epos.CommandLine
                 }
             };
 
-            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(new[] { "test" }));
+            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(["test"]));
             Assert.That(
                 theConsoleOutput.ToString(),
                 Is.EqualTo(
@@ -242,7 +242,7 @@ namespace Epos.CommandLine
 
             theConsoleOutput.GetStringBuilder().Clear();
 
-            theCommandLineDefinition.Try(new[] { "test", "-a" });
+            theCommandLineDefinition.Try(["test", "-a"]);
             Assert.That(theTestOptions!.All, Is.True);
             Assert.That(theTestOptions.From, Is.EqualTo(0));
             Assert.That(theTestOptions.To, Is.EqualTo(0));
@@ -250,7 +250,7 @@ namespace Epos.CommandLine
 
             theConsoleOutput.GetStringBuilder().Clear();
 
-            theCommandLineDefinition.Try(new[] { "test", "-s", "123" });
+            theCommandLineDefinition.Try(["test", "-s", "123"]);
             Assert.That(theTestOptions.All, Is.False);
             Assert.That(theTestOptions.From, Is.EqualTo(0));
             Assert.That(theTestOptions.To, Is.EqualTo(0));
@@ -258,7 +258,7 @@ namespace Epos.CommandLine
 
             theConsoleOutput.GetStringBuilder().Clear();
 
-            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(new[] { "test", "-a", "-s", "123" }));
+            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(["test", "-a", "-s", "123"]));
             Assert.That(
                 theConsoleOutput.ToString(),
                 Is.EqualTo(
@@ -274,7 +274,7 @@ namespace Epos.CommandLine
 
             theConsoleOutput.GetStringBuilder().Clear();
 
-            theCommandLineDefinition.Try(new[] { "test", "-f", "123", "-t", "456" });
+            theCommandLineDefinition.Try(["test", "-f", "123", "-t", "456"]);
             Assert.That(theTestOptions.All, Is.False);
             Assert.That(theTestOptions.From, Is.EqualTo(123));
             Assert.That(theTestOptions.To, Is.EqualTo(456));
@@ -283,7 +283,7 @@ namespace Epos.CommandLine
             theConsoleOutput.GetStringBuilder().Clear();
 
             Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(
-                new[] { "test", "-f", "123", "-t", "456", "-a" }
+                ["test", "-f", "123", "-t", "456", "-a"]
             ));
             Assert.That(
                 theConsoleOutput.ToString(),
@@ -378,7 +378,7 @@ namespace Epos.CommandLine
             theCommandLineDefinition.Configuration.ErrorAction = () => throw new CommandLineError();
             theConsoleOutput.GetStringBuilder().Clear();
 
-            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(new[] { "build" }));
+            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(["build"]));
 
             Assert.That(
                 theConsoleOutput.ToString(),
@@ -398,21 +398,21 @@ namespace Epos.CommandLine
 
             theConsoleOutput.GetStringBuilder().Clear();
 
-            theCommandLineDefinition.Try(new[] { "build", "-p", "0", "dummy" });
+            theCommandLineDefinition.Try(["build", "-p", "0", "dummy"]);
             Assert.That(theBuildOptions!.ProjectNumber, Is.EqualTo(0));
             Assert.That(theBuildOptions.Memory, Is.EqualTo("1 GB"));
             Assert.That(theBuildOptions.DummyParameter, Is.EqualTo("dummy"));
             Assert.That(theBuildOptions.Disable, Is.False);
             Assert.That(theConsoleOutput.ToString(), Is.Empty);
 
-            theCommandLineDefinition.Try(new[] { "build", "-d", "-p", "0", "dummy" });
+            theCommandLineDefinition.Try(["build", "-d", "-p", "0", "dummy"]);
             Assert.That(theBuildOptions.ProjectNumber, Is.EqualTo(0));
             Assert.That(theBuildOptions.Memory, Is.EqualTo("1 GB"));
             Assert.That(theBuildOptions.DummyParameter, Is.EqualTo("dummy"));
             Assert.That(theBuildOptions.Disable, Is.True);
             Assert.That(theConsoleOutput.ToString(), Is.Empty);
 
-            theCommandLineDefinition.Try(new[] { "build", "-d", "-p", "11", "dummy" });
+            theCommandLineDefinition.Try(["build", "-d", "-p", "11", "dummy"]);
             Assert.That(theBuildOptions.ProjectNumber, Is.EqualTo(11));
             Assert.That(theBuildOptions.Memory, Is.EqualTo("1 GB"));
             Assert.That(theBuildOptions.DummyParameter, Is.EqualTo("dummy"));
@@ -420,7 +420,7 @@ namespace Epos.CommandLine
             Assert.That(theBuildOptions.Zzzz, Is.False);
             Assert.That(theConsoleOutput.ToString(), Is.Empty);
 
-            theCommandLineDefinition.Try(new[] { "build", "-d", "--project-number", "99", "-m", "2 GB", "dummy" });
+            theCommandLineDefinition.Try(["build", "-d", "--project-number", "99", "-m", "2 GB", "dummy"]);
             Assert.That(theBuildOptions.ProjectNumber, Is.EqualTo(99));
             Assert.That(theBuildOptions.Memory, Is.EqualTo("2 GB"));
             Assert.That(theBuildOptions.DummyParameter, Is.EqualTo("dummy"));
@@ -428,7 +428,7 @@ namespace Epos.CommandLine
             Assert.That(theBuildOptions.Zzzz, Is.False);
             Assert.That(theConsoleOutput.ToString(), Is.Empty);
 
-            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(new[] { "build", "-dz", "-p", "99", "dummy" }));
+            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(["build", "-dz", "-p", "99", "dummy"]));
 
             Assert.That(
                 theConsoleOutput.ToString(),
@@ -448,7 +448,7 @@ namespace Epos.CommandLine
 
             theConsoleOutput.GetStringBuilder().Clear();
 
-            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(new[] { "build", "-p", "abc", "dummy" }));
+            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(["build", "-p", "abc", "dummy"]));
 
             Assert.That(
                 theConsoleOutput.ToString(),
@@ -468,7 +468,7 @@ namespace Epos.CommandLine
 
             theConsoleOutput.GetStringBuilder().Clear();
 
-            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(new[] { "build", "-p" }));
+            Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(["build", "-p"]));
 
             Assert.That(
                 theConsoleOutput.ToString(),

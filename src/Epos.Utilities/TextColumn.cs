@@ -28,7 +28,7 @@ namespace Epos.Utilities
             set {
                 mySecondaryHeader = value;
 
-                if (mySecondaryHeader != null) {
+                if (mySecondaryHeader is not null) {
                     Width = Math.Max(Width, mySecondaryHeader.Length);
                 }
             }
@@ -40,7 +40,7 @@ namespace Epos.Utilities
             set {
                 myDataType = value;
 
-                if (myDataType != null) {
+                if (myDataType is not null) {
                     Width = Math.Max(Width, myDataType.Length);
                 }
             }

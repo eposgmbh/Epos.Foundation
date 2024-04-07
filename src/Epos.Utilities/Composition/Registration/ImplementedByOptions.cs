@@ -13,7 +13,7 @@ namespace Epos.Utilities.Composition
     public sealed class ImplementedByOptions<TAbstraction, TImplementation> : LifetimeOptions where TImplementation : TAbstraction
     {
         internal ImplementedByOptions(ComponentRegistration componentRegistration) : base(componentRegistration) {
-            ComponentRegistration.ConcreteType = typeof (TImplementation);
+            ComponentRegistration.ConcreteType = typeof(TImplementation);
         }
 
         /// <summary>Specifies the first constructor parameter of the implementation.
@@ -22,7 +22,7 @@ namespace Epos.Utilities.Composition
         /// <param name="value">Parameter value</param>
         /// <returns>Options following this fluent interface step</returns>
         public WithParameterOptions WithParameter(string parameterName, object value) {
-            if (parameterName == null) {
+            if (parameterName is null) {
                 throw new ArgumentNullException(nameof(parameterName));
             }
 

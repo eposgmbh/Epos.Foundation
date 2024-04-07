@@ -6,8 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Epos.Utilities
 {
-    /// <summary>Collection of extension methods for the
-    /// <see cref="System.String" /> type.</summary>
+    /// <summary>Collection of extension methods for the <see cref="string" /> type.</summary>
     public static class StringExtensions
     {
         /// <summary>Extracts a substring between specified delimiter strings.</summary>
@@ -19,13 +18,13 @@ namespace Epos.Utilities
         /// <param name="and">Right delimiter</param>
         /// <returns>Extracted string</returns>
         public static string Extract(this string value, string between, string and) {
-            if (value == null) {
+            if (value is null) {
                 throw new ArgumentNullException(nameof(value));
             }
-            if (between == null) {
+            if (between is null) {
                 throw new ArgumentNullException(nameof(between));
             }
-            if (and == null) {
+            if (and is null) {
                 throw new ArgumentNullException(nameof(and));
             }
 
@@ -97,7 +96,7 @@ namespace Epos.Utilities
                     return false;
                 }
 
-                object theValue = theConverter.ConvertFromString(null, cultureInfo, value);
+                object theValue = theConverter.ConvertFromString(null, cultureInfo, value)!;
                 convertedValue = isNullableType ? Activator.CreateInstance(destinationType, theValue) : theValue;
 
                 return true;

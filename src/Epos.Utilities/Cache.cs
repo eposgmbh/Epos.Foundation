@@ -8,9 +8,11 @@ namespace Epos.Utilities
     /// <summary>Provides a general in-memory Cache.</summary>
     /// <typeparam name="TKey">Cache key type</typeparam>
     /// <typeparam name="TValue">Cache value type (must be a <b>class</b>)</typeparam>
-    public sealed class Cache<TKey, TValue> where TValue : class
+    public sealed class Cache<TKey, TValue>
+        where TKey : notnull
+        where TValue : class
     {
-        private static readonly object SyncLock = new object();
+        private static readonly object SyncLock = new();
 
         private readonly Dictionary<TKey, TValue> myInternalCache;
         private readonly Queue<TKey> myQueue;
@@ -30,26 +32,30 @@ namespace Epos.Utilities
             myInternalCache = new Dictionary<TKey, TValue>(capacity + 1);
             myQueue = new Queue<TKey>(capacity + 1);
         }
-		
+
         /// <summary>Sets or returns a cache value.</summary>
         /// <param name="key">Cache key</param>
         /// <returns>Value or <b>null</b>, if no value is found</returns>
-        public TValue this[TKey key] {
+        public TValue? this[TKey key] {
             get {
-                myInternalCache.TryGetValue(key, out TValue theResult);
+                myInternalCache.TryGetValue(key, out TValue? theResult);
                 return theResult;
             }
-            set {
-                lock (SyncLock) {
-                    if (!myInternalCache.ContainsKey(key)) {
-                        myQueue.Enqueue(key);
-                    }
-                    myInternalCache[key] = value;
+        }
 
-                    if (myQueue.Count > Capacity) {
-                        TKey theFirstKey = myQueue.Dequeue();
-                        myInternalCache.Remove(theFirstKey);
-                    }
+        /// <summary> Adds a cache value. </summary>
+        /// <param name="key">Key</param>
+        /// <param name="value">Value</param>
+        public void Add(TKey key, TValue value) {
+            lock (SyncLock) {
+                if (!myInternalCache.ContainsKey(key)) {
+                    myQueue.Enqueue(key);
+                }
+                myInternalCache[key] = value;
+
+                if (myQueue.Count > Capacity) {
+                    TKey theFirstKey = myQueue.Dequeue();
+                    myInternalCache.Remove(theFirstKey);
                 }
             }
         }

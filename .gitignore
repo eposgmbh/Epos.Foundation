@@ -261,5 +261,6 @@ __pycache__/
 *.pyc
 
 # Custom
-docs/Api/
+docs/api/
 docs/log.txt
+docs/output
