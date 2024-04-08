@@ -11,6 +11,7 @@
     <Description>Utilities</Description>
     <Authors>Jan Bohlen</Authors>
     <Company>Epos</Company>
+    <IsAotCompatible>true</IsAotCompatible>
     <PackageLicenseUrl>https://github.com/eposgmbh/Epos.Foundation/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/eposgmbh/Epos.Foundation</PackageProjectUrl>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>

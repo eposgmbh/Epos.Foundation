@@ -2,15 +2,14 @@
 using System.Threading;
 using NUnit.Framework;
 
-namespace Epos.Utilities
+namespace Epos.Utilities;
+
+[SetUpFixture]
+public class TestSuite
 {
-    [SetUpFixture]
-    public class TestSuite
-    {
-        [OneTimeSetUp]
-        public void SetUp() {
-            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-        }
+    [OneTimeSetUp]
+    public void SetUp() {
+        Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+        Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
     }
 }

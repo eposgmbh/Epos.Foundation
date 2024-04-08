@@ -1,9 +1,8 @@
-﻿namespace Epos.CommandLine
+﻿namespace Epos.CommandLine;
+
+internal enum CommandLineTokenKind
 {
-    internal enum CommandLineTokenKind
-    {
-        Subcommand,
-        Option,
-        Parameter
-    }
+    Subcommand,
+    Option,
+    Parameter
 }

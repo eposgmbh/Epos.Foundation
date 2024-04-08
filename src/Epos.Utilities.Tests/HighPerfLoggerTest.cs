@@ -5,53 +5,52 @@ using System.Text;
 
 using NUnit.Framework;
 
-namespace Epos.Utilities
+namespace Epos.Utilities;
+
+[TestFixture]
+public class HighPerfLoggerTest
 {
-    [TestFixture]
-    public class HighPerfLoggerTest
-    {
-        [Test]
-        public void SetLogAction() {
-            bool isLoggerActionCalled = false;
-            HighPerfLogger.SetLogAction(str => { isLoggerActionCalled = true; });
-            Assert.That(isLoggerActionCalled, Is.False);
-            
-            HighPerfLogger.Log("Hello World!");
-            Assert.That(isLoggerActionCalled, Is.True);
+    [Test]
+    public void SetLogAction() {
+        bool isLoggerActionCalled = false;
+        HighPerfLogger.SetLogAction(str => { isLoggerActionCalled = true; });
+        Assert.That(isLoggerActionCalled, Is.False);
 
-            Assert.Throws<ArgumentNullException>(() => HighPerfLogger.SetLogAction(null!));
-        }
+        HighPerfLogger.Log("Hello World!");
+        Assert.That(isLoggerActionCalled, Is.True);
 
-        [Test]
-        public void Log() {
-            var theBuilder = new StringBuilder();
-            HighPerfLogger.SetLogAction(s => theBuilder.Append(s));
+        Assert.Throws<ArgumentNullException>(() => HighPerfLogger.SetLogAction(null!));
+    }
 
-            HighPerfLogger.Log("This ");
-            HighPerfLogger.Log("is ");
-            HighPerfLogger.Log("a ");
-            HighPerfLogger.Log("test.");
+    [Test]
+    public void Log() {
+        var theBuilder = new StringBuilder();
+        HighPerfLogger.SetLogAction(s => theBuilder.Append(s));
 
-            Assert.That(theBuilder.ToString(), Is.EqualTo("This is a test."));
-        }
+        HighPerfLogger.Log("This ");
+        HighPerfLogger.Log("is ");
+        HighPerfLogger.Log("a ");
+        HighPerfLogger.Log("test.");
 
-        [Test]
-        public void LogLine() {
-            var theBuilder = new StringBuilder();
-            HighPerfLogger.SetLogAction(s => theBuilder.Append(s));
+        Assert.That(theBuilder.ToString(), Is.EqualTo("This is a test."));
+    }
 
-            HighPerfLogger.LogLine("This");
-            HighPerfLogger.LogLine("is");
-            HighPerfLogger.LogLine("a");
-            HighPerfLogger.LogLine("test.");
+    [Test]
+    public void LogLine() {
+        var theBuilder = new StringBuilder();
+        HighPerfLogger.SetLogAction(s => theBuilder.Append(s));
 
-            Assert.That(theBuilder.ToString(), Is.EqualTo(
-                "This" + Environment.NewLine +
-                "is" + Environment.NewLine +
-                "a" + Environment.NewLine +
-                "test." + Environment.NewLine)
-            );
-        }
+        HighPerfLogger.LogLine("This");
+        HighPerfLogger.LogLine("is");
+        HighPerfLogger.LogLine("a");
+        HighPerfLogger.LogLine("test.");
+
+        Assert.That(theBuilder.ToString(), Is.EqualTo(
+            "This" + Environment.NewLine +
+            "is" + Environment.NewLine +
+            "a" + Environment.NewLine +
+            "test." + Environment.NewLine)
+        );
     }
 }
 

@@ -1,13 +1,12 @@
 using NUnit.Framework;
 
-namespace Epos.Utilities.Web
+namespace Epos.Utilities.Web;
+
+[TestFixture]
+public class ObjectSessionTest
 {
-    [TestFixture]
-    public class ObjectSessionTest
-    {
-        [Test]
-        public void Constructor() {
-            // TODO
-        }
+    [Test]
+    public void Constructor() {
+        // TODO
     }
 }

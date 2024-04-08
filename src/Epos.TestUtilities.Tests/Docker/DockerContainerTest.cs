@@ -2,91 +2,90 @@ using System.Linq;
 
 using NUnit.Framework;
 
-namespace Epos.TestUtilities.Docker
+namespace Epos.TestUtilities.Docker;
+
+[TestFixture]
+[Ignore("Does not work on Azure DevOps.")]
+public sealed class DockerContainerTest
 {
-    [TestFixture]
-    [Ignore("Does not work on Azure DevOps.")]
-    public sealed class DockerContainerTest
+    [Test]
+    public void Basics()
     {
-        [Test]
-        public void Basics()
-        {
-            var theContainer = DockerContainer.StartAndWaitForReadynessLogPhrase(
-                new DockerContainerOptions
-                {
-                    Name = "Gabbel123",
-                    ImageName = "postgres:10.6",
-                    ReadynessLogPhrase = "ready to accept connections",
-                    Ports = { (31000, 5432) }
-                }
-            );
+        var theContainer = DockerContainer.StartAndWaitForReadynessLogPhrase(
+            new DockerContainerOptions
+            {
+                Name = "Gabbel123",
+                ImageName = "postgres:10.6",
+                ReadynessLogPhrase = "ready to accept connections",
+                Ports = { (31000, 5432) }
+            }
+        );
 
-            Assert.That(theContainer.Id, Is.Not.Null);
-            Assert.That(theContainer.Name, Is.EqualTo("Gabbel123"));
+        Assert.That(theContainer.Id, Is.Not.Null);
+        Assert.That(theContainer.Name, Is.EqualTo("Gabbel123"));
 
-            // Do it once more to assert that the container is force removed before the start.
+        // Do it once more to assert that the container is force removed before the start.
 
-            theContainer = DockerContainer.StartAndWaitForReadynessLogPhrase(
-                new DockerContainerOptions
-                {
-                    Name = "Gabbel123",
-                    ImageName = "postgres:10.6",
-                    ReadynessLogPhrase = "ready to accept connections",
-                    Ports = { (31000, 5432) }
-                }
-            );
+        theContainer = DockerContainer.StartAndWaitForReadynessLogPhrase(
+            new DockerContainerOptions
+            {
+                Name = "Gabbel123",
+                ImageName = "postgres:10.6",
+                ReadynessLogPhrase = "ready to accept connections",
+                Ports = { (31000, 5432) }
+            }
+        );
 
-            Assert.That(theContainer.Id, Is.Not.Null);
-            Assert.That(theContainer.Name, Is.EqualTo("Gabbel123"));
+        Assert.That(theContainer.Id, Is.Not.Null);
+        Assert.That(theContainer.Name, Is.EqualTo("Gabbel123"));
 
-            theContainer.ForceRemove();
-        }
+        theContainer.ForceRemove();
+    }
 
-        [Test]
-        public void BuiltinContainers()
-        {
-            DockerContainer theContainer = DockerContainer.Postgres.Start();
+    [Test]
+    public void BuiltinContainers()
+    {
+        DockerContainer theContainer = DockerContainer.Postgres.Start();
 
-            Assert.That(theContainer.Id, Is.Not.Null);
-            Assert.That(theContainer.Name, Is.EqualTo("PostgresTestContainer"));
+        Assert.That(theContainer.Id, Is.Not.Null);
+        Assert.That(theContainer.Name, Is.EqualTo("PostgresTestContainer"));
 
-            (int thePort, int _) = theContainer.Ports.First();
+        (int thePort, int _) = theContainer.Ports.First();
 
-            Assert.That(
-                theContainer.ConnectionString,
-                Is.EqualTo($"Server=localhost;Port={thePort};Database=test;User ID=admin;Password=admin")
-            );
+        Assert.That(
+            theContainer.ConnectionString,
+            Is.EqualTo($"Server=localhost;Port={thePort};Database=test;User ID=admin;Password=admin")
+        );
 
-            theContainer.ForceRemove();
+        theContainer.ForceRemove();
 
-            // ----------------------------------------------------------
+        // ----------------------------------------------------------
 
-            theContainer = DockerContainer.SqlServer.Start();
+        theContainer = DockerContainer.SqlServer.Start();
 
-            Assert.That(theContainer.Id, Is.Not.Null);
-            Assert.That(theContainer.Name, Is.EqualTo("SqlServerTestContainer"));
+        Assert.That(theContainer.Id, Is.Not.Null);
+        Assert.That(theContainer.Name, Is.EqualTo("SqlServerTestContainer"));
 
-            (thePort, _) = theContainer.Ports.First();
+        (thePort, _) = theContainer.Ports.First();
 
-            Assert.That(
-                theContainer.ConnectionString,
-                Is.EqualTo($"Server=localhost,{thePort};Database=test;User Id=SA;Password=aB1cD2eF3")
-            );
+        Assert.That(
+            theContainer.ConnectionString,
+            Is.EqualTo($"Server=localhost,{thePort};Database=test;User Id=SA;Password=aB1cD2eF3")
+        );
 
-            theContainer.ForceRemove();
+        theContainer.ForceRemove();
 
-            // ----------------------------------------------------------
+        // ----------------------------------------------------------
 
-            theContainer = DockerContainer.MongoDB.Start();
+        theContainer = DockerContainer.MongoDB.Start();
 
-            Assert.That(theContainer.Id, Is.Not.Null);
-            Assert.That(theContainer.Name, Is.EqualTo("MongoDBTestContainer"));
+        Assert.That(theContainer.Id, Is.Not.Null);
+        Assert.That(theContainer.Name, Is.EqualTo("MongoDBTestContainer"));
 
-            (thePort, _) = theContainer.Ports.First();
+        (thePort, _) = theContainer.Ports.First();
 
-            Assert.That(theContainer.ConnectionString, Is.EqualTo($"mongodb://localhost:{thePort}"));
+        Assert.That(theContainer.ConnectionString, Is.EqualTo($"mongodb://localhost:{thePort}"));
 
-            theContainer.ForceRemove();
-        }
+        theContainer.ForceRemove();
     }
 }
