@@ -10,15 +10,12 @@ namespace Epos.CommandLine;
 public class CommandLineDefinitionTest
 {
     [Test]
-    public void BasicsWithoutSubcommand()
-    {
+    public void BasicsWithoutSubcommand() {
         var theConsoleOutput = new StringWriter();
 
-        var theCommandLineDefinition = new CommandLineDefinition
-        {
+        var theCommandLineDefinition = new CommandLineDefinition {
             HasDifferentiatedSubcommands = false,
-            Configuration = new CommandLineConfiguration
-            {
+            Configuration = new CommandLineConfiguration {
                 UsageTextWriter = theConsoleOutput,
                 ErrorAction = () => { }
             }
@@ -32,8 +29,7 @@ public class CommandLineDefinitionTest
 
         bool isRun = false;
         theCommandLineDefinition.Subcommands.Add(
-            new CommandLineSubcommand<object>(CommandLineSubcommand.DefaultName, "Default command")
-            {
+            new CommandLineSubcommand<object>(CommandLineSubcommand.DefaultName, "Default command") {
                 CommandLineFunc = (o, _) => { isRun = true; return 0; }
             }
         );
@@ -45,21 +41,18 @@ public class CommandLineDefinitionTest
     }
 
     [Test]
-    public void BasicsWithDifferentiatedCommands()
-    {
+    public void BasicsWithDifferentiatedCommands() {
         var theConsoleOutput = new StringWriter();
 
-        var theCommandLineDefinition = new CommandLineDefinition
-        {
-            Name = "sample",
-            Configuration = new CommandLineConfiguration
-            {
+        var theCommandLineDefinition = new CommandLineDefinition {
+            Configuration = new CommandLineConfiguration {
+                Name = "sample",
                 UsageTextWriter = theConsoleOutput,
                 ErrorAction = () => { }
             }
         };
 
-        Assert.That(theCommandLineDefinition.Name, Is.EqualTo("sample"));
+        Assert.That(theCommandLineDefinition.Configuration.Name, Is.EqualTo("sample"));
 
         Assert.Throws<InvalidOperationException>(() => theCommandLineDefinition.Try([]));
 
@@ -89,8 +82,7 @@ public class CommandLineDefinitionTest
     }
 
     [Test]
-    public void Parameters()
-    {
+    public void Parameters() {
         var theConsoleOutput = new StringWriter();
 
         // decimal als Parametertyp ist beispielsweise nicht erlaubt:
@@ -98,18 +90,16 @@ public class CommandLineDefinitionTest
         // ReSharper disable once ObjectCreationAsStatement
         Assert.Throws<TypeInitializationException>(() => new CommandLineParameter<decimal>(null!, null!));
 
-        BuildOptions? theBuildOptions = null;
+        BuildOptionsParm? theBuildOptions = null;
 
-        var theCommandLineDefinition = new CommandLineDefinition
-        {
-            Name = "sample",
-            Configuration = new CommandLineConfiguration
-            {
+        var theCommandLineDefinition = new CommandLineDefinition {
+            Configuration = new CommandLineConfiguration {
+                Name = "sample",
                 UsageTextWriter = theConsoleOutput,
                 ErrorAction = () => throw new CommandLineError()
             },
             Subcommands = {
-                new CommandLineSubcommand<BuildOptions>("build", "Builds something.") {
+                new CommandLineSubcommand<BuildOptionsParm>("build", "Builds something.") {
                     Parameters = {
                         new CommandLineParameter<int>("project-number", "Sets the project number."),
                         new CommandLineParameter<string>("memory", "Sets the used memory.") {
@@ -171,13 +161,11 @@ public class CommandLineDefinitionTest
         theCommandLineDefinition.Try(["build", "33"]);
         Assert.That(theBuildOptions!.ProjectNumber, Is.EqualTo(33));
         Assert.That(theBuildOptions.Memory, Is.EqualTo("1 GB"));
-        Assert.That(theBuildOptions.DummyParameter, Is.Null);
         Assert.That(theConsoleOutput.ToString(), Is.Empty);
 
         theCommandLineDefinition.Try(["build", "66", "2 GB"]);
         Assert.That(theBuildOptions.ProjectNumber, Is.EqualTo(66));
         Assert.That(theBuildOptions.Memory, Is.EqualTo("2 GB"));
-        Assert.That(theBuildOptions.DummyParameter, Is.Null);
         Assert.That(theConsoleOutput.ToString(), Is.Empty);
 
         Assert.Throws<CommandLineError>(() => theCommandLineDefinition.Try(["build", "33", "2 GB", "Too much!"]));
@@ -195,17 +183,14 @@ public class CommandLineDefinitionTest
     }
 
     [Test]
-    public void ExclusionGroups()
-    {
+    public void ExclusionGroups() {
         var theConsoleOutput = new StringWriter();
 
         TestOptions? theTestOptions = null;
 
-        var theCommandLineDefinition = new CommandLineDefinition
-        {
-            Name = "sample",
-            Configuration = new CommandLineConfiguration
-            {
+        var theCommandLineDefinition = new CommandLineDefinition {
+            Configuration = new CommandLineConfiguration {
+                Name = "sample",
                 UsageTextWriter = theConsoleOutput,
                 ErrorAction = () => throw new CommandLineError()
             },
@@ -300,8 +285,7 @@ public class CommandLineDefinitionTest
     }
 
     [Test]
-    public void OptionsAndShowHelp()
-    {
+    public void OptionsAndShowHelp() {
         var theConsoleOutput = new StringWriter();
 
         // decimal als Parametertyp ist beispielsweise nicht erlaubt:
@@ -310,11 +294,9 @@ public class CommandLineDefinitionTest
 
         BuildOptions? theBuildOptions = null;
 
-        var theCommandLineDefinition = new CommandLineDefinition
-        {
-            Name = "sample",
-            Configuration = new CommandLineConfiguration
-            {
+        var theCommandLineDefinition = new CommandLineDefinition {
+            Configuration = new CommandLineConfiguration {
+                Name = "sample",
                 UsageTextWriter = theConsoleOutput,
                 ErrorAction = () => { }
             },
@@ -513,5 +495,14 @@ public class CommandLineDefinitionTest
 
         [CommandLineParameter("dummy")]
         public string? DummyParameter { get; set; }
+    }
+
+    internal class BuildOptionsParm
+    {
+        [CommandLineParameter("project-number")]
+        public int ProjectNumber { get; set; }
+
+        [CommandLineParameter("memory")]
+        public string? Memory { get; set; }
     }
 }

@@ -5,7 +5,7 @@ public sealed class ColumnSeperator
 {
     /// <summary>Gets or sets the header.</summary>
     /// <value>Header</value>
-    public string Header { get; set; } = string.Empty;
+    public string Header { get; set; } = "";
 
     /// <summary>Gets or sets the colspan.</summary>
     /// <value>Colspan</value>

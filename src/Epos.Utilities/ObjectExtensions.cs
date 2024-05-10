@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace Epos.Utilities;
 
@@ -22,6 +23,10 @@ public static class ObjectExtensions
     public static TAttribute? GetAttribute<TAttribute>(this object obj) where TAttribute : Attribute {
         if (obj is null) {
             throw new ArgumentNullException(nameof(obj));
+        }
+
+        if (obj is MemberInfo theMemberInfo) {
+            return (TAttribute?) Attribute.GetCustomAttribute(theMemberInfo, typeof(TAttribute));
         }
 
         return (TAttribute?) Attribute.GetCustomAttribute(obj.GetType(), typeof(TAttribute));

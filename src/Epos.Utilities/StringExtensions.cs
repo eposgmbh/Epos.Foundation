@@ -31,7 +31,7 @@ public static class StringExtensions
 
         int theLeftIndex = value.IndexOf(between, StringComparison.Ordinal);
         if (theLeftIndex == -1) {
-            return string.Empty;
+            return "";
         }
 
         int theRightIndex = value.IndexOf(and, StringComparison.Ordinal);
@@ -40,7 +40,7 @@ public static class StringExtensions
         }
 
         if (theRightIndex < theLeftIndex) {
-            return string.Empty;
+            return "";
         }
 
         return value.Substring(theLeftIndex + between.Length, theRightIndex - theLeftIndex - and.Length);

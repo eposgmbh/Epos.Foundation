@@ -11,7 +11,9 @@ public static class Program
     {
         var theCommandLineDefinition = new CommandLineDefinition
         {
-            Name = "sample", // <- if null, .exe-Filename is taken
+            Configuration = new CommandLineConfiguration {
+                Name = "sample", // <- if unset, .exe-Filename is taken
+            },
             Subcommands = {
                 new CommandLineSubcommand<BuildOptions>("build", "Builds something.") {
                     Options = {

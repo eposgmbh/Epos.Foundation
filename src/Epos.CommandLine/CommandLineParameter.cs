@@ -80,7 +80,7 @@ public abstract class CommandLineParameter
             .Append('<')
             .Append(Name);
 
-        if (DataType != typeof(FileInfo)) {
+        if (DataType != typeof(FileInfo) && DataType != typeof(DirectoryInfo)) {
             theResult
                 .Append(":")
                 .Append(DataType.Dump());

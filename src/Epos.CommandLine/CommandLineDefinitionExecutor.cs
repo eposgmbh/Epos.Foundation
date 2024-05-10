@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Epos.CommandLine;
@@ -15,7 +16,7 @@ internal sealed class CommandLineDefinitionExecutor
         myArgs = args;
     }
 
-    public async Task<int> TryAsync() {
+    public async Task<int> TryAsync(CancellationToken cancellationToken) {
         var theUsageWriter = new CommandLineUsageWriter(myDefinition);
 
         if (myDefinition.HasDifferentiatedSubcommands && !myDefinition.Subcommands.Any()) {
@@ -44,6 +45,6 @@ internal sealed class CommandLineDefinitionExecutor
         List<CommandLineToken> theTokens = theTokenizer.Tokenize(myArgs, ref theSubcommand);
 
         // Subcommand ausführen
-        return await theSubcommand!.ExecuteAsync(theTokens, myDefinition);
+        return await theSubcommand!.ExecuteAsync(theTokens, myDefinition, cancellationToken);
     }
 }

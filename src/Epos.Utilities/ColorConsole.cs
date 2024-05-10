@@ -40,12 +40,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object to the standard output stream
     /// in the color black. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteBlack(object value) => WriteBlack(value is not null ? value.ToString() : string.Empty);
+    public static void WriteBlack(object value) => WriteBlack(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color black. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteBlack(string value) => WriteBlack(value ?? string.Empty, null);
+    public static void WriteBlack(string value) => WriteBlack(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color black using the
@@ -58,12 +58,12 @@ public static class ColorConsole
     /// in the color dark Blue. </summary>
     /// <param name="value">The value to write, or null.</param>
     public static void WriteDarkBlue(object value) =>
-        WriteDarkBlue(value is not null ? value.ToString() : string.Empty);
+        WriteDarkBlue(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color dark Blue. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteDarkBlue(string value) => WriteDarkBlue(value ?? string.Empty, null);
+    public static void WriteDarkBlue(string value) => WriteDarkBlue(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color dark Blue using the
@@ -77,12 +77,12 @@ public static class ColorConsole
     /// in the color dark Green. </summary>
     /// <param name="value">The value to write, or null.</param>
     public static void WriteDarkGreen(object value) =>
-        WriteDarkGreen(value is not null ? value.ToString() : string.Empty);
+        WriteDarkGreen(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color dark Green. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteDarkGreen(string value) => WriteDarkGreen(value ?? string.Empty, null);
+    public static void WriteDarkGreen(string value) => WriteDarkGreen(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color dark Green using the
@@ -94,12 +94,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object to the standard output stream
     /// in the color dark Cyan. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteDarkCyan(object value) => WriteDarkCyan(value is not null ? value.ToString() : string.Empty);
+    public static void WriteDarkCyan(object value) => WriteDarkCyan(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color dark Cyan. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteDarkCyan(string value) => WriteDarkCyan(value ?? string.Empty, null);
+    public static void WriteDarkCyan(string value) => WriteDarkCyan(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color dark Cyan using the
@@ -111,12 +111,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object to the standard output stream
     /// in the color dark Red. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteDarkRed(object value) => WriteDarkRed(value is not null ? value.ToString() : string.Empty);
+    public static void WriteDarkRed(object value) => WriteDarkRed(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color dark Red. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteDarkRed(string value) => WriteDarkRed(value ?? string.Empty, null);
+    public static void WriteDarkRed(string value) => WriteDarkRed(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color dark Red using the
@@ -128,12 +128,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object to the standard output stream
     /// in the color dark Magenta. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteDarkMagenta(object value) => WriteDarkMagenta(value is not null ? value.ToString() : string.Empty);
+    public static void WriteDarkMagenta(object value) => WriteDarkMagenta(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color dark Magenta. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteDarkMagenta(string value) => WriteDarkMagenta(value ?? string.Empty, null);
+    public static void WriteDarkMagenta(string value) => WriteDarkMagenta(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color dark Magenta using the
@@ -145,12 +145,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object to the standard output stream
     /// in the color dark Yellow. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteDarkYellow(object value) => WriteDarkYellow(value is not null ? value.ToString() : string.Empty);
+    public static void WriteDarkYellow(object value) => WriteDarkYellow(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color dark Yellow. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteDarkYellow(string value) => WriteDarkYellow(value ?? string.Empty, null);
+    public static void WriteDarkYellow(string value) => WriteDarkYellow(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color dark Yellow using the
@@ -162,12 +162,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object to the standard output stream
     /// in the color gray. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteGray(object value) => WriteGray(value is not null ? value.ToString() : string.Empty);
+    public static void WriteGray(object value) => WriteGray(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color gray. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteGray(string value) => WriteGray(value ?? string.Empty, null);
+    public static void WriteGray(string value) => WriteGray(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color gray using the
@@ -179,12 +179,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object to the standard output stream
     /// in the color dark Gray. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteDarkGray(object value) => WriteDarkGray(value is not null ? value.ToString() : string.Empty);
+    public static void WriteDarkGray(object value) => WriteDarkGray(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color dark Gray. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteDarkGray(string value) => WriteDarkGray(value ?? string.Empty, null);
+    public static void WriteDarkGray(string value) => WriteDarkGray(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color dark Gray using the
@@ -196,12 +196,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object to the standard output stream
     /// in the color blue. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteBlue(object value) => WriteBlue(value is not null ? value.ToString() : string.Empty);
+    public static void WriteBlue(object value) => WriteBlue(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color blue. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteBlue(string value) => WriteBlue(value ?? string.Empty, null);
+    public static void WriteBlue(string value) => WriteBlue(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color blue using the
@@ -213,12 +213,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object to the standard output stream
     /// in the color green. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteGreen(object value) => WriteGreen(value is not null ? value.ToString() : string.Empty);
+    public static void WriteGreen(object value) => WriteGreen(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color green. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteGreen(string value) => WriteGreen(value ?? string.Empty, null);
+    public static void WriteGreen(string value) => WriteGreen(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color green using the
@@ -230,12 +230,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object to the standard output stream
     /// in the color cyan. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteCyan(object value) => WriteCyan(value is not null ? value.ToString() : string.Empty);
+    public static void WriteCyan(object value) => WriteCyan(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color cyan. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteCyan(string value) => WriteCyan(value ?? string.Empty, null);
+    public static void WriteCyan(string value) => WriteCyan(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color cyan using the
@@ -247,12 +247,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object to the standard output stream
     /// in the color red. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteRed(object value) => WriteRed(value is not null ? value.ToString() : string.Empty);
+    public static void WriteRed(object value) => WriteRed(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color red. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteRed(string value) => WriteRed(value ?? string.Empty, null);
+    public static void WriteRed(string value) => WriteRed(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color red using the
@@ -264,12 +264,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object to the standard output stream
     /// in the color magenta. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteMagenta(object value) => WriteMagenta(value is not null ? value.ToString() : string.Empty);
+    public static void WriteMagenta(object value) => WriteMagenta(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color magenta. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteMagenta(string value) => WriteMagenta(value ?? string.Empty, null);
+    public static void WriteMagenta(string value) => WriteMagenta(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color magenta using the
@@ -281,12 +281,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object to the standard output stream
     /// in the color yellow. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteYellow(object value) => WriteYellow(value is not null ? value.ToString() : string.Empty);
+    public static void WriteYellow(object value) => WriteYellow(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color yellow. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteYellow(string value) => WriteYellow(value ?? string.Empty, null);
+    public static void WriteYellow(string value) => WriteYellow(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color yellow using the
@@ -298,12 +298,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object to the standard output stream
     /// in the color white. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteWhite(object value) => WriteWhite(value is not null ? value.ToString() : string.Empty);
+    public static void WriteWhite(object value) => WriteWhite(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value to the standard output stream
     /// in the color white. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteWhite(string value) => WriteWhite(value ?? string.Empty, null);
+    public static void WriteWhite(string value) => WriteWhite(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects
     /// to the standard output stream in the color white using the
@@ -315,12 +315,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object, followed by
     /// the current line terminator, to the standard output stream in the color black. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineBlack(object value) => WriteLineBlack(value is not null ? value.ToString() : string.Empty);
+    public static void WriteLineBlack(object value) => WriteLineBlack(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color black. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineBlack(string value) => WriteLineBlack(value ?? string.Empty, null);
+    public static void WriteLineBlack(string value) => WriteLineBlack(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the
@@ -332,12 +332,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object, followed by
     /// the current line terminator, to the standard output stream in the color dark Blue. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineDarkBlue(object value) => WriteLineDarkBlue(value is not null ? value.ToString() : string.Empty);
+    public static void WriteLineDarkBlue(object value) => WriteLineDarkBlue(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color dark Blue. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineDarkBlue(string value) => WriteLineDarkBlue(value ?? string.Empty, null);
+    public static void WriteLineDarkBlue(string value) => WriteLineDarkBlue(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the
@@ -349,12 +349,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object, followed by
     /// the current line terminator, to the standard output stream in the color dark Green. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineDarkGreen(object value) => WriteLineDarkGreen(value is not null ? value.ToString() : string.Empty);
+    public static void WriteLineDarkGreen(object value) => WriteLineDarkGreen(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color dark Green. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineDarkGreen(string value) => WriteLineDarkGreen(value ?? string.Empty, null);
+    public static void WriteLineDarkGreen(string value) => WriteLineDarkGreen(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the
@@ -366,12 +366,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object, followed by
     /// the current line terminator, to the standard output stream in the color dark Cyan. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineDarkCyan(object value) => WriteLineDarkCyan(value is not null ? value.ToString() : string.Empty);
+    public static void WriteLineDarkCyan(object value) => WriteLineDarkCyan(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color dark Cyan. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineDarkCyan(string value) => WriteLineDarkCyan(value ?? string.Empty, null);
+    public static void WriteLineDarkCyan(string value) => WriteLineDarkCyan(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the
@@ -383,12 +383,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object, followed by
     /// the current line terminator, to the standard output stream in the color dark Red. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineDarkRed(object value) => WriteLineDarkRed(value is not null ? value.ToString() : string.Empty);
+    public static void WriteLineDarkRed(object value) => WriteLineDarkRed(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color dark Red. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineDarkRed(string value) => WriteLineDarkRed(value ?? string.Empty, null);
+    public static void WriteLineDarkRed(string value) => WriteLineDarkRed(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the
@@ -400,12 +400,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object, followed by
     /// the current line terminator, to the standard output stream in the color dark Magenta. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineDarkMagenta(object value) => WriteLineDarkMagenta(value is not null ? value.ToString() : string.Empty);
+    public static void WriteLineDarkMagenta(object value) => WriteLineDarkMagenta(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color dark Magenta. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineDarkMagenta(string value) => WriteLineDarkMagenta(value ?? string.Empty, null);
+    public static void WriteLineDarkMagenta(string value) => WriteLineDarkMagenta(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the
@@ -417,12 +417,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object, followed by
     /// the current line terminator, to the standard output stream in the color dark Yellow. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineDarkYellow(object value) => WriteLineDarkYellow(value is not null ? value.ToString() : string.Empty);
+    public static void WriteLineDarkYellow(object value) => WriteLineDarkYellow(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color dark Yellow. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineDarkYellow(string value) => WriteLineDarkYellow(value ?? string.Empty, null);
+    public static void WriteLineDarkYellow(string value) => WriteLineDarkYellow(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the
@@ -434,12 +434,12 @@ public static class ColorConsole
     /// <summary> Writes the text representation of the specified object, followed by
     /// the current line terminator, to the standard output stream in the color gray. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineGray(object value) => WriteLineGray(value is not null ? value.ToString() : string.Empty);
+    public static void WriteLineGray(object value) => WriteLineGray(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color gray. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineGray(string value) => WriteLineGray(value ?? string.Empty, null);
+    public static void WriteLineGray(string value) => WriteLineGray(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the
@@ -453,12 +453,12 @@ public static class ColorConsole
     /// the current line terminator, to the standard output stream in the color dark Gray. </summary>
     /// <param name="value">The value to write, or null.</param>
     public static void WriteLineDarkGray(object value) =>
-        WriteLineDarkGray(value is not null ? value.ToString() : string.Empty);
+        WriteLineDarkGray(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color dark Gray. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineDarkGray(string value) => WriteLineDarkGray(value ?? string.Empty, null);
+    public static void WriteLineDarkGray(string value) => WriteLineDarkGray(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the
@@ -472,12 +472,12 @@ public static class ColorConsole
     /// the current line terminator, to the standard output stream in the color blue. </summary>
     /// <param name="value">The value to write, or null.</param>
     public static void WriteLineBlue(object value) =>
-        WriteLineBlue(value is not null ? value.ToString() : string.Empty);
+        WriteLineBlue(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color blue. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineBlue(string value) => WriteLineBlue(value ?? string.Empty, null);
+    public static void WriteLineBlue(string value) => WriteLineBlue(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the
@@ -491,12 +491,12 @@ public static class ColorConsole
     /// the current line terminator, to the standard output stream in the color green. </summary>
     /// <param name="value">The value to write, or null.</param>
     public static void WriteLineGreen(object value) =>
-        WriteLineGreen(value is not null ? value.ToString() : string.Empty);
+        WriteLineGreen(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color green. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineGreen(string value) => WriteLineGreen(value ?? string.Empty, null);
+    public static void WriteLineGreen(string value) => WriteLineGreen(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the
@@ -510,12 +510,12 @@ public static class ColorConsole
     /// the current line terminator, to the standard output stream in the color cyan. </summary>
     /// <param name="value">The value to write, or null.</param>
     public static void WriteLineCyan(object value) =>
-        WriteLineCyan(value is not null ? value.ToString() : string.Empty);
+        WriteLineCyan(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color cyan. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineCyan(string value) => WriteLineCyan(value ?? string.Empty, null);
+    public static void WriteLineCyan(string value) => WriteLineCyan(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the
@@ -529,12 +529,12 @@ public static class ColorConsole
     /// the current line terminator, to the standard output stream in the color red. </summary>
     /// <param name="value">The value to write, or null.</param>
     public static void WriteLineRed(object value) =>
-        WriteLineRed(value is not null ? value.ToString() : string.Empty);
+        WriteLineRed(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color red. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineRed(string value) => WriteLineRed(value ?? string.Empty, null);
+    public static void WriteLineRed(string value) => WriteLineRed(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the
@@ -548,12 +548,12 @@ public static class ColorConsole
     /// the current line terminator, to the standard output stream in the color magenta. </summary>
     /// <param name="value">The value to write, or null.</param>
     public static void WriteLineMagenta(object value) =>
-        WriteLineMagenta(value is not null ? value.ToString() : string.Empty);
+        WriteLineMagenta(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color magenta. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineMagenta(string value) => WriteLineMagenta(value ?? string.Empty, null);
+    public static void WriteLineMagenta(string value) => WriteLineMagenta(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the
@@ -567,12 +567,12 @@ public static class ColorConsole
     /// the current line terminator, to the standard output stream in the color yellow. </summary>
     /// <param name="value">The value to write, or null.</param>
     public static void WriteLineYellow(object value) =>
-        WriteLineYellow(value is not null ? value.ToString() : string.Empty);
+        WriteLineYellow(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color yellow. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineYellow(string value) => WriteLineYellow(value ?? string.Empty, null);
+    public static void WriteLineYellow(string value) => WriteLineYellow(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the
@@ -586,12 +586,12 @@ public static class ColorConsole
     /// the current line terminator, to the standard output stream in the color white. </summary>
     /// <param name="value">The value to write, or null.</param>
     public static void WriteLineWhite(object value) =>
-        WriteLineWhite(value is not null ? value.ToString() : string.Empty);
+        WriteLineWhite(value is not null ? value.ToString() : "");
 
     /// <summary> Writes the specified string value, followed by the current line terminator,
     /// to the standard output stream in the color white. </summary>
     /// <param name="value">The value to write, or null.</param>
-    public static void WriteLineWhite(string value) => WriteLineWhite(value ?? string.Empty, null);
+    public static void WriteLineWhite(string value) => WriteLineWhite(value ?? "", null);
 
     /// <summary> Writes the text representation of the specified array of objects,
     /// followed by the current line terminator to the standard output stream in the

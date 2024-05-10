@@ -26,7 +26,7 @@ internal sealed class CommandLineUsageWriter
         var theResult = new StringBuilder("Usage: ");
 
         theResult
-            .Append(myDefinition.Name).Append(Space)
+            .Append(myDefinition.Configuration.Name).Append(Space)
             .Append('<')
             .Append(string.Join(" | ", myDefinition.Subcommands.Select(sc => sc.Name)))
             .Append('>')
@@ -76,7 +76,7 @@ internal sealed class CommandLineUsageWriter
     public void WriteAndExit(CommandLineSubcommand subcommand, string? errorMessage = null) {
         StringBuilder theResult = new StringBuilder()
             .Append("Usage: ")
-            .Append(myDefinition.Name);
+            .Append(myDefinition.Configuration.Name);
 
         int theLineInsertionCount = theResult.Length;
 

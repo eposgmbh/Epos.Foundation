@@ -16,6 +16,11 @@ internal static class ParseUtils
             return new System.IO.FileInfo(rawValue);
         }
 
+        if (theDataType == typeof(System.IO.DirectoryInfo)) {
+            errorMessage = null;
+            return new System.IO.DirectoryInfo(rawValue);
+        }
+
         if (rawValue.TryConvert(theDataType, CultureInfo.InvariantCulture, out object? theConvertedValue))
         {
             errorMessage = null;
@@ -35,6 +40,11 @@ internal static class ParseUtils
         if (theDataType == typeof(System.IO.FileInfo)) {
             errorMessage = null;
             return new System.IO.FileInfo(rawValue);
+        }
+
+        if (theDataType == typeof(System.IO.DirectoryInfo)) {
+            errorMessage = null;
+            return new System.IO.DirectoryInfo(rawValue);
         }
 
         if (rawValue.TryConvert(theDataType, CultureInfo.InvariantCulture, out object? theConvertedValue))

@@ -7,6 +7,11 @@ namespace Epos.CommandLine;
 /// <see cref="CommandLineDefinition"/>.</summary>
 public sealed class CommandLineConfiguration
 {
+    /// <summary> Gets or sets the name of the command line tool. If not specified
+    /// (<b>null</b>) the lower-case filename (without extension) is used.
+    /// </summary>
+    public string? Name { get; set; }
+
     /// <summary>Specifies the <see cref="System.IO.TextWriter"/> that is used
     /// to write usage help.</summary>
     /// <remarks>Defaults to <see cref="System.Console.Out"/>.</remarks>

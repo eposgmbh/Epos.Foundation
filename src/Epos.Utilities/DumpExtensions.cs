@@ -504,7 +504,7 @@ public static class DumpExtensions
                     for (int theNextIndex = theIndex + 1; theNextIndex < theIndex + theValue.ColSpan; theNextIndex++) {
                         TextColumn<TColumn> theNextTextColumn = theResult[theNextIndex];
 
-                        theNextTextColumn.Rows.Add((string.Empty, 1));
+                        theNextTextColumn.Rows.Add(("", 1));
                         theTotalWidth += theNextTextColumn.Width;
                     }
 

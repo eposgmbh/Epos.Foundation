@@ -1,11 +1,12 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 using Epos.Utilities;
-
-using Refit;
 
 namespace Epos.CommandLine.Helpers;
 
@@ -22,12 +23,8 @@ public static class RefitRestClientConsoleHelper
         Func<Task<T>> refitRestClientFunc,
         Func<T, int> successAction
     ) {
-        if (refitRestClientFunc is null) {
-            throw new ArgumentNullException(nameof(refitRestClientFunc));
-        }
-        if (successAction is null) {
-            throw new ArgumentNullException(nameof(successAction));
-        }
+        ArgumentNullException.ThrowIfNull(refitRestClientFunc);
+        ArgumentNullException.ThrowIfNull(successAction);
 
         try {
             T theResponse = await refitRestClientFunc();
@@ -35,16 +32,6 @@ public static class RefitRestClientConsoleHelper
             Console.WriteLine();
 
             return successAction(theResponse);
-        } catch (AggregateException theException) {
-            Exception theInnerException = theException.InnerExceptions.First();
-
-            if (theInnerException is ApiException theApiException) {
-                return HandleApiException(theApiException);
-            } else {
-                return HandleException(theInnerException);
-            }
-        } catch (ApiException theException) {
-            return HandleApiException(theException);
         } catch (Exception theException) {
             return HandleException(theException);
         }
@@ -60,12 +47,8 @@ public static class RefitRestClientConsoleHelper
         Func<Task> refitRestClientFunc,
         Func<int> successAction
     ) {
-        if (refitRestClientFunc is null) {
-            throw new ArgumentNullException(nameof(refitRestClientFunc));
-        }
-        if (successAction is null) {
-            throw new ArgumentNullException(nameof(successAction));
-        }
+        ArgumentNullException.ThrowIfNull(refitRestClientFunc);
+        ArgumentNullException.ThrowIfNull(successAction);
 
         try {
             await refitRestClientFunc();
@@ -73,16 +56,6 @@ public static class RefitRestClientConsoleHelper
             Console.WriteLine();
 
             return successAction();
-        } catch (AggregateException theException) {
-            Exception theInnerException = theException.InnerExceptions.First();
-
-            if (theInnerException is ApiException theApiException) {
-                return HandleApiException(theApiException);
-            } else {
-                return HandleException(theInnerException);
-            }
-        } catch (ApiException theException) {
-            return HandleApiException(theException);
         } catch (Exception theException) {
             return HandleException(theException);
         }
@@ -90,46 +63,78 @@ public static class RefitRestClientConsoleHelper
 
     #region --- Helper methods ---
 
-    private static int HandleApiException(ApiException theApiException) {
+    private static int HandleException(Exception exception) {
+        if (exception is AggregateException theAggregateException) {
+            Exception theInnerException = theAggregateException.InnerExceptions.First();
+
+            if (theInnerException.GetType().FullName == "Refit.ApiException") {
+                return HandleApiException(theInnerException);
+            }
+        }
+
+        Console.WriteLine();
+        ColorConsole.WriteError(" ERROR ");
+        Console.WriteLine($" {exception.Message}");
+
+        return -1;
+    }
+
+    [UnconditionalSuppressMessage("AssemblyLoadTrimming", "IL2075", Justification = "Types are available at runtime.")]
+    private static int HandleApiException(Exception apiException) {
         Console.WriteLine();
 
-        if (theApiException.StatusCode == HttpStatusCode.Unauthorized) {
+        var theStatusCode = (HttpStatusCode) apiException
+            .GetType()
+            .GetProperty("StatusCode")!
+            .GetGetMethod()!
+            .Invoke(apiException, [])!;
+
+        if (theStatusCode == HttpStatusCode.Unauthorized) {
             ColorConsole.WriteError(" ERROR ");
             Console.WriteLine(" Invalid or expired token.");
 
             return 1;
-        } else if (theApiException.StatusCode == HttpStatusCode.Forbidden) {
+        } else if (theStatusCode == HttpStatusCode.Forbidden) {
             ColorConsole.WriteError(" ERROR ");
             Console.WriteLine(" You are not authorized to execute this command.");
 
             return 2;
-        } else if (theApiException.StatusCode == HttpStatusCode.NotFound) {
-            ColorConsole.WriteError(" ERROR ");
-            Console.WriteLine(
-                $" Not found. Invalid URL?" +
-                $" ({theApiException.RequestMessage.Method} {theApiException.RequestMessage.RequestUri})"
-            );
+        } else if (theStatusCode == HttpStatusCode.NotFound) {
+            var theRequestMessage = (HttpRequestMessage) apiException
+                .GetType()
+                .GetProperty("RequestMessage")!
+                .GetGetMethod()!
+                .Invoke(apiException, [])!;
 
-            return 4;
-        } else if (theApiException.ContentHeaders?.ContentType?.MediaType == "text/html") {
             ColorConsole.WriteError(" ERROR ");
-            Console.WriteLine(" Cannot connect to host (text/html proxy found, but no json REST response).");
+            Console.WriteLine($" Not found. Invalid URL? ({theRequestMessage.Method} {theRequestMessage.RequestUri})");
 
-            return 5;
+            return 3;
         } else {
-            ColorConsole.WriteError(" ERROR ");
-            Console.WriteLine($" {theApiException.Content}");
+            var theContentHeaders = (HttpContentHeaders?) apiException
+                .GetType()
+                .GetProperty("ContentHeaders")!
+                .GetGetMethod()!
+                .Invoke(apiException, []);
 
-            return 6;
+            if (theContentHeaders?.ContentType?.MediaType == "text/html") {
+                ColorConsole.WriteError(" ERROR ");
+                Console.WriteLine(" Cannot connect to host (text/html proxy found, but no json REST response).");
+
+                return 4;
+            } else {
+                string? theContent = (string?) apiException
+                    .GetType()
+                    .GetProperty("Content")!
+                    .GetGetMethod()!
+                    .Invoke(apiException, []);
+
+                ColorConsole.WriteError(" ERROR ");
+                Console.WriteLine($" {theContent}");
+
+                return 5;
+            }
         }
-    }
-
-    private static int HandleException(Exception theException) {
-        Console.WriteLine();
-        ColorConsole.WriteError(" ERROR ");
-        Console.WriteLine($" {theException.Message}");
-
-        return 999;
     }
 
     #endregion

@@ -18,12 +18,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Refit" Version="6.3.2" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Epos.Utilities\Epos.Utilities.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

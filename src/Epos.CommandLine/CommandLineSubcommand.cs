@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using Epos.CommandLine.Application;
+using Epos.Utilities;
 
 namespace Epos.CommandLine;
 
@@ -38,26 +41,27 @@ public sealed class CommandLineSubcommand<
     public Func<TOptions, CommandLineDefinition, Task<int>>? AsyncCommandLineFunc { get; set; }
 
     internal override async Task<int> ExecuteAsync(
-        IEnumerable<CommandLineToken> argTokens, CommandLineDefinition definition
-    ) {
+        IEnumerable<CommandLineToken> argTokens, CommandLineDefinition definition, CancellationToken cancellationToken) {
         var theOptions = new TOptions();
         Type theOptionsType = typeof(TOptions);
 
         foreach (CommandLineToken theArgToken in argTokens) {
             if (theArgToken.Kind != CommandLineTokenKind.Subcommand) {
                 // Option oder Parameter
-                string thePropertyName = theArgToken.Name.Replace("-", string.Empty); // de-kebap-style
+                string thePropertyName = theArgToken.Name;
 
                 // Spezifische (Attribute) PropertyInfo finden
                 PropertyInfo? thePropertyInfo;
 
                 if (theArgToken.Kind == CommandLineTokenKind.Option) {
+                    thePropertyName = thePropertyName.Replace("-", ""); // de-kebap-style
+
                     thePropertyInfo =
                         theOptionsType
                             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                             .SingleOrDefault(
-                                pi => pi.GetCustomAttribute<CommandLineOptionAttribute>() is not null &&
-                                      pi.GetCustomAttribute<CommandLineOptionAttribute>()!.Letter.ToString() == thePropertyName
+                                pi => pi.GetCustomAttribute<CommandLineOptionAttribute>() is CommandLineOptionAttribute theAttribute &&
+                                      theAttribute.Letter.ToString() == thePropertyName
                             );
                 } else {
                     // Parameter
@@ -65,17 +69,15 @@ public sealed class CommandLineSubcommand<
                         theOptionsType
                             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                             .SingleOrDefault(
-                                pi => pi.GetCustomAttribute<CommandLineParameterAttribute>() is not null &&
-                                      pi.GetCustomAttribute<CommandLineParameterAttribute>()!.Name.ToLower() == thePropertyName
+                                pi => pi.GetCustomAttribute<CommandLineParameterAttribute>() is CommandLineParameterAttribute theAttribute &&
+                                      theAttribute.Name.ToLower() == thePropertyName
                             );
                 }
 
-                if (thePropertyInfo is null) {
-                    // Property mit genau dem passenden Namen (case-insensitive) finden
-                    thePropertyInfo = theOptionsType.GetProperty(
-                        thePropertyName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase
-                    );
-                }
+                // Falls nicht gefunden: Property mit genau dem passenden Namen (case-insensitive) finden
+                thePropertyInfo ??= theOptionsType.GetProperty(
+                    thePropertyName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase
+                );
 
                 if (thePropertyInfo is not null) {
                     // Property gefunden, Wert setzen
@@ -129,5 +131,118 @@ public abstract class CommandLineSubcommand
     /// <remarks> Here you can register your subcommand parameters. </remarks>
     public IList<CommandLineParameter> Parameters { get; }
 
-    internal abstract Task<int> ExecuteAsync(IEnumerable<CommandLineToken> argTokens, CommandLineDefinition definition);
+    internal abstract Task<int> ExecuteAsync(
+        IEnumerable<CommandLineToken> argTokens, CommandLineDefinition definition, CancellationToken cancellationToken);
+}
+
+internal sealed class CommandLineSubcommandWrapper : CommandLineSubcommand
+{
+    private readonly ISubcommand mySubcommand;
+
+    [UnconditionalSuppressMessage("AOT", "IL3050", Justification = "Types are available at runtime.")]
+    public CommandLineSubcommandWrapper(ISubcommand subcommand) : base(subcommand.Name, subcommand.Description) {
+        foreach (PropertyInfo thePropertyInfo in subcommand.GetType().GetProperties()) {
+            OptionAttribute? theOptionAttribute = thePropertyInfo.GetAttribute<OptionAttribute>();
+            if (theOptionAttribute is not null) {
+                Type theCommandLineOptionType =
+                    typeof(CommandLineOption<>).MakeGenericType(thePropertyInfo.PropertyType);
+                ConstructorInfo theConstructor =
+                    theCommandLineOptionType.GetConstructor([typeof(char), typeof(string)])!;
+
+                var theOption =
+                    (CommandLineOption) theConstructor.Invoke([theOptionAttribute.Letter, theOptionAttribute.Description]);
+                theOption.LongName = theOptionAttribute.LongName;
+
+                if (theOptionAttribute.DefaultValue is not null) {
+                    theOption
+                        .GetType()
+                        .GetProperty("DefaultValue")!
+                        .GetSetMethod()!
+                        .Invoke(theOption, [theOptionAttribute.DefaultValue]);
+                }
+
+                if (theOptionAttribute.ExclusionGroups is not null) {
+                    foreach (string theExclusionGroup in theOptionAttribute.ExclusionGroups) {
+                        theOption.ExclusionGroups.Add(theExclusionGroup);
+                    }
+                }
+
+                Options.Add(theOption);
+            }
+
+            ParameterAttribute? theParameterAttribute = thePropertyInfo.GetAttribute<ParameterAttribute>();
+            if (theParameterAttribute is not null) {
+                Type theCommandLineParameterType =
+                    typeof(CommandLineParameter<>).MakeGenericType(thePropertyInfo.PropertyType);
+                ConstructorInfo theConstructor =
+                    theCommandLineParameterType.GetConstructor([typeof(string), typeof(string)])!;
+
+                var theParameter =
+                    (CommandLineParameter) theConstructor.Invoke([theParameterAttribute.Name, theParameterAttribute.Description]);
+
+                if (theParameterAttribute.DefaultValue is not null) {
+                    theParameter
+                        .GetType()
+                        .GetProperty("DefaultValue")!
+                        .GetSetMethod()!
+                        .Invoke(theParameter, [theParameterAttribute.DefaultValue]);
+                }
+
+                Parameters.Add(theParameter);
+            }
+        }
+
+        mySubcommand = subcommand;
+    }
+
+    internal override async Task<int> ExecuteAsync(
+        IEnumerable<CommandLineToken> argTokens, CommandLineDefinition definition, CancellationToken cancellationToken) {
+        ISubcommand theSubcommand = mySubcommand;
+        Type theSubcommandType = theSubcommand.GetType();
+
+        foreach (CommandLineToken theArgToken in argTokens) {
+            if (theArgToken.Kind != CommandLineTokenKind.Subcommand) {
+                // Option oder Parameter
+                string thePropertyName = theArgToken.Name;
+
+                // Spezifische (Attribute) PropertyInfo finden
+                PropertyInfo? thePropertyInfo;
+
+                if (theArgToken.Kind == CommandLineTokenKind.Option) {
+                    thePropertyName = thePropertyName.Replace("-", ""); // de-kebap-style
+
+                    thePropertyInfo =
+                        theSubcommandType
+                            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                            .SingleOrDefault(
+                                pi => pi.GetCustomAttribute<OptionAttribute>() is OptionAttribute theAttribute &&
+                                      theAttribute.Letter.ToString() == thePropertyName);
+                } else {
+                    // Parameter
+                    thePropertyInfo =
+                        theSubcommandType
+                            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                            .SingleOrDefault(
+                                pi => pi.GetCustomAttribute<ParameterAttribute>() is ParameterAttribute theAttribute &&
+                                      theAttribute.Name.ToLower() == thePropertyName);
+                }
+
+                // Falls nicht gefunden: Property mit genau dem passenden Namen (case-insensitive) finden
+                thePropertyInfo ??= theSubcommandType.GetProperty(
+                    thePropertyName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase
+                );
+
+                if (thePropertyInfo is not null) {
+                    // Property gefunden, Wert setzen
+                    thePropertyInfo.SetMethod?.Invoke(theSubcommand, [theArgToken.Value]);
+                } else {
+                    throw new InvalidOperationException(
+                        $"No property for \"{thePropertyName}\" found on options type {theSubcommandType.FullName}."
+                    );
+                }
+            }
+        }
+
+        return await mySubcommand.ExecuteAsync(cancellationToken);
+    }
 }

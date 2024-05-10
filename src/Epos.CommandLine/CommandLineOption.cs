@@ -60,13 +60,13 @@ public abstract class CommandLineOption
     /// <summary> Gets the data type. </summary>
     public Type DataType { get; }
 
-    /// <summary> Gets or sets the long name ("--example").
+    /// <summary> Gets or sets the long name without the double dash ("example" for "--example").
     /// </summary>
     public string? LongName { get; set; }
 
     /// <summary> Exclusion groups to which this option belongs. </summary>
     /// <remarks> Two options with the same exclusion group cannot be used together. </remarks>
-    public IList<string> ExclusionGroups { get; } = new List<string>();
+    public IList<string> ExclusionGroups { get; } = [];
 
     internal bool IsSwitch => DataType == typeof(bool);
 

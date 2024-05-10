@@ -145,7 +145,9 @@ Sample entry point that uses the `BuildOptions` class for the subcommand `build`
 
 ```csharp
 var theCommandLineDefinition = new CommandLineDefinition {
-    Name = "sample", // <- if not specified, .exe-Filename is used
+    Configuration = new CommandLineConfiguration {
+        Name = "sample", // <- if unset, .exe-Filename is taken
+    },
     Subcommands = {
         new CommandLineSubcommand<BuildOptions>("build", "Builds something.") {
             Options = {
@@ -199,6 +201,66 @@ Parameters
 ```
 
 Long option chains and description texts are properly line breaked regarding the console window width.
+
+---
+
+Alternatively you can use the even simpler and mightier `CommandLineApplicationBuilder` class. It supports logging (to the console of course, but you can register further loggers or provide your own implementation) and dependency injection (see `TestService`) for the sub commands.
+
+The subcommands are registered with the `AddSubcommand` method, see below for an example with just one `default` subcommand (which means no subcommand at all).
+
+```csharp
+using Epos.CommandLine.Application;
+
+HostApplicationBuilder theBuilder = CommandLineApplicationBuilder.CreateApplicationBuilder(args);
+
+theBuilder.Configure(x => {
+    x.Name = "test-app";
+});
+
+theBuilder.Services.AddSingleton<TestService>();
+theBuilder.Services.AddSubcommand<MySubcommand>();
+
+await theBuilder
+    .Build()
+    .RunAsync();
+
+// ---------------------------------------------
+
+class TestService
+{
+    public string GetSomeString() => "Hello, World!";
+}
+
+class MySubcommand(TestService testService, ILogger<MySubcommand> logger) : ISubcommand
+{
+    public string Name => "default";
+
+    public string Description => "Default command";
+
+    [Option('t', "Test option", LongName = "test")]
+    public string? TestOption { get; set; }
+
+    [Parameter("test-param", "Test parameter", DefaultValue = 123)]
+    public int TestParam { get; set; }
+
+
+    public Task<int> ExecuteAsync(CancellationToken cancellationToken) {
+        if (TestOption == "World" &&
+            testService.GetSomeString().StartsWith("Hello"))
+        {
+            logger.LogInformation("Successful!");
+            return Task.FromResult(TestParam);
+        }
+        else
+        {
+            logger.LogError("Unsuccessful!");
+            return Task.FromResult(0);
+        }
+    }
+}
+```
+
+If you just need to write text to the console, use the `LogInformation` method (you may use `Console.WriteLine` alternatively). Other log levels produce `WARNING`-, `ERROR`- etc. banners. For `INFO`-banner use `LogTrace`.
 
 ## Contributing
 
