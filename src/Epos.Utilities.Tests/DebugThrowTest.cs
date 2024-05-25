@@ -11,16 +11,17 @@ public class DebugThrowTest
 {
     [Test]
     public void IfNull() {
-        Assert.Throws<ArgumentNullException>(() => DebugThrow.IfNull((object?) null, "param"));
+        object? param = null;
+        Assert.Throws<ArgumentNullException>(() => DebugThrow.IfNull(param));
 
         DebugThrow.IfNull("not-null", "param");
     }
 
     [Test]
     public void IfInvalidEnum() {
-        var theDateTimeKind = (DateTimeKind) 999;
+        var param = (DateTimeKind) 999;
 
-        Assert.Throws<InvalidEnumArgumentException>(() => DebugThrow.IfInvalidEnum(theDateTimeKind, "param"));
+        Assert.Throws<InvalidEnumArgumentException>(() => DebugThrow.IfInvalidEnum(param));
 
         DebugThrow.IfInvalidEnum(DateTimeKind.Utc, "param");
     }

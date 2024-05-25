@@ -17,7 +17,8 @@ public static class DebugThrow
     [Conditional("DEBUG")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Global
-    public static void IfNull<T>(T? value, string paramName) where T : class {
+    public static void IfNull<T>(T? value, [CallerArgumentExpression(nameof(value))] string? paramName = null)
+        where T : class {
         if (value is null) {
             throw new ArgumentNullException(paramName);
         }
@@ -29,7 +30,7 @@ public static class DebugThrow
     /// <param name="paramName">Param name</param>
     [Conditional("DEBUG")]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void IfInvalidEnum(Enum value, string paramName) {
+    public static void IfInvalidEnum(Enum value, [CallerArgumentExpression(nameof(value))] string? paramName = null) {
         if (!Enum.IsDefined(value.GetType(), value)) {
             throw new InvalidEnumArgumentException(paramName, (int) (object) value, value.GetType());
         }
