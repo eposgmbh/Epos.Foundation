@@ -39,7 +39,7 @@ public class HostExtensionsTest
 
 public class Logger : ILogger
 {
-    public IDisposable BeginScope<TState>(TState state) => null!;
+    public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
 
     public bool IsEnabled(LogLevel logLevel) => true;
 
@@ -48,5 +48,5 @@ public class Logger : ILogger
         LogMessages.Add(logLevel + ": " + theFormattedLogValues!.First().Value);
     }
 
-    public List<string> LogMessages {get;} = new List<string>();
+    public List<string> LogMessages { get; } = new List<string>();
 }

@@ -24,6 +24,8 @@ public static class DumpExtensions
     /// <paramref name="value"/>.</summary>
     /// <param name="value">Value</param>
     /// <returns>Pretty-print string representation</returns>
+    [UnconditionalSuppressMessage("AssemblyLoadTrimming", "IL2072", Justification = "Types are available at runtime.")]
+    [UnconditionalSuppressMessage("AssemblyLoadTrimming", "IL2075", Justification = "Types are available at runtime.")]
     public static string Dump(this object? value) {
         // Simple cases:
         switch (value) {

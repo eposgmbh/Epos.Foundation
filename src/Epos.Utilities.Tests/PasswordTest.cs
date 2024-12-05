@@ -11,6 +11,6 @@ public class PasswordTest
         Assert.Throws<ArgumentNullException>(() => Password.Hash(null!));
 
         string theHash = Password.Hash("abcd1234");
-        Assert.AreEqual("e9cee71ab932fde863338d08be4de9dfe39ea049bdafb342ce659ec5450b69ae", theHash);
+        Assert.That(theHash, Is.EqualTo("e9cee71ab932fde863338d08be4de9dfe39ea049bdafb342ce659ec5450b69ae"));
     }
 }

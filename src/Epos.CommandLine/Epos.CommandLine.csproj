@@ -3,7 +3,7 @@
   <PropertyGroup>
     <AssemblyName>Epos.CommandLine</AssemblyName>
     <RootNamespace>Epos.CommandLine</RootNamespace>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <AssemblyVersion>9.9.9</AssemblyVersion>
     <AssemblyInformationalVersion>9.9.9</AssemblyInformationalVersion>
     <PackageVersion>9.9.9</PackageVersion>
@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Epos.Utilities\Epos.Utilities.csproj" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
   </ItemGroup>
 
 </Project>

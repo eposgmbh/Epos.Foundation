@@ -63,7 +63,7 @@ public static class HostExtensions
         var theClient = new TcpClient();
         var theStopwatch = Stopwatch.StartNew();
 
-        var (theHost, thePort) = GetHostAndPort(serviceUrl);
+        (string theHost, int thePort) = GetHostAndPort(serviceUrl);
 
         bool theIsSuccessful = false;
         bool theIsLogged = false;
@@ -121,25 +121,25 @@ public static class HostExtensions
         IConfiguration theConfiguration = serviceProvider.GetRequiredService<IConfiguration>();
         ILogger theLogger = serviceProvider.GetRequiredService<ILogger<Logging>>();
 
-        foreach (var theConfigurationEntry in serviceUrlConfigurationEntries) {
+        foreach (string? theConfigurationEntry in serviceUrlConfigurationEntries) {
             if (theConfigurationEntry is null) {
                 throw new ArgumentNullException(nameof(serviceUrlConfigurationEntries));
             }
 
-            string theServiceUrl = theConfiguration[theConfigurationEntry];
+            string? theServiceUrl = theConfiguration[theConfigurationEntry];
 
-            WaitForServiceAvailability(theServiceUrl, theLogger, timeoutSeconds);
+            WaitForServiceAvailability(theServiceUrl!, theLogger, timeoutSeconds);
         }
     }
 
     private static (string Host, int Port) GetHostAndPort(string serviceUrl) {
         try {
-            Uri theUri = new Uri(serviceUrl);
+            var theUri = new Uri(serviceUrl);
             return (theUri.Host, theUri.Port);
         } catch (UriFormatException) {
             var theRegex = new Regex(@"\s*[S|s]erver=([A-Za-z0-9\.\-]+).*[P|p]ort=([0-9]+).*", RegexOptions.Compiled);
 
-            var theMatch = theRegex.Matches(serviceUrl).SingleOrDefault();
+            Match? theMatch = theRegex.Matches(serviceUrl).SingleOrDefault();
             if (theMatch is not null) {
                 string theHost = theMatch.Groups[1].Value;
                 if (int.TryParse(theMatch.Groups[2].Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out int thePort)) {

@@ -139,6 +139,7 @@ internal sealed class CommandLineSubcommandWrapper : CommandLineSubcommand
 {
     private readonly ISubcommand mySubcommand;
 
+    [UnconditionalSuppressMessage("AssemblyLoadTrimming", "IL2075", Justification = "Types are available at runtime.")]
     [UnconditionalSuppressMessage("AOT", "IL3050", Justification = "Types are available at runtime.")]
     public CommandLineSubcommandWrapper(ISubcommand subcommand) : base(subcommand.Name, subcommand.Description) {
         foreach (PropertyInfo thePropertyInfo in subcommand.GetType().GetProperties()) {
@@ -195,6 +196,7 @@ internal sealed class CommandLineSubcommandWrapper : CommandLineSubcommand
         mySubcommand = subcommand;
     }
 
+    [UnconditionalSuppressMessage("AssemblyLoadTrimming", "IL2075", Justification = "Types are available at runtime.")]
     internal override async Task<int> ExecuteAsync(
         IEnumerable<CommandLineToken> argTokens, CommandLineDefinition definition, CancellationToken cancellationToken) {
         ISubcommand theSubcommand = mySubcommand;
