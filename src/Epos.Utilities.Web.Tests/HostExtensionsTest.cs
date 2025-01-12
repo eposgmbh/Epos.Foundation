@@ -48,5 +48,5 @@ public class Logger : ILogger
         LogMessages.Add(logLevel + ": " + theFormattedLogValues!.First().Value);
     }
 
-    public List<string> LogMessages { get; } = new List<string>();
+    public List<string> LogMessages { get; } = [];
 }

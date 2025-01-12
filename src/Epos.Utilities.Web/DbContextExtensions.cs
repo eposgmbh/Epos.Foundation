@@ -24,10 +24,8 @@ public static class DbContextExtensions
         IInfrastructure<IServiceProvider> theInfrastructure = dbContext;
         ILogger theLogger = theInfrastructure.GetService<ILogger<Logging>>();
 
-        string? theConnectionString = dbContext.Database.GetConnectionString();
-        if (theConnectionString is null) {
+        string theConnectionString = dbContext.Database.GetConnectionString() ??
             throw new InvalidOperationException($"Invalid connection string on {dbContext.GetType()}");
-        }
 
         HostExtensions.WaitForServiceAvailability(theConnectionString, theLogger, timeoutSeconds);
 

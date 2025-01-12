@@ -65,7 +65,7 @@ public static class HttpClientBuilderExtensions
         using IServiceScope theServiceScope = httpClientBuilder.Services.BuildServiceProvider().CreateScope();
         ILogger theLogger = theServiceScope.ServiceProvider.GetRequiredService<ILogger<HttpClient>>();
 
-        HttpClientHandler theHttpClientHandler = new HttpClientHandler {
+        var theHttpClientHandler = new HttpClientHandler {
             ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => {
                 theLogger.LogWarning($"Trusting certificate {cert!.Issuer}.");
                 return true;
@@ -77,7 +77,6 @@ public static class HttpClientBuilderExtensions
         return httpClientBuilder;
     }
 
-    private static TimeSpan SleepDurationProvider(int retryAttempt) {
-        return TimeSpan.FromSeconds(Math.Pow(Seconds, retryAttempt));
-    }
+    private static TimeSpan SleepDurationProvider(int retryAttempt)
+        => TimeSpan.FromSeconds(Math.Pow(Seconds, retryAttempt));
 }
