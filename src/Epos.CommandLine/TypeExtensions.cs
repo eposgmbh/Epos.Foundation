@@ -13,7 +13,8 @@ internal static class TypeExtensions
         typeof(double),
         typeof(DateTime),
         typeof(System.IO.FileInfo),
-        typeof(System.IO.DirectoryInfo)
+        typeof(System.IO.DirectoryInfo),
+        typeof(Uri)
     };
 
     public static void TestAvailable(this Type dataType) {

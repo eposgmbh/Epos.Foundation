@@ -21,6 +21,18 @@ internal static class ParseUtils
             return new System.IO.DirectoryInfo(rawValue);
         }
 
+        if (theDataType == typeof(System.Uri)) {
+            if (Uri.TryCreate(rawValue, UriKind.Absolute, out Uri? theUri)) {
+                errorMessage = null;
+                return theUri;
+            }
+            else
+            {
+                errorMessage = $"Value \"{rawValue}\" for option {option.ToLongCommandLineString()} is not a valid URI.";
+                return null;
+            }
+        }
+
         if (rawValue.TryConvert(theDataType, CultureInfo.InvariantCulture, out object? theConvertedValue))
         {
             errorMessage = null;
