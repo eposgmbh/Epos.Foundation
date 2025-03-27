@@ -137,9 +137,16 @@ public static class HostExtensions
             var theUri = new Uri(serviceUrl);
             return (theUri.Host, theUri.Port);
         } catch (UriFormatException) {
-            var theRegex = new Regex(@"\s*[S|s]erver=([A-Za-z0-9\.\-]+).*[P|p]ort=([0-9]+).*", RegexOptions.Compiled);
+            var theRegex = new Regex(@"\s*[S|s]erver=([A-Za-z0-9\.\-]+).*[P|p]ort=([0-9]+).*");
 
             Match? theMatch = theRegex.Matches(serviceUrl).SingleOrDefault();
+
+            if (theMatch is null) {
+                theRegex = new Regex(@"\s*[H|h]ost=([A-Za-z0-9\.\-]+).*[P|p]ort=([0-9]+).*");
+
+                theMatch = theRegex.Matches(serviceUrl).SingleOrDefault();
+            }
+
             if (theMatch is not null) {
                 string theHost = theMatch.Groups[1].Value;
                 if (int.TryParse(theMatch.Groups[2].Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out int thePort)) {

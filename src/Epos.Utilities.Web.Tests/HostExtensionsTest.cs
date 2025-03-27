@@ -23,10 +23,24 @@ public class HostExtensionsTest
     }
 
     [Test]
-    public void ConnectionString() {
+    public void ConnectionStringWithServerComponent() {
         var theLogger = new Logger();
 
         string theConnectionString = "Server=unknown.server.com;Port=5432;Database=db;User ID=admin;Password=admin";
+
+        try {
+            HostExtensions.WaitForServiceAvailability(theConnectionString, theLogger, 5);
+        } catch (TimeoutException theException) {
+            Assert.That(theLogger.LogMessages, Has.One.StartsWith("Information: Waiting for the availability of the host unknown.server.com:5432..."));
+            Assert.That(theException.Message, Is.EqualTo("Host unknown.server.com:5432 is not available after 5 seconds."));
+        }
+    }
+    [Test]
+
+    public void ConnectionStringWithHostComponent() {
+        var theLogger = new Logger();
+
+        string theConnectionString = "Host=unknown.server.com;Port=5432;Database=db;User ID=admin;Password=admin";
 
         try {
             HostExtensions.WaitForServiceAvailability(theConnectionString, theLogger, 5);
