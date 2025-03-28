@@ -26,7 +26,7 @@ public sealed partial class DockerContainer : IDisposable
             throw new ArgumentNullException("options.ImageName");
         }
 
-        var theDockerArguments = new StringBuilder($"run --detach --name ").Append(options.Name);
+        StringBuilder theDockerArguments = new StringBuilder($"run --detach --name ").Append(options.Name);
 
         if (options.Hostname is not null) {
             theDockerArguments.Append($" --hostname {options.Hostname}");
@@ -138,7 +138,7 @@ public sealed partial class DockerContainer : IDisposable
     }
 
     private static int GetFreeTcpHostPort() {
-        TcpListener theTcpListener = new TcpListener(IPAddress.Loopback, 0);
+        var theTcpListener = new TcpListener(IPAddress.Loopback, 0);
 
         theTcpListener.Start();
         int thePort = ((IPEndPoint) theTcpListener.LocalEndpoint).Port;

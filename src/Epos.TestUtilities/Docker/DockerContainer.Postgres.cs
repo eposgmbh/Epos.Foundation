@@ -19,7 +19,7 @@ public partial class DockerContainer
 
             int thePort = GetFreeTcpHostPort();
 
-            var theContainer = StartAndWaitForReadynessLogPhrase(
+            DockerContainer theContainer = StartAndWaitForReadynessLogPhrase(
                 new DockerContainerOptions
                 {
                     Name = "PostgresTestContainer",

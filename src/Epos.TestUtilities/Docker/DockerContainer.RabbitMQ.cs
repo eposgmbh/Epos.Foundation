@@ -17,19 +17,26 @@ public partial class DockerContainer
                 throw new ArgumentException($"\"{nameof(version)}\" must not be null or white space.", nameof(version));
             }
 
-            return StartAndWaitForReadynessLogPhrase(
+            int theRabbitMQPort = GetFreeTcpHostPort();
+            int theManagementPort = GetFreeTcpHostPort();
+
+            DockerContainer theContainer =  StartAndWaitForReadynessLogPhrase(
                 new DockerContainerOptions
                 {
                     Name = "RabbitMQTestContainer",
                     ImageName = $"rabbitmq:{version}",
                     Hostname = "rabbitmq-host",
                     Ports = {
-                        (hostPort: 5672, containerPort: 5672),
-                        (hostPort: 15672, containerPort: 15672)
+                        (hostPort: theRabbitMQPort, containerPort: 5672),
+                        (hostPort: theManagementPort, containerPort: 15672)
                     },
                     ReadynessLogPhrase = "startup complete"
                 }
             );
+
+            theContainer.ConnectionString = $"amqp://guest:guest@localhost:{theRabbitMQPort}";
+
+            return theContainer;
         }
     }
 }
