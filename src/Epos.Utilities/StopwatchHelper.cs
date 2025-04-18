@@ -16,7 +16,7 @@ public static class StopwatchHelper
             throw new ArgumentNullException(nameof(action));
         }
 
-        Stopwatch theStopwatch = Stopwatch.StartNew();
+        var theStopwatch = Stopwatch.StartNew();
 
         action();
 

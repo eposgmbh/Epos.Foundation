@@ -54,7 +54,7 @@ public static class ListExtensions
         foreach (T theObject in list) {
             theResult =
                 37 * theResult +
-                (!ReferenceEquals(theObject, null) ? theObject.GetHashCode() : 0);
+                (theObject is not null ? theObject.GetHashCode() : 0);
         }
 
         return theResult;
