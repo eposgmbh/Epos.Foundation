@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Threading.Tasks;
 
 using Epos.Utilities;
@@ -65,11 +67,15 @@ public static class RefitRestClientConsoleHelper
 
     private static int HandleException(Exception exception) {
         if (exception is AggregateException theAggregateException) {
-            Exception theInnerException = theAggregateException.InnerExceptions.First();
+            exception = theAggregateException.InnerExceptions.First();
+        }
 
-            if (theInnerException.GetType().FullName == "Refit.ApiException") {
-                return HandleApiException(theInnerException);
-            }
+        if (exception.GetType().FullName == "Refit.ValidationApiException") {
+            return HandleValidationApiException(exception);
+        }
+
+        if (exception.GetType().FullName == "Refit.ApiException") {
+            return HandleApiException(exception);
         }
 
         Console.WriteLine();
@@ -77,6 +83,40 @@ public static class RefitRestClientConsoleHelper
         Console.WriteLine($" {exception.Message}");
 
         return -1;
+    }
+    [UnconditionalSuppressMessage("AssemblyLoadTrimming", "IL2075", Justification = "Types are available at runtime.")]
+    private static int HandleValidationApiException(Exception validationApiException) {
+        Console.WriteLine();
+
+        object theContent = validationApiException
+            .GetType()
+            .GetProperty("Content", BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)!
+            .GetGetMethod()!
+            .Invoke(validationApiException, [])!;
+
+        string theDetail = (string) theContent
+            .GetType()
+            .GetProperty("Detail")!
+            .GetGetMethod()!
+            .Invoke(theContent, [])!;
+
+        var theErrors = (Dictionary<string, string[]>) theContent
+            .GetType()
+            .GetProperty("Errors")!
+            .GetGetMethod()!
+            .Invoke(theContent, [])!;
+
+        var theErrorStrings = theErrors.SelectMany(e => e.Value).ToList();
+
+        ColorConsole.WriteError(" ERROR ");
+
+        if (theErrorStrings.Count != 0) {
+            Console.WriteLine($" {theErrorStrings.First()}");
+        } else {
+            Console.WriteLine($" {theDetail}");
+        }
+
+        return 6;
     }
 
     [UnconditionalSuppressMessage("AssemblyLoadTrimming", "IL2075", Justification = "Types are available at runtime.")]
