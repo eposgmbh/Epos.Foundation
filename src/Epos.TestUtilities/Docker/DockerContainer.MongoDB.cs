@@ -11,15 +11,17 @@ public partial class DockerContainer
         public const string LatestVersion = "6.0";
 
         /// <summary> Starts a MongoDB Docker container. </summary>
+        /// <param name="version">Version</param>
+        /// <param name="port">Specific port</param>
         /// <returns>Docker container</returns>
-        public static DockerContainer Start(string version = LatestVersion) {
+        public static DockerContainer Start(string version = LatestVersion, int? port = null) {
             if (string.IsNullOrWhiteSpace(version)) {
                 throw new ArgumentException($"\"{nameof(version)}\" must not be null or white space.", nameof(version));
             }
 
-            int thePort = GetFreeTcpHostPort();
+            int thePort = port ?? GetFreeTcpHostPort();
 
-            var theContainer = StartAndWaitForReadynessLogPhrase(
+            DockerContainer theContainer = StartAndWaitForReadynessLogPhrase(
                 new DockerContainerOptions
                 {
                     Name = "MongoDBTestContainer",
