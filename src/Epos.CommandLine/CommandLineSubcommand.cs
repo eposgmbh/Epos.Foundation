@@ -5,11 +5,11 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Epos.CommandLine.Application;
 using Epos.Utilities;
 
 namespace Epos.CommandLine;
-
 
 /// <summary> Command line subcommand, see <a href="/getting-started.html">Getting started</a>
 /// for an example.</summary>
@@ -245,6 +245,6 @@ internal sealed class CommandLineSubcommandWrapper : CommandLineSubcommand
             }
         }
 
-        return await mySubcommand.ExecuteAsync(cancellationToken);
+        return await mySubcommand.ExecuteAsync(new SubcommandHelper(definition), cancellationToken);
     }
 }

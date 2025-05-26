@@ -1,14 +1,13 @@
 using System;
-using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 using NUnit.Framework;
 using NUnit.Framework.Internal;
-using Microsoft.Extensions.Logging;
-using System.Threading;
 
 namespace Epos.CommandLine.Application;
 
@@ -49,7 +48,7 @@ public class CommandLineApplicationBuilderTest
         public int TestParam { get; set; }
 
 
-        public Task<int> ExecuteAsync(CancellationToken cancellationToken) {
+        public Task<int> ExecuteAsync(ISubcommandHelper helper, CancellationToken cancellationToken) {
             if (TestOption == "World" && testService.GetSomeString().StartsWith("Hello")) {
                 logger.LogInformation("Successful!");
                 return Task.FromResult(TestParam);

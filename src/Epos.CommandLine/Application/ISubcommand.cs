@@ -24,7 +24,8 @@ public interface ISubcommand
     /// instance that is initialized with the command line arguments. The method is
     /// only called, if the command line can be parsed successfully. The method should
     /// return an error code (0 if successful). </remarks>
+    /// <param name="helper">Subcommand helper methods</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Exit code (async)</returns>
-    public Task<int> ExecuteAsync(CancellationToken cancellationToken);
+    public Task<int> ExecuteAsync(ISubcommandHelper helper, CancellationToken cancellationToken);
 }
