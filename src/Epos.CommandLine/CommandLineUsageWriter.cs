@@ -23,6 +23,11 @@ internal sealed class CommandLineUsageWriter
     }
 
     public void WriteAndExit(string? errorMessage = null) {
+        if (!myDefinition.HasDifferentiatedSubcommands) {
+            WriteAndExit(myDefinition.Subcommands.First(), errorMessage);
+            return;
+        }
+
         var theResult = new StringBuilder("Usage: ");
 
         theResult
@@ -108,6 +113,11 @@ internal sealed class CommandLineUsageWriter
                 .Append(Environment.NewLine)
                 .Append("Error: ")
                 .Append(errorMessage)
+                .Append(Environment.NewLine);
+        } else {
+            theResult
+                .Append(Environment.NewLine)
+                .Append(subcommand.Description)
                 .Append(Environment.NewLine);
         }
 

@@ -347,6 +347,7 @@ public class CommandLineDefinitionTest
             Is.EqualTo(
                 "Usage: sample build [-p, --project-number <int>] [-m, --memory <string=\"1 GB\">]" +
                 " [-d] [-z] <dummy:string>" + DbLf +
+                "Builds something." + DbLf +
                 "Options" + Lf +
                 "  -p, --project-number   Sets the project number." + Lf +
                 "  -m, --memory           Sets the used memory. >>> defaults to \"1 GB\"" + Lf +
