@@ -34,7 +34,8 @@ namespace Epos.Utilities
             Assert.That(typeof(string).Dump(), Is.EqualTo("string"));
             Assert.That(typeof(decimal).Dump(), Is.EqualTo("decimal"));
             Assert.That(typeof(double?).Dump(), Is.EqualTo("double?"));
-            Assert.That(typeof(DateTime).Dump(), Is.EqualTo("System.DateTime"));
+            Assert.That(typeof(DateTime).Dump(), Is.EqualTo("DateTime"));
+            Assert.That(typeof(DateOnly).Dump(), Is.EqualTo("DateOnly"));
             Assert.That(typeof(Cache<,>).Dump(), Is.EqualTo("Epos.Utilities.Cache<TKey, TValue>"));
             Assert.That(typeof(Cache<int, string>).Dump(), Is.EqualTo("Epos.Utilities.Cache<int, string>"));
             Assert.That(typeof(ExampleClass).Dump(), Is.EqualTo("Epos.Utilities.DumpExtensionsTest.ExampleClass"));

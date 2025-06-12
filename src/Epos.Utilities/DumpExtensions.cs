@@ -358,6 +358,22 @@ public static class DumpExtensions
             return "double";
         } else if (type == typeof(bool)) {
             return "bool";
+        } else if (type == typeof(string)) {
+            return "string";
+        } else if (type == typeof(object)) {
+            return "object";
+        } else if (type == typeof(DateOnly)) {
+            return nameof(DateOnly);
+        } else if (type == typeof(DateTime)) {
+            return nameof(DateTime);
+        } else if (type.FullName == "Epos.Core.Date") {
+            return "Date";
+        } else if (type.FullName == "Epos.Core.DateSpan") {
+            return "DateSpan";
+        } else if (type.FullName == "Epos.Core.HistoricalState") {
+            return "HistoricalState";
+        } else if (type.FullName == "Epos.Core.Rational") {
+            return "Rational";
         } else if (type == typeof(byte)) {
             return "byte";
         } else if (type == typeof(char)) {
@@ -372,18 +388,8 @@ public static class DumpExtensions
             return "float";
         } else if (type == typeof(void)) {
             return "void";
-        } else if (type == typeof(string)) {
-            return "string";
         } else if (type == typeof(object)) {
             return "object";
-        } else if (type.FullName == "Epos.Core.Date") {
-            return "Date";
-        } else if (type.FullName == "Epos.Core.DateSpan") {
-            return "DateSpan";
-        } else if (type.FullName == "Epos.Core.HistoricalState") {
-            return "HistoricalState";
-        } else if (type.FullName == "Epos.Core.Rational") {
-            return "Rational";
         } else {
             return type.FullName!;
         }
