@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>Epos.TestUtilities</AssemblyName>
     <RootNamespace>Epos.TestUtilities</RootNamespace>
     <AssemblyVersion>9.9.9</AssemblyVersion>
