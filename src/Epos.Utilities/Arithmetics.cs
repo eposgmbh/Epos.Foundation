@@ -130,6 +130,7 @@ public static class Arithmetics
     /// <remarks>Works only with the following types: <see cref="double" />, <see cref="decimal" /></remarks>
     public static RoundOperation<T> CreateRoundOperation<
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods |
+         DynamicallyAccessedMemberTypes.PublicProperties |
          DynamicallyAccessedMemberTypes.PublicConstructors)] T
     >() {
         Type theType = typeof(T);
@@ -154,13 +155,13 @@ public static class Arithmetics
                     theCallRoundExpression, theTypeToRoundArgument, theInt32Argument, theMidpointRoundingArgument
                 ).Compile();
             } else {
-                ParameterExpression theTypeArgument = Expression.Parameter(typeof(T));
+                ParameterExpression theTypeArgument = Expression.Parameter(theType);
 
-                MethodInfo theGetHasValueMethodInfo = theType.GetMethod("get_HasValue")!;
+                MethodInfo theGetHasValueMethodInfo = theType.GetProperty("HasValue")!.GetGetMethod()!;
                 MethodCallExpression theCallGetHasValueExpression =
                     Expression.Call(theTypeArgument, theGetHasValueMethodInfo);
 
-                MethodInfo theGetValueMethodInfo = theType.GetMethod("get_Value")!;
+                MethodInfo theGetValueMethodInfo = theType.GetProperty("Value")!.GetGetMethod()!;
                 MethodCallExpression theCallGetValueExpression =
                     Expression.Call(theTypeArgument, theGetValueMethodInfo);
 
