@@ -36,10 +36,9 @@ public static class DumpExtensions
                 return theString;
 
             case double theDoubleValue:
-                return
-                    Math.Abs(theDoubleValue) < 1.0E-14 ?
-                    "0" :
-                    theDoubleValue.ToString("R", CultureInfo.InvariantCulture);
+                return Math.Abs(theDoubleValue) < 1.0E-14
+                    ? "0"
+                    : theDoubleValue.ToString("0.##########", CultureInfo.InvariantCulture);
 
             case DictionaryEntry theEntry:
                 return
