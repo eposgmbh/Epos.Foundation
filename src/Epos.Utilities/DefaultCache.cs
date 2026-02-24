@@ -2,30 +2,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Epos.Utilities;
 
-/// <summary>Provides a general in-memory Cache.</summary>
-/// <typeparam name="TKey">Cache key type</typeparam>
-/// <typeparam name="TValue">Cache value type (must be a <b>class</b>)</typeparam>
-public sealed class Cache<TKey, TValue>
+/// <inheritdoc />
+public sealed class DefaultCache<TKey, TValue> : ICache<TKey, TValue>
     where TKey : notnull
     where TValue : class
 {
-    private static readonly object SyncLock = new();
+    private static readonly Lock SyncLock = new();
 
     private readonly Dictionary<TKey, TValue> myInternalCache;
     private readonly Queue<TKey> myQueue;
 
-    /// <summary>Initializes an instance of the <see cref="Cache{TKey,TValue}"/> class.</summary>
+    /// <summary>Initializes an instance of the <see cref="DefaultCache{TKey,TValue}"/> class.</summary>
     /// <param name="capacity">Cache capacity</param>
-    public Cache(int capacity) {
+    public DefaultCache(int capacity) {
         if (capacity < 2) {
-            throw new ArgumentOutOfRangeException(
-                nameof(capacity),
-                capacity,
-                "Capacity must be greater than one."
-            );
+            throw new ArgumentOutOfRangeException(nameof(capacity), capacity, "Capacity must be greater than one.");
         }
 
         Capacity = capacity;
@@ -33,9 +28,7 @@ public sealed class Cache<TKey, TValue>
         myQueue = new Queue<TKey>(capacity + 1);
     }
 
-    /// <summary>Sets or returns a cache value.</summary>
-    /// <param name="key">Cache key</param>
-    /// <returns>Value or <b>null</b>, if no value is found</returns>
+    /// <inheritdoc />
     public TValue? this[TKey key] {
         get {
             myInternalCache.TryGetValue(key, out TValue? theResult);
@@ -43,9 +36,7 @@ public sealed class Cache<TKey, TValue>
         }
     }
 
-    /// <summary> Adds a cache value. </summary>
-    /// <param name="key">Key</param>
-    /// <param name="value">Value</param>
+    /// <inheritdoc />
     public void Add(TKey key, TValue value) {
         lock (SyncLock) {
             if (!myInternalCache.ContainsKey(key)) {
@@ -60,16 +51,13 @@ public sealed class Cache<TKey, TValue>
         }
     }
 
-    /// <summary>Gets the cache capacity. </summary>
-    /// <returns>Cache capacity</returns>
+    /// <inheritdoc />
     public int Capacity { get; }
 
-    /// <summary>Gets the value count of the cache.</summary>
-    /// <returns>Cache value count</returns>
+    /// <inheritdoc />
     public int Count => myQueue.Count;
 
-    /// <summary>Returns a string that represents the cache.</summary>
-    /// <returns>String representation of the cache</returns>
+    /// <inheritdoc />
     public override string ToString() {
         lock (SyncLock) {
             IEnumerable theDumpFriendlyEnumerable =

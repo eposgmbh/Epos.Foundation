@@ -9,11 +9,11 @@ public class CacheTest
 {
     [Test]
     public void ConstructorExceptions() =>
-        Assert.Throws<ArgumentOutOfRangeException>(() => { new Cache<object, object>(1); });
+        Assert.Throws<ArgumentOutOfRangeException>(() => { new DefaultCache<object, object>(1); });
 
     [Test]
     public void ConstructorAndBasics() {
-        var theCache = new Cache<int, string>(2);
+        var theCache = ICache<int, string>.Create(2);
         Assert.That(theCache.Capacity, Is.EqualTo(2));
         Assert.That(theCache.Count, Is.EqualTo(0));
 

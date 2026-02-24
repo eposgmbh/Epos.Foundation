@@ -36,8 +36,8 @@ namespace Epos.Utilities
             Assert.That(typeof(double?).Dump(), Is.EqualTo("double?"));
             Assert.That(typeof(DateTime).Dump(), Is.EqualTo("DateTime"));
             Assert.That(typeof(DateOnly).Dump(), Is.EqualTo("DateOnly"));
-            Assert.That(typeof(Cache<,>).Dump(), Is.EqualTo("Epos.Utilities.Cache<TKey, TValue>"));
-            Assert.That(typeof(Cache<int, string>).Dump(), Is.EqualTo("Epos.Utilities.Cache<int, string>"));
+            Assert.That(typeof(DefaultCache<,>).Dump(), Is.EqualTo("Epos.Utilities.DefaultCache<TKey, TValue>"));
+            Assert.That(typeof(DefaultCache<int, string>).Dump(), Is.EqualTo("Epos.Utilities.DefaultCache<int, string>"));
             Assert.That(typeof(ExampleClass).Dump(), Is.EqualTo("Epos.Utilities.DumpExtensionsTest.ExampleClass"));
         }
 
@@ -125,8 +125,8 @@ Sum                          |  177.57 |
             }
 
             public override IEnumerable<Row> GetRows() {
-                yield return new Row(1, "Gabbel", "World", 34.45, "Guguck"); 
-                yield return new Row(2, "Blofeld", "Hello", 43.89, "Moin"); 
+                yield return new Row(1, "Gabbel", "World", 34.45, "Guguck");
+                yield return new Row(2, "Blofeld", "Hello", 43.89, "Moin");
                 yield return new Row(3, "Kaputt", "Together", 99.23, "Hi");
                 yield return new Row(new TableHeader("Sum", 3), (34.45 + 43.89 + 99.23), "");
             }
