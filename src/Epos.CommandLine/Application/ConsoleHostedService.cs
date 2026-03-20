@@ -48,6 +48,10 @@ internal sealed class ConsoleHostedService(
         } catch (Exception theException) {
             logger.LogCritical("{ErrorMessage}", theException.Message);
             logger.LogInformation("{StackTrace}", theException.StackTrace);
+            if (theException.InnerException is not null) {
+                logger.LogCritical("--- Inner Exception {ErrorMessage}", theException.Message);
+                logger.LogInformation("{StackTrace}", theException.StackTrace);
+            }
         }
 
         hostApplicationLifetime.StopApplication();
