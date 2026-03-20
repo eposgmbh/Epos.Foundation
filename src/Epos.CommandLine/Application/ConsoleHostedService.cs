@@ -49,8 +49,8 @@ internal sealed class ConsoleHostedService(
             logger.LogCritical("{ErrorMessage}", theException.Message);
             logger.LogInformation("{StackTrace}", theException.StackTrace);
             if (theException.InnerException is not null) {
-                logger.LogCritical("--- Inner Exception {ErrorMessage}", theException.Message);
-                logger.LogInformation("{StackTrace}", theException.StackTrace);
+                logger.LogCritical("--- Inner Exception {ErrorMessage}", theException.InnerException.Message);
+                logger.LogInformation("{StackTrace}", theException.InnerException.StackTrace);
             }
         }
 
